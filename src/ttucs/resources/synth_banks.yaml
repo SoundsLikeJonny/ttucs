@@ -6,7 +6,7 @@
 #     (e.g. GLASS-BREAK, METAL-FRICTION, WOOD-TONAL),
 #   * the UCS Explanation and the (distinctiveness-weighted) UCS Synonyms of the CatID,
 #   * global `modifiers` and `contexts`.
-# Written by hand from sound-library conventions (BOOM/PSE style FX names) - no library
+# Written by hand from sound-library conventions (commercial-library style FX names) - no library
 # metadata is copied here.
 
 modifiers:

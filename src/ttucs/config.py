@@ -2,7 +2,7 @@
 
 A tiny, dependency-free take on the Hydra/Lightning-CLI pattern::
 
-    cfg = load_config("configs/bow.yaml", ["train.epochs=3", "data.boom.enabled=false"])
+    cfg = load_config("configs/bow.yaml", ["train.epochs=3", "data.label_documents=false"])
 """
 
 from __future__ import annotations
@@ -21,17 +21,10 @@ DEFAULTS: dict[str, Any] = {
         "exclude_categories": ["ARCHIVED"],
         "synthetic": {
             "enabled": True,
-            "target_per_class": 150,   # synthetic tops up real data to this many examples
-            "min_per_class": 60,       # always generate at least this many per CatID
+            "target_per_class": 150,   # synthetic examples per CatID
+            "min_per_class": 60,       # lower bound if target_per_class is set lower
             "max_synonym_df": 25,
             "cache": "data/processed/synthetic.jsonl",
-        },
-        "boom": {
-            "enabled": True,
-            "path": "data/raw/boom_one.csv",
-            "use_for_training": True,
-            "max_per_class": 300,      # cap dominant classes (OBJCont has >1000 rows)
-            "text_fields": ["description", "fxname"],
         },
         "label_documents": True,       # add UCS explanation/synonym docs as training text
         "slate_augment_fraction": 0.25,

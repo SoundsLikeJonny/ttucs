@@ -1,4 +1,5 @@
-# Default CPU model: hashed word + char n-gram bag of embeddings (fastText-style).
+# Larger CPU model: hashed word + char n-gram bag of embeddings (fastText-style).
+# The published weights use the compact configs/bow-release.yaml.
 # Train:  ttucs train -c configs/bow.yaml      (override: -o train.epochs=3)
 seed: 42
 output_dir: models/ttucs-bow
@@ -7,16 +8,10 @@ data:
   exclude_categories: [ARCHIVED]     # workflow CatIDs (ADR, MIX, WIP...) - not sound content
   synthetic:
     enabled: true
-    target_per_class: 150            # synthetic tops real data up to this many per CatID
-    min_per_class: 60                # ...but always at least this many synthetic examples
+    target_per_class: 150            # synthetic examples per CatID
+    min_per_class: 60                # lower bound if target_per_class is set lower
     max_synonym_df: 25
     cache: data/processed/synthetic.jsonl
-  boom:
-    enabled: true                    # needs `ttucs fetch-boom`; silently skipped if missing
-    path: data/raw/boom_one.csv
-    use_for_training: true
-    max_per_class: 300               # cap dominant classes
-    text_fields: [description, fxname]
   label_documents: true
   slate_augment_fraction: 0.25
   split: {val: 0.1, test: 0.1}

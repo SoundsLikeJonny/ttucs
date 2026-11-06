@@ -20,7 +20,7 @@ _KEYWORD_TAIL = re.compile(r"(?:^|(?<=[.!?]))\s*((?:[A-Z0-9][\w'&/-]*(?:\s[\w'&/
 def split_description(description: str) -> tuple[str, list[str]]:
     """Split a library description into its prose part and trailing keyword list.
 
-    Professional libraries (e.g. BOOM ONE) write ``"<sentences>. Kw1, Kw2, Kw3."``.
+    Professional libraries often write ``"<sentences>. Kw1, Kw2, Kw3."``.
 
     >>> split_description("Wooden door creaks open. Door, Wood, Creak, Open.")
     ('Wooden door creaks open.', ['Door', 'Wood', 'Creak', 'Open'])
