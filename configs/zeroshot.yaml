@@ -1,0 +1,10 @@
+# No training: cosine similarity between the input and UCS Explanation+Synonyms documents.
+# A cold-start floor / sanity baseline. backend: tfidf (offline) or sbert (needs transformers).
+seed: 42
+output_dir: models/ttucs-zeroshot
+model:
+  name: zeroshot
+  backend: tfidf
+  similarity_scale: 20.0
+mlflow:
+  registered_model_name: ttucs-zeroshot

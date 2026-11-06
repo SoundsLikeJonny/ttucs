@@ -1,0 +1,22 @@
+# Optional transformer path: frozen all-MiniLM-L6-v2 sentence embeddings + MLP head whose
+# output layer is initialised from UCS label-document embeddings (zero-shot prior).
+# Needs: pip install "ttucs[transformers]" (downloads ~90 MB from the Hugging Face Hub once).
+seed: 42
+output_dir: models/ttucs-minilm
+model:
+  name: encoder
+  encoder: sentence-transformers/all-MiniLM-L6-v2
+  encoder_dim: 384
+  hidden_dim: 768
+  dropout: 0.1
+  init_scale: 10.0
+  category_loss_weight: 0.3
+train:
+  epochs: 20
+  batch_size: 512
+  lr: 2.0e-3
+  weight_decay: 1.0e-4
+  label_smoothing: 0.05
+  patience: 4
+mlflow:
+  registered_model_name: ttucs-minilm

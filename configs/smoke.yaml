@@ -1,0 +1,11 @@
+# Tiny, fast configuration used by CI / `make smoke` (synthetic only, few epochs, no MLflow model).
+seed: 7
+output_dir: models/ttucs-smoke
+data:
+  synthetic: {target_per_class: 12, min_per_class: 12, cache: null}
+  boom: {enabled: false}
+  slate_augment_fraction: 0.2
+  processed_dir: data/processed-smoke
+model: {name: bow, embedding_dim: 32, num_buckets: 65536}
+train: {epochs: 2, batch_size: 128, num_threads: 2}
+mlflow: {enabled: false}
