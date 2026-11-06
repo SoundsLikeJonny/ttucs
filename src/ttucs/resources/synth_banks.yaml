@@ -1,0 +1,136 @@
+# Vocabulary banks for the synthetic description generator (ttucs.synth).
+#
+# The generator combines, per CatID:
+#   * category-level `objects` (what is sounding) and `actions` (what it does),
+#   * subcategory-level `subcategory_actions` for the material x action pattern UCS uses
+#     (e.g. GLASS-BREAK, METAL-FRICTION, WOOD-TONAL),
+#   * the UCS Explanation and the (distinctiveness-weighted) UCS Synonyms of the CatID,
+#   * global `modifiers` and `contexts`.
+# Written by hand from sound-library conventions (BOOM/PSE style FX names) - no library
+# metadata is copied here.
+
+modifiers:
+  speed: [slow, fast, quick, very slow, medium speed, rapid]
+  intensity: [soft, hard, gentle, heavy, light, loud, quiet, aggressive, subtle, violent, strong, weak]
+  size: [small, large, big, tiny, huge, medium, massive, little]
+  time: [short, long, single, multiple, repeated, intermittent, steady, constant, sporadic, continuous, rhythmic, sequence, series]
+  character: [metallic, hollow, resonant, dull, bright, muffled, rattly, crisp, deep, high pitched, low, thin, thick, wet, dry, old, rusty, squeaky, creaky]
+
+contexts:
+  - in a small room
+  - in a large hall
+  - in the garage
+  - outside
+  - in the forest
+  - on the street
+  - in the kitchen
+  - in a warehouse
+  - in the backyard
+  - in a parking lot
+  - in the studio
+  - in a stairwell
+  - by the river
+  - in the basement
+  - with some wind
+  - with distant traffic
+  - with room reverb
+
+subcategory_actions:
+  BREAK: [break, breaking, snap, shatter, crack, smash, split]
+  CRASH & DEBRIS: [crash, debris falling, crash and debris, collapse into pieces, rubble settle, pieces scatter]
+  FRICTION: [scrape, rub, drag, grind, slide, screech, scratch, squeal]
+  HANDLE: [handling, pick up, put down, set down, grab, fiddle, place on table]
+  IMPACT: [impact, hit, drop, thud, bang, knock, slam, strike, tap, smack]
+  MOVEMENT: [movement, rattle, shake, jostle, roll, shuffle, wobble, tumble]
+  TONAL: [ring, resonance, tonal hit, bowed, singing tone, ringout, hum]
+  CREAK: [creak, creaking, groan, strain, squeak]
+  RIP: [rip, tear, ripping apart, shred]
+  FLAP: [flap, flutter, snap in wind, wave]
+  MISC: [sound, misc, various, assorted]
+  DUST: [dust, puff of dust, sift, trickle, pour]
+  SUCTION: [suction, suck, slurp, plunger pull, squelch]
+  BUBBLES: [bubbles, bubbling, gurgle, blub, boil]
+
+categories:
+  AIR: {objects: [air, compressed air, air hose, air can, tire valve, balloon, bellows], actions: [blow, release, leak, hiss, burst, suck]}
+  AIRCRAFT: {objects: [airplane, plane, jet, helicopter, cessna, airliner, propeller plane, fighter jet, drone], actions: [fly by, takeoff, landing, pass by, idle, taxi, approach, flyover]}
+  ALARMS: {objects: [alarm, alarm clock, fire alarm, buzzer, siren, klaxon, smoke detector], actions: [ringing, going off, beeping, wailing, sounding]}
+  AMBIENCE: {objects: [ambience, atmosphere, room tone, background, soundscape, walla, presence], actions: [steady, with distant activity, busy, quiet, at night, in the morning, daytime]}
+  ANIMALS: {objects: [dog, cat, horse, cow, pig, sheep, goat, frog, monkey, mouse, insect, lion, wolf, bear, elephant], actions: [bark, meow, whinny, moo, oink, growl, howl, call, croak, snort, purr, roar, hiss, chirp]}
+  ARCHIVED: {objects: [file, stem, mixdown, tone, recording], actions: [print, bounce, export]}
+  BEEPS: {objects: [beep, beeper, tone, timer, microwave, monitor, truck reverse beeper], actions: [beeping, single beep, double beep, chirp, countdown]}
+  BELLS: {objects: [bell, church bell, handbell, doorbell, gong, cowbell, sleigh bells, temple bell], actions: [ring, toll, ding, chime, strike, clang]}
+  BIRDS: {objects: [birds, bird, crow, raven, seagull, gull, songbird, robin, owl, hawk, eagle, duck, goose, chicken, rooster, parrot, heron], actions: [chirping, singing, calling, squawk, caw, cluck, honk, hoot, screech, tweet]}
+  BOATS: {objects: [boat, ship, motorboat, sailboat, rowboat, ferry, tugboat, fishing boat, submarine, yacht, kayak, canoe, outboard motor], actions: [pass by, idle, moor, docking, onboard, wake, sail, motoring away, approach]}
+  BULLETS: {objects: [bullet, round, shell casing, ricochet], actions: [whiz by, impact, ricochet, hit, zip past, drop on concrete]}
+  CARTOON: {objects: [cartoon, toon, slide whistle, boing spring, bonk, kazoo, squeaker], actions: [boing, bonk, zip, splat, pop, squeak, twang, wobble]}
+  CERAMICS: {objects: [ceramic, plate, mug, porcelain, pottery, tile, ceramic bowl, flower pot, vase], actions: [clink, chip, set down, clatter]}
+  CHAINS: {objects: [chain, metal chain, chain link, bike chain, anchor chain, shackles], actions: [rattle, drag, clank, jingle, pull taut]}
+  CHEMICALS: {objects: [acid, chemical, beaker, reaction, solution, alka seltzer, dry ice], actions: [fizz, bubble, sizzle, react, dissolve, hiss]}
+  CLOCKS: {objects: [clock, grandfather clock, pocket watch, wall clock, cuckoo clock, wristwatch, metronome], actions: [ticking, tick tock, chime, wind up, striking the hour]}
+  CLOTH: {objects: [cloth, fabric, jacket, sheet, blanket, canvas, tarp, flag, towel, denim, nylon, curtain], actions: [rustle, swish, snap, flap, shake out, fold]}
+  COMMUNICATIONS: {objects: [radio, walkie talkie, telephone, cellphone, smartphone, television, typewriter, camera shutter, record player, intercom, rotary phone], actions: [static, ring, dial, tune, click, squelch, chatter, vibrate]}
+  COMPUTERS: {objects: [computer, laptop, keyboard, mouse, hard drive, server, desktop pc, disk drive], actions: [typing, clicking, spinning up, whirring, seek, hum]}
+  CREATURES: {objects: [creature, monster, beast, dragon, alien, zombie, demon, troll, goblin, dinosaur, ghost], actions: [growl, roar, snarl, hiss, screech, breathing, attack vocal, gurgle]}
+  CROWDS: {objects: [crowd, audience, people, group, kids, fans, spectators], actions: [cheering, applause, chatter, murmur, laughing, booing, chanting, panic, walla]}
+  DESIGNED: {objects: [designed hit, braam, riser, drone, whoosh, stinger, low boom, sub drop, texture, synth impact], actions: [rising, swelling, building, booming, pulsing, evolving, morphing]}
+  DESTRUCTION: {objects: [building, wall, structure, debris, rubble, roof, bridge], actions: [collapse, crumble, destruction, demolition, cave in, crash down]}
+  DIRT & SAND: {objects: [dirt, sand, gravel, soil, earth, mud clod, dust, pebbles], actions: [pour, scoop, shovel, dig, sift, spill, scatter]}
+  DOORS: {objects: [door, front door, car door, gate, cabinet door, screen door, garage door, sliding door, barn door, cell door], actions: [open, close, slam, creak, knock, latch, squeak, shut, swing]}
+  DRAWERS: {objects: [drawer, desk drawer, filing cabinet drawer, dresser drawer, kitchen drawer], actions: [open, close, slide out, slam shut, rattle]}
+  ELECTRICITY: {objects: [electricity, power line, transformer, spark, tesla coil, fluorescent light, electrical box, neon sign], actions: [buzz, hum, crackle, zap, arc, sparking]}
+  EQUIPMENT: {objects: [backpack gear, tactical vest, harness, saddle, climbing gear, carabiner, camping gear, ski gear, holster], actions: [rattle, jingle, clip, buckle, handling, strap]}
+  EXPLOSIONS: {objects: [explosion, blast, detonation, bomb, grenade, dynamite, car bomb], actions: [explode, boom, blast, distant rumble, debris tail]}
+  FARTS: {objects: [fart, flatulence, toot, whoopee cushion], actions: [rip, squeak, long, wet, short]}
+  FIGHT: {objects: [punch, kick, body, slap, fist, elbow], actions: [hit, punch, grab, body fall, impact, struggle, scuffle]}
+  FIRE: {objects: [fire, campfire, fireplace, flames, torch, bonfire, gas burner, blowtorch, match], actions: [crackling, burning, roaring, ignite, whoosh, flare up, sizzle]}
+  FIREWORKS: {objects: [fireworks, firecracker, rocket, roman candle, sparkler, firework mortar], actions: [launch, burst, crackle, whistle, pop, explode overhead]}
+  FOLEY: {objects: [foley, hands, props, cloth pass, feet], actions: [movement, handling, rustle, pat, rub, pass]}
+  FOOD & DRINK: {objects: [food, drink, glass, bottle, can, coffee, soda, frying pan, knife and fork, plate, cup, pot, chips, apple, beer], actions: [pour, sip, gulp, chew, crunch, sizzle, stir, clink, slurp, chop, bite]}
+  FOOTSTEPS: {objects: [footsteps, steps, boots, heels, sneakers, bare feet, hooves, paws], actions: [walking, running, jogging, sneaking, shuffling, stomping, climbing stairs]}
+  GAMES: {objects: [dice, board game, chess pieces, slot machine, pinball, arcade machine, cards, poker chips, game console, roulette], actions: [roll, shuffle, deal, spin, jackpot, button press, clatter]}
+  GEOTHERMAL: {objects: [geyser, fumarole, mud pot, lava, hot spring, volcanic vent], actions: [bubbling, erupting, hissing, venting, steaming, gurgling]}
+  GLASS: {objects: [glass, window pane, glass bottle, wine glass, drinking glass, glass jar, mirror, light bulb], actions: [clink, set down, tap]}
+  GORE: {objects: [flesh, blood, bone, guts, body, meat, cabbage, celery], actions: [squish, splat, stab, crunch, tear, ooze, snap, drip]}
+  GUNS: {objects: [gun, pistol, rifle, shotgun, machine gun, revolver, assault rifle, cannon, handgun, sniper rifle], actions: [shot, gunshot, firing, burst, reload, cock, single shot, distant shots]}
+  HORNS: {objects: [horn, air horn, party horn, bugle, foghorn, shofar, conch], actions: [blast, honk, toot, blow, long blast]}
+  HUMAN: {objects: [man, woman, person, mouth, nose, breath, heart, body], actions: [breathing, cough, sneeze, burp, snore, sniff, kiss, spit, heartbeat, panting]}
+  ICE: {objects: [ice, ice cube, ice block, frozen lake, icicle, ice sheet], actions: [crack, clink, slide, chip, melt, creak]}
+  LASERS: {objects: [laser, laser beam, laser gun, blaster, ray gun], actions: [zap, beam, pew, fire, sweep, charge]}
+  LEATHER: {objects: [leather, leather jacket, belt, boots, saddle, leather bag, leather gloves], actions: [creak, stretch, rub, flex, squeak]}
+  LIQUID & MUD: {objects: [mud, sludge, slime, goo, liquid, paint, honey, oil], actions: [squelch, splat, bubble, suck, slosh, ooze, stir]}
+  MACHINES: {objects: [machine, washing machine, dishwasher, elevator, escalator, fan, air conditioner, vending machine, printer, lawn mower, compressor, pump, treadmill, conveyor], actions: [running, start up, shut down, hum, whir, idle, cycle, operating]}
+  MAGIC: {objects: [magic, spell, wand, enchantment, curse, portal], actions: [cast, shimmer, sparkle, poof, swirl, charge, glow]}
+  MECHANICAL: {objects: [mechanism, lever, switch, latch, lock, gears, ratchet, pulley, relay, crank, button], actions: [click, clunk, ratchet, flip, turn, engage, release, cranking]}
+  METAL: {objects: [metal, sheet metal, metal pipe, steel beam, metal can, metal bucket, rebar, trash can, metal plate], actions: [clang, clank, bang, ding]}
+  MOTORS: {objects: [motor, engine, electric motor, servo, turbine, generator, outboard engine], actions: [running, start, rev, idle, whine, spin up, wind down]}
+  MOVEMENT: {objects: [person, crowd, animal, insects, creature, people], actions: [moving, rustle, scurry, shuffle, passing, presence, activity]}
+  MUSICAL: {objects: [piano, guitar, violin, drum, trumpet, flute, synth, choir, cymbal, harp, xylophone, music box, banjo, saxophone, marimba, organ, ukulele, kalimba], actions: [note, chord, strum, pluck, hit, phrase, riff, melody, played, roll, tremolo]}
+  NATURAL DISASTER: {objects: [earthquake, tornado, avalanche, tsunami, typhoon, volcano, landslide, hurricane], actions: [rumble, roar, eruption, destruction, shaking, approaching]}
+  OBJECTS: {objects: [keys, coins, bag, book, umbrella, zipper, tape, suitcase, box, pen, jewelry, scissors, wallet, plastic bag, cardboard box, shopping cart, chair, stapler], actions: [handling, drop, jingle, open, close, put down, rattle, zip, unzip, rustle]}
+  PAPER: {objects: [paper, newspaper, cardboard, book pages, paper bag, envelope, magazine, map, tissue paper], actions: [rustle, crumple, page turn, fold, flip]}
+  PLASTIC: {objects: [plastic, plastic bottle, plastic bag, plastic container, tupperware, plastic crate, bubble wrap, plastic cup], actions: [crinkle, crunch, squeeze, pop]}
+  RAIN: {objects: [rain, light rain, heavy rain, drizzle, downpour, rain shower, raindrops], actions: [falling, pouring, pattering, dripping, steady, hitting]}
+  ROBOTS: {objects: [robot, android, droid, mech, robot arm, cyborg], actions: [servo movement, walking, beeping, talking, powering up, whirring]}
+  ROCKS: {objects: [rock, stone, boulder, pebble, gravel, slate, cobblestone, rocks], actions: [clack, tumble, roll, knock]}
+  ROPE: {objects: [rope, cord, cable, line, mooring rope, string, twine], actions: [creak, pull, tighten, whip, uncoil, strain, coil]}
+  RUBBER: {objects: [rubber, rubber band, rubber ball, tire, rubber boots, rubber glove, inner tube, balloon], actions: [squeak, stretch, bounce, snap, rub]}
+  SCIFI: {objects: [spaceship, sci-fi door, force field, energy weapon, hologram, sci-fi computer, teleporter, alien device, hover car, plasma], actions: [power up, hum, whoosh, fire, open, scan, pulse, pass by]}
+  SNOW: {objects: [snow, snowball, fresh snow, packed snow, snowbank, powder], actions: [crunch, squeak, fall, pack, shovel, compress]}
+  SPORTS: {objects: [basketball, tennis ball, soccer ball, baseball bat, golf club, skateboard, hockey puck, bowling ball, volleyball, weights, swimming pool, skis], actions: [bounce, kick, hit, swing, roll, dribble, serve, slide, strike]}
+  SWOOSHES: {objects: [swoosh, whoosh, swish, pass by, swipe, stick swish], actions: [fast, slow, by, past, sweep]}
+  TOOLS: {objects: [hammer, drill, saw, screwdriver, wrench, chainsaw, angle grinder, nail gun, pliers, shovel, rake, sander, impact driver, hand saw, axe], actions: [hammering, drilling, sawing, cutting, grinding, tightening, running, start up]}
+  TOYS: {objects: [toy, wind up toy, toy car, rattle, squeaky toy, jack in the box, spinning top, toy robot, music toy], actions: [wind up, spin, squeak, rattle, play, roll]}
+  TRAINS: {objects: [train, freight train, subway, tram, steam train, locomotive, high speed train, streetcar, metro], actions: [pass by, arrive, depart, horn, brakes, clickety clack, idle]}
+  USER INTERFACE: {objects: [ui, button, menu, notification, interface, app, screen, hud], actions: [click, select, confirm, error, hover, swipe, alert, data blips, glitch]}
+  VEGETATION: {objects: [leaves, grass, bushes, branches, tree, reeds, hay, twigs, corn stalks, palm fronds], actions: [rustle, swish, crack, snap, move through, creak, sway]}
+  VEHICLES: {objects: [car, truck, bus, motorcycle, van, suv, bicycle, tractor, police car, ambulance, pickup truck, race car, semi truck, scooter], actions: [pass by, drive by, start, idle, rev, accelerate, brake, skid, honk, pull away, onboard]}
+  VOICES: {objects: [man, woman, child, baby, girl, boy, voice, female voice, male voice, old man], actions: [scream, laugh, cry, whisper, yell, sing, efforts, grunt, gasp, sigh, talk]}
+  WATER: {objects: [water, stream, creek, river, faucet, tap, drip, waves, puddle, fountain, waterfall, toilet, sink, hose, pool, lake], actions: [flow, drip, splash, pour, trickle, gurgle, lapping, running, spray, babble]}
+  WEAPONS: {objects: [sword, knife, axe, arrow, bow, spear, mace, whip, dagger, shield, armor, club, catapult], actions: [swing, slash, stab, unsheathe, draw, clash, impact, whoosh]}
+  WEATHER: {objects: [thunder, storm, hail, thunderstorm, lightning, blizzard], actions: [rumble, crack, rolling, distant, pouring, clap]}
+  WHISTLES: {objects: [whistle, referee whistle, train whistle, tin whistle, pea whistle, kettle whistle, steam whistle], actions: [blow, short blast, long blast, tweet, shriek]}
+  WIND: {objects: [wind, breeze, gust, gale, storm wind, draft, howling wind], actions: [blowing, howling, whistling, gusting, steady, through trees, moaning]}
+  WINDOWS: {objects: [window, sash window, sliding window, shutters, blinds, curtains, window latch, car window], actions: [open, close, rattle, knock, slide, slam, crank]}
+  WINGS: {objects: [wings, bird wings, pigeon, bat wings, insect wings, flock, dragon wings, bee, fly], actions: [flap, flutter, take off, buzz, beat, wing flaps]}
+  WOOD: {objects: [wood, plank, board, stick, branch, log, two by four, plywood, wooden crate, pallet, wooden beam], actions: [knock, creak, splinter, thud, clack]}
