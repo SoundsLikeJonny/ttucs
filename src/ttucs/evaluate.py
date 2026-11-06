@@ -11,7 +11,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from sklearn.metrics import f1_score
 
 from ttucs.pipeline import TTUCS
 from ttucs.slate.parser import SlateParser
@@ -26,6 +25,11 @@ def classification_metrics(probs: np.ndarray, y: np.ndarray, label_to_cat: np.nd
     """top-1/top-5/macro-F1/category accuracy/ECE (and coverage at ``threshold``)."""
     if len(y) == 0:
         return {}
+    from ttucs._extras import require_train_extras
+
+    require_train_extras("evaluation")
+    from sklearn.metrics import f1_score
+
     pred = probs.argmax(1)
     top5 = np.argsort(-probs, axis=1)[:, :5]
     conf = probs.max(1)

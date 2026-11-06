@@ -1,4 +1,4 @@
-"""Command line interface: ``ttucs generate-data|train|eval|predict|parse|fetch-boom|report``."""
+"""Command line interface: ``ttucs predict|parse|info|download|generate-data|train|eval|report``."""
 
 from __future__ import annotations
 
@@ -10,7 +10,8 @@ from pathlib import Path
 
 from ttucs._version import __version__
 
-DEFAULT_MODEL = "models/ttucs-bow"
+MODEL_HELP = ("model directory or published model name (default: 'bow', resolved offline-first: "
+              "installed ttucs-model-bow package -> cache -> download unless TTUCS_OFFLINE=1)")
 
 
 def _add_config(p: argparse.ArgumentParser) -> None:
@@ -44,10 +45,15 @@ def cmd_generate_data(args: argparse.Namespace) -> int:
 
 
 def cmd_train(args: argparse.Namespace) -> int:
+    from ttucs._extras import require_mlflow, require_train_extras
+
+    require_train_extras("`ttucs train`")
     from ttucs.config import load_config
     from ttucs.train import train
 
     cfg = load_config(args.config, args.override)
+    if cfg.get("mlflow", {}).get("enabled", True):
+        require_mlflow("`ttucs train` with mlflow.enabled=true")
     summary = train(cfg, rebuild_data=args.rebuild_data)
     print(json.dumps({k: summary.get(k) for k in ("output_dir", "temperature", "mlflow_run_id",
                                                      "model_uri", "registered_model_version")},
@@ -56,6 +62,9 @@ def cmd_train(args: argparse.Namespace) -> int:
 
 
 def cmd_eval(args: argparse.Namespace) -> int:
+    from ttucs._extras import require_train_extras
+
+    require_train_extras("`ttucs eval`")
     from ttucs.config import load_config
     from ttucs.datasets.build import read_jsonl
     from ttucs.evaluate import (
@@ -104,9 +113,9 @@ def cmd_eval(args: argparse.Namespace) -> int:
 
         mlflow.set_tracking_uri(cfg["mlflow"]["tracking_uri"])
         mlflow.set_experiment(cfg["mlflow"]["experiment"])
-        with mlflow.start_run(run_name=f"eval:{Path(args.model).name}"):
+        with mlflow.start_run(run_name=f"eval:{Path(str(pipe.model_path)).name}"):
             mlflow.set_tag("stage", "eval")
-            mlflow.log_param("model_dir", args.model)
+            mlflow.log_param("model_dir", str(pipe.model_path))
             for split, m in metrics.items():
                 mlflow.log_metrics({f"{split}.{k}": float(v) for k, v in m.items()})
             if parser_m:
@@ -149,15 +158,10 @@ def cmd_parse(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_fetch_boom(args: argparse.Namespace) -> int:
-    from ttucs.datasets.boom import fetch_boom_one
-
-    path = fetch_boom_one(args.dest)
-    print(f"saved BOOM ONE metadata to {path} (c) BOOM Library - do not redistribute")
-    return 0
-
-
 def cmd_report(args: argparse.Namespace) -> int:
+    from ttucs._extras import require_train_extras
+
+    require_train_extras("`ttucs report`")
     from ttucs.config import load_config
     from ttucs.reporting import distribution_report
     from ttucs.taxonomy import UCSTaxonomy
@@ -166,9 +170,45 @@ def cmd_report(args: argparse.Namespace) -> int:
     cfg = load_config(args.config, args.override)
     splits = load_or_build(cfg)
     tax = UCSTaxonomy.load(cfg["ucs_version"])
-    path = distribution_report(splits["train"], tax, args.out, cfg["data"]["boom"].get("path"),
+    path = distribution_report(splits["train"], tax, args.out,
                                set(cfg["data"].get("exclude_categories") or []))
     print(f"wrote {path}")
+    return 0
+
+
+def cmd_info(args: argparse.Namespace) -> int:
+    from ttucs import hub
+    from ttucs.taxonomy import UCS_VERSION
+
+    info: dict = {"ttucs_version": __version__, "ucs_version": UCS_VERSION,
+                  "offline_mode": hub.is_offline(), "cache_dir": str(hub.cache_root())}
+    try:
+        resolved = hub.resolve_model(args.model, allow_download=False)
+        info["model"] = hub.describe(resolved)
+        if args.verify:
+            hub.verify_manifest(resolved.path)
+            info["model"]["manifest_verified"] = True
+    except hub.ModelNotFoundError as exc:
+        info["model"] = None
+        info["error"] = str(exc)
+    if args.json:
+        print(json.dumps(info, indent=2))
+    else:
+        for k, v in info.items():
+            if isinstance(v, dict):
+                print(f"{k}:")
+                for kk, vv in v.items():
+                    print(f"  {kk:<20} {vv}")
+            else:
+                print(f"{k:<22} {v}")
+    return 0 if info["model"] else 1
+
+
+def cmd_download(args: argparse.Namespace) -> int:
+    from ttucs import hub
+
+    path = hub.download_model(args.model, dest=args.dest, url=args.url, sha256=args.sha256, force=args.force)
+    print(f"model {args.model!r} ready at {path}")
     return 0
 
 
@@ -192,7 +232,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("eval", help="evaluate a trained model")
     _add_config(s)
-    s.add_argument("-m", "--model", default=DEFAULT_MODEL)
+    s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
     s.add_argument("--data", nargs="*", help="JSONL files with text/label (default: test splits)")
     s.add_argument("--parse", action="store_true", help="run the slate parser on --data texts")
     s.add_argument("--predictions", default=None, help="write realistic-slate predictions CSV")
@@ -206,7 +246,7 @@ def build_parser() -> argparse.ArgumentParser:
         s.add_argument("text", nargs="*")
         s.add_argument("-f", "--file", help="read one transcript per line")
         if name == "predict":
-            s.add_argument("-m", "--model", default=DEFAULT_MODEL)
+            s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
             s.add_argument("-k", "--top-k", type=int, default=5)
             s.add_argument("--threshold", type=float, default=None, help="unknown threshold")
             s.add_argument("--creator-id", default=None)
@@ -216,9 +256,19 @@ def build_parser() -> argparse.ArgumentParser:
             s.add_argument("--verbose", action="store_true", help="include empty fields")
         s.set_defaults(func=func)
 
-    s = sub.add_parser("fetch-boom", help="download BOOM ONE metadata (local research use)")
-    s.add_argument("--dest", default="data/raw/boom_one.csv")
-    s.set_defaults(func=cmd_fetch_boom)
+    s = sub.add_parser("info", help="show the resolved model, versions and offline mode (no network)")
+    s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
+    s.add_argument("--verify", action="store_true", help="check weights against manifest.json sha256")
+    s.add_argument("--json", action="store_true")
+    s.set_defaults(func=cmd_info)
+
+    s = sub.add_parser("download", help="download + verify published weights into the cache")
+    s.add_argument("--model", default="bow", help="published model name (default: bow)")
+    s.add_argument("--dest", default=None, help="target directory (default: $TTUCS_HOME or user cache)")
+    s.add_argument("--url", default=None, help="override the release URL (mirror / local file)")
+    s.add_argument("--sha256", default=None, help="expected sha256 of the archive (with --url)")
+    s.add_argument("--force", action="store_true", help="re-download even if present")
+    s.set_defaults(func=cmd_download)
 
     s = sub.add_parser("report", help="class distribution report + plots")
     _add_config(s)
@@ -233,7 +283,21 @@ def main(argv: list[str] | None = None) -> int:
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     for noisy in ("alembic", "urllib3", "matplotlib", "PIL", "sentence_transformers", "httpx"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
-    return int(args.func(args) or 0)
+    from ttucs._extras import MissingExtraError
+    from ttucs.hub import (
+        ChecksumError,
+        DownloadError,
+        IncompatibleModelError,
+        ModelNotFoundError,
+        OfflineError,
+    )
+
+    try:
+        return int(args.func(args) or 0)
+    except (MissingExtraError, ModelNotFoundError, OfflineError, ChecksumError,
+            IncompatibleModelError, DownloadError) as exc:
+        print(f"ttucs {args.command}: error: {exc}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":  # pragma: no cover

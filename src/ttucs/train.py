@@ -5,7 +5,7 @@
 1. dataset build (or reuse of ``ttucs generate-data`` output with a matching config hash);
 2. model fit with per-epoch metrics;
 3. temperature calibration on the validation split;
-4. evaluation of every ``test_*`` split (synthetic, BOOM ONE, synthetic slates, hand-written
+4. evaluation of every ``test_*`` split (synthetic descriptions, synthetic slates, hand-written
    realistic slates) plus slate-parser field accuracy;
 5. MLflow logging: params, metrics, per-class reports, confusion artifacts, the model as a
    ``pyfunc`` with signature, and (optionally) registration in the model registry.
@@ -57,6 +57,12 @@ def data_fingerprint(cfg: dict) -> str:
     payload = {"seed": cfg["seed"], "ucs": cfg["ucs_version"], "data": cfg["data"],
                "version": __version__}
     return hashlib.sha1(json.dumps(payload, sort_keys=True).encode(), usedforsecurity=False).hexdigest()[:12]
+
+
+def training_data_sources(cfg: dict, splits: dict[str, list[Example]]) -> dict[str, Any]:
+    """Which data sources reached the training split (recorded for provenance/licensing checks)."""
+    sources = sorted({e.source.split(":")[0] for e in splits.get("train", [])})
+    return {"sources": sources, "label_documents": bool(cfg["data"].get("label_documents"))}
 
 
 def generate_data(cfg: dict, out_dir: str | Path | None = None) -> dict[str, list[Example]]:
@@ -150,7 +156,8 @@ def train(cfg: dict, rebuild_data: bool = False) -> dict[str, Any]:
         inference = {**cfg.get("inference", {})}
         model.save(out_dir, extra={"temperature": temperature, "ucs_version": tax.version,
                                    "inference": inference, "ttucs_version": __version__,
-                                   "data_fingerprint": data_fingerprint(cfg), "seed": seed})
+                                   "data_fingerprint": data_fingerprint(cfg), "seed": seed,
+                                   "training_data": training_data_sources(cfg, splits)})
         pipe = TTUCS.from_pretrained(out_dir)
 
         # ---- evaluation

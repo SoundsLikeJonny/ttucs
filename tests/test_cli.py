@@ -11,5 +11,6 @@ def test_parse_command(capsys):
 
 def test_help_lists_commands():
     text = build_parser().format_help()
-    for cmd in ("generate-data", "train", "eval", "predict", "parse", "fetch-boom", "report"):
+    for cmd in ("generate-data", "train", "eval", "predict", "parse", "report", "info",
+                "download"):
         assert cmd in text

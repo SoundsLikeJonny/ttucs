@@ -114,21 +114,37 @@ class TTUCS:
         self.creator_id = creator_id
         self.source_id = source_id
         self.meta = meta or {}
+        self.model_path: Path | None = None
+        self.model_source: str | None = None
         self._entries = [self.taxonomy[c] for c in model.labels]
         self._misc = {e.category: e.cat_id for e in self.taxonomy.entries if e.subcategory == "MISC"}
 
     # ------------------------------------------------------------------ loading
     @classmethod
-    def from_pretrained(cls, path: str | Path, **overrides: Any) -> TTUCS:
-        """Load a model directory written by ``ttucs train`` (or :meth:`save_pretrained`)."""
-        model, meta = UCSModel.load(path)
+    def from_pretrained(cls, model: str | Path | None = None, *, allow_download: bool | None = None,
+                        **overrides: Any) -> TTUCS:
+        """Load a model - offline-first.
+
+        ``model`` is a directory written by ``ttucs train``/:meth:`save_pretrained`, or a published
+        model name (default ``"bow"``). Names resolve to the installed ``ttucs-model-bow``
+        package, then the user cache, then (only if not offline) a verified download - see
+        :mod:`ttucs.hub`. Set ``TTUCS_OFFLINE=1`` to guarantee no network access.
+        """
+        from ttucs.hub import check_compatibility, resolve_model
+
+        resolved = resolve_model(model, allow_download=allow_download)
+        meta_path = resolved.path / "config.json"
+        check_compatibility(json.loads(meta_path.read_text()), resolved.path)
+        model_obj, meta = UCSModel.load(resolved.path)
         inf = meta.get("inference", {})
         kwargs = {"temperature": meta.get("temperature", 1.0),
                   "unknown_threshold": inf.get("unknown_threshold", DEFAULT_UNKNOWN_THRESHOLD),
                   "category_threshold": inf.get("category_threshold", DEFAULT_CATEGORY_THRESHOLD)}
         kwargs.update(overrides)
         tax = UCSTaxonomy.load(meta.get("ucs_version", "8.2.1"))
-        return cls(model, taxonomy=tax, meta=meta, **kwargs)
+        pipe = cls(model_obj, taxonomy=tax, meta=meta, **kwargs)
+        pipe.model_path, pipe.model_source = resolved.path, resolved.source
+        return pipe
 
     @classmethod
     def from_mlflow(cls, model_uri: str, **overrides: Any) -> TTUCS:
@@ -140,7 +156,8 @@ class TTUCS:
 
     def save_pretrained(self, path: str | Path) -> Path:
         extra = {k: v for k, v in self.meta.items()
-                 if k not in {"model_name", "labels", "label_categories", "model"}}
+                 if k not in {"model_name", "labels", "label_categories", "model", "format_version",
+                              "weights_dtype"}}
         extra.update({"temperature": self.temperature, "ucs_version": self.taxonomy.version,
                       "inference": {**extra.get("inference", {}),
                                     "unknown_threshold": self.unknown_threshold,
