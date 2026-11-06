@@ -14,8 +14,8 @@ coverage.xml
 htmlcov/
 
 # ttucs artefacts (generated / licensed data never goes into git)
-data/
-models/
+/data/
+/models/
 mlruns/
 mlartifacts/
 mlflow.db
