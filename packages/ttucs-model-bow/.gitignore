@@ -1,0 +1,4 @@
+# weights are built by scripts/build_model_package.py and never committed
+src/ttucs_model_bow/model/
+dist/
+build/

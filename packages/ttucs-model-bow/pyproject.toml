@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ttucs-model-bow"
+version = "0.1.1"
+description = "Pretrained weights (data only) for ttucs, the Text-to-UCS slate classifier: hashed n-gram bag-of-embeddings model."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Jon Evans" }]
+requires-python = ">=3.10"
+dependencies = []
+keywords = ["ucs", "universal category system", "sound effects", "metadata", "model weights"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/SoundsLikeJonny/ttucs"
+"Model card" = "https://github.com/SoundsLikeJonny/ttucs/blob/main/MODEL_CARD.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ttucs_model_bow = ["model/*.json", "model/*.safetensors"]
