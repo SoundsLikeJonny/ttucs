@@ -10,3 +10,5 @@
 
 Adding a model: subclass `ttucs.models.base.UCSModel`, decorate it with `@register("name")`, import it in
 `ttucs/models/__init__.py`, and add `configs/<name>.yaml`.
+
+> CI workflow lives in `ci/github-actions-ci.yml`: move it to `.github/workflows/ci.yml` to enable it (the automation token was not allowed to push workflow files).
