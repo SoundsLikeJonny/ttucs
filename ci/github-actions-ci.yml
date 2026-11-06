@@ -15,7 +15,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - run: pip install -e ".[dev]"
+      # ttucs depends on the weights package; install the local (weightless) copy so pip does not
+      # need PyPI for it. Tests that need real weights skip when they are absent.
+      - run: pip install -e packages/ttucs-model-bow -e ".[dev]"
       - run: ruff check src tests scripts
       - run: pytest -q
       - run: ttucs generate-data -c configs/smoke.yaml && ttucs train -c configs/smoke.yaml
+      - name: Packaging smoke test
+        run: python -m build --outdir dist . && twine check --strict dist/*

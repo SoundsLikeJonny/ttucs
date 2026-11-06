@@ -1,0 +1,93 @@
+# Build + publish ttucs and ttucs-model-bow with PyPI Trusted Publishing (no API tokens).
+# The GitHub App used by the assistant cannot write .github/workflows/: MOVE this file to
+# .github/workflows/publish.yml to enable it. See docs/RELEASING.md.
+#
+#   * manual "Run workflow"  -> builds and uploads to TestPyPI (environment: testpypi)
+#   * push of a tag v*        -> builds and uploads to PyPI     (environment: pypi)
+#
+# The weights are not in git: they are taken from the GitHub Release asset
+# model-bow-v<version>.tar.gz and checked against packages/ttucs-model-bow/RELEASE_SHA256.
+name: Publish
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install build tooling (CPU torch is enough to export/verify)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install numpy pyyaml safetensors platformdirs build twine
+          pip install --no-deps -e .
+      - name: Check tag matches ttucs version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          v=$(python -c "import ttucs._version as v; print(v.__version__)")
+          test "v$v" = "${GITHUB_REF_NAME}" || { echo "tag ${GITHUB_REF_NAME} != ttucs $v"; exit 1; }
+      - name: Fetch release weights and build ttucs-model-bow
+        run: |
+          MV=$(sed -n 's/^version = "\(.*\)"/\1/p' packages/ttucs-model-bow/pyproject.toml)
+          URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/model-bow-v${MV}/model-bow-v${MV}.tar.gz"
+          python scripts/build_model_package.py --from-tarball "$URL" \
+            --sha256 "$(cut -d' ' -f1 packages/ttucs-model-bow/RELEASE_SHA256)" --wheel --outdir dist
+      - name: Build ttucs
+        run: python -m build --outdir dist .
+      - name: twine check
+        run: twine check --strict dist/*
+      - run: ls -l dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*
+
+  publish-testpypi:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/project/ttucs/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Drop the release tarball (only sdists/wheels are uploaded)
+        run: rm -f dist/*.tar.gz.sha256 dist/model-bow-*.tar.gz
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true   # the model package version changes less often than ttucs
+
+  publish-pypi:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/ttucs/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - run: rm -f dist/*.tar.gz.sha256 dist/model-bow-*.tar.gz
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
