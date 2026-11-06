@@ -1,0 +1,56 @@
+# Default CPU model: hashed word + char n-gram bag of embeddings (fastText-style).
+# Train:  ttucs train -c configs/bow.yaml      (override: -o train.epochs=3)
+seed: 42
+output_dir: models/ttucs-bow
+
+data:
+  exclude_categories: [ARCHIVED]     # workflow CatIDs (ADR, MIX, WIP...) - not sound content
+  synthetic:
+    enabled: true
+    target_per_class: 150            # synthetic tops real data up to this many per CatID
+    min_per_class: 60                # ...but always at least this many synthetic examples
+    max_synonym_df: 25
+    cache: data/processed/synthetic.jsonl
+  boom:
+    enabled: true                    # needs `ttucs fetch-boom`; silently skipped if missing
+    path: data/raw/boom_one.csv
+    use_for_training: true
+    max_per_class: 300               # cap dominant classes
+    text_fields: [description, fxname]
+  label_documents: true
+  slate_augment_fraction: 0.25
+  split: {val: 0.1, test: 0.1}
+  realistic_slates: examples/realistic_slates.jsonl
+  processed_dir: data/processed
+
+model:
+  name: bow
+  embedding_dim: 192
+  num_buckets: 524288
+  word_ngrams: 2
+  char_ngrams: [3, 5]
+  dropout: 0.2
+  category_loss_weight: 0.3
+
+train:
+  epochs: 15
+  batch_size: 256
+  lr: 1.0e-2
+  weight_decay: 1.0e-5
+  label_smoothing: 0.05
+  patience: 3
+  num_threads: 8
+  calibrate: true
+
+inference:
+  unknown_threshold: 0.12
+  category_threshold: 0.5
+  top_k: 5
+
+mlflow:
+  enabled: true
+  tracking_uri: sqlite:///mlflow.db
+  experiment: ttucs
+  log_model: true
+  register_model: true
+  registered_model_name: ttucs
