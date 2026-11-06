@@ -1,15 +1,22 @@
 # Data card
 
+Data behind the published `ttucs-model-bow` weights. Everything is either in the repository or
+generated from it, so the weights can be redistributed.
+
 | source | used for | in repo? |
 |---|---|---|
 | UCS v8.2.1 Full List (753 CatIDs, Explanations, Synonyms) | label space, synthetic vocab, label documents | yes (`src/ttucs/resources`) |
-| Synthetic descriptions (`ttucs.synth`) | training/val/test; tops every CatID up to 150 (min 60) | generated |
-| Synthetic slates (`SlateGenerator`) | augmentation, parser + slate eval with ground truth | generated |
-| BOOM ONE metadata sheet (40,325 rows, 553 CatIDs) | real-text training (cap 300/CatID) and held-out eval | **no**: `ttucs fetch-boom`, (c) BOOM Library |
-| Pro Sound Effects HF dataset | not used: gated (login required), not retrieved | no |
-| `examples/realistic_slates.jsonl` (80 hand-written slates) | sanity test set | yes |
+| Synthetic descriptions (`ttucs.synth`) | training/val/test; 150 per CatID (min 60) | generated |
+| Synthetic slates (`SlateGenerator`) | augmentation (25%), parser + slate eval with ground truth | generated |
+| `examples/realistic_slates.jsonl` (80 hand-written slates) | sanity test set, never trained on | yes |
 
-**BOOM ONE analysis:** 201 UCS CatIDs are missing (e.g. ARCHIVED 15, BOATS 14, AMBIENCE 12, MUSICAL 9).
-Classes are heavily imbalanced: median 34 rows per CatID, max 1,063 (OBJCont). There are 13,851
-duplicate descriptions. Splits are grouped by FXName stem so takes never straddle splits.
-Run `ttucs report` for `docs/assets/distribution.md` with plots.
+- 738 CatIDs are used (the ARCHIVED workflow category is excluded). Synthetic generation is balanced,
+  so every CatID has training examples.
+- Splits are deterministic (seed 42) and grouped so variants of one description never straddle splits.
+- Generated data is fingerprinted from the config and cached in `processed_dir`.
+- Run `ttucs report` for `docs/assets/distribution.md` with plots.
+
+**Your own data:** real library metadata is the biggest lever for accuracy on real slates, but there
+is no built-in option for it yet. To experiment, retrain from source with `pip install "ttucs[train]"`
+and extend `ttucs.datasets.build`. Keep non-redistributable metadata out of the repository and out of
+any weights you publish.
