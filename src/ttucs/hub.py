@@ -60,7 +60,7 @@ class ModelSpec:
 MODELS: dict[str, ModelSpec] = {
     "bow": ModelSpec(
         name="bow", package="ttucs_model_bow", distribution="ttucs-model-bow", version="0.1.1",
-        sha256="fcab4f66967072899757650eacd03c5ba167a2864f0f6aa85216fdf46c06a932",
+        sha256="b554dc771527b9a864aeb877ad7ea6741834ac55de78fad5a6a726e2f357954d",
         archive="model-bow-v0.1.1.tar.gz"),
 }
 
