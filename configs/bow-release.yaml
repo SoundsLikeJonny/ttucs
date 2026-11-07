@@ -1,7 +1,8 @@
 # Release model published as the `ttucs-model-bow` wheel on PyPI.
 # Trained on synthetic descriptions/slates + UCS label documents (all redistributable).
-# Compact vs configs/bow.yaml: 131072 buckets x 128 dims (vs 524288 x 192), exported as fp16
-# safetensors (~34 MB) so the wheel stays well under PyPI's 100 MB file limit.
+# Compact vs configs/bow.yaml: 131072 buckets x 256 dims (vs 524288 x 192), exported as fp16
+# safetensors (~67 MB) so the wheel stays under PyPI's 100 MB file limit.
+# Settings chosen on examples/dev_descriptions.jsonl (examples/realistic_slates.jsonl is held out).
 # Train:  ttucs train -c configs/bow-release.yaml
 # Build:  python scripts/build_model_package.py --model-dir models/ttucs-bow-release --tarball --wheel
 seed: 42
@@ -11,9 +12,10 @@ data:
   exclude_categories: [ARCHIVED]     # workflow CatIDs (ADR, MIX, WIP...) - not sound content
   synthetic:
     enabled: true
-    target_per_class: 150            # synthetic examples per CatID
+    target_per_class: 300            # synthetic examples per CatID
     min_per_class: 60                # lower bound if target_per_class is set lower
     max_synonym_df: 25
+    phrase_prob: 0.5                 # share of examples built from resources/catid_phrases.yaml
     cache: data/processed-release/synthetic.jsonl
   label_documents: true
   slate_augment_fraction: 0.25
@@ -23,7 +25,7 @@ data:
 
 model:
   name: bow
-  embedding_dim: 128
+  embedding_dim: 256
   num_buckets: 131072
   word_ngrams: 2
   char_ngrams: [3, 5]

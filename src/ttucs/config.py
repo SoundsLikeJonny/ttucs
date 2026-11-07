@@ -24,6 +24,7 @@ DEFAULTS: dict[str, Any] = {
             "target_per_class": 150,   # synthetic examples per CatID
             "min_per_class": 60,       # lower bound if target_per_class is set lower
             "max_synonym_df": 25,
+            "phrase_prob": 0.5,
             "cache": "data/processed/synthetic.jsonl",
         },
         "label_documents": True,       # add UCS explanation/synonym docs as training text

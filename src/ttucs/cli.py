@@ -103,9 +103,11 @@ def cmd_eval(args: argparse.Namespace) -> int:
         print("\nslate parser (synthetic slates):")
         for k, v in parser_m.items():
             print(f"  {k:<34} {v:.4f}")
-    if args.predictions and "test_realistic" in splits:
-        predictions_csv(pipe, splits["test_realistic"], args.predictions)
-        print(f"\nwrote {args.predictions}")
+    if args.predictions:
+        # the realistic slates by default; otherwise the first --data file (e.g. the dev set)
+        name = "test_realistic" if "test_realistic" in splits else next(iter(splits))
+        predictions_csv(pipe, splits[name], args.predictions)
+        print(f"\nwrote {args.predictions} ({name})")
     if args.json:
         Path(args.json).write_text(json.dumps({"metrics": metrics, "parser": parser_m}, indent=2))
     if args.mlflow:
@@ -235,7 +237,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
     s.add_argument("--data", nargs="*", help="JSONL files with text/label (default: test splits)")
     s.add_argument("--parse", action="store_true", help="run the slate parser on --data texts")
-    s.add_argument("--predictions", default=None, help="write realistic-slate predictions CSV")
+    s.add_argument("--predictions", default=None,
+                   help="write a predictions CSV (realistic slates, else the first --data file)")
     s.add_argument("--json", default=None, help="write metrics JSON")
     s.add_argument("--mlflow", action="store_true", help="log an evaluation run to MLflow")
     s.set_defaults(func=cmd_eval)

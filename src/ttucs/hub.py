@@ -59,9 +59,9 @@ class ModelSpec:
 
 MODELS: dict[str, ModelSpec] = {
     "bow": ModelSpec(
-        name="bow", package="ttucs_model_bow", distribution="ttucs-model-bow", version="0.1.1",
-        sha256="b554dc771527b9a864aeb877ad7ea6741834ac55de78fad5a6a726e2f357954d",
-        archive="model-bow-v0.1.1.tar.gz"),
+        name="bow", package="ttucs_model_bow", distribution="ttucs-model-bow", version="0.2.0",
+        sha256="22e8ac483fa97bbd8152d29bffad60cda668653c7786f8c20e92f90f52913e7b",
+        archive="model-bow-v0.2.0.tar.gz"),
 }
 
 

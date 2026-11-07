@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ttucs-model-bow"
-version = "0.1.1"
+version = "0.2.0"
 description = "Pretrained weights (data only) for ttucs, the Text-to-UCS slate classifier: hashed n-gram bag-of-embeddings model."
 readme = "README.md"
 license = "MIT"
