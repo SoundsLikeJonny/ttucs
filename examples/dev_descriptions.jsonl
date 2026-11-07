@@ -1,0 +1,332 @@
+{"text": "sedan starts up idles then drives away", "label": "VEHCar", "source": "handwritten_dev", "group": "dev:0", "meta": {}}
+{"text": "automobile whooshing past on a rainy street", "label": "VEHBy", "source": "handwritten_dev", "group": "dev:1", "meta": {}}
+{"text": "pickup truck drive by gravel road", "label": "VEHBy", "source": "handwritten_dev", "group": "dev:2", "meta": {}}
+{"text": "vehicle door unlatch and shut, four door", "label": "VEHDoor", "source": "handwritten_dev", "group": "dev:3", "meta": {}}
+{"text": "car horn honk two short beeps", "label": "VEHHorn", "source": "handwritten_dev", "group": "dev:4", "meta": {}}
+{"text": "tires screeching on asphalt hard stop", "label": "VEHSkid", "source": "handwritten_dev", "group": "dev:5", "meta": {}}
+{"text": "motorcycle revving and pulling away", "label": "VEHMoto", "source": "handwritten_dev", "group": "dev:6", "meta": {}}
+{"text": "city bus pulls up air brakes and doors", "label": "VEHBus", "source": "handwritten_dev", "group": "dev:7", "meta": {}}
+{"text": "semi truck idling at the loading dock", "label": "VEHTruck", "source": "handwritten_dev", "group": "dev:8", "meta": {}}
+{"text": "interior of a car driving on the highway", "label": "VEHInt", "source": "handwritten_dev", "group": "dev:9", "meta": {}}
+{"text": "police siren passing on the street", "label": "VEHSirn", "source": "handwritten_dev", "group": "dev:10", "meta": {}}
+{"text": "bicycle bell and chain freewheel ticking", "label": "VEHBike", "source": "handwritten_dev", "group": "dev:11", "meta": {}}
+{"text": "power window rolling up in the car", "label": "VEHWndw", "source": "handwritten_dev", "group": "dev:12", "meta": {}}
+{"text": "car alarm going off in parking lot", "label": "VEHAlrm", "source": "handwritten_dev", "group": "dev:13", "meta": {}}
+{"text": "passenger jet climbing out after departure", "label": "AEROJet", "source": "handwritten_dev", "group": "dev:14", "meta": {}}
+{"text": "helicopter hovering then flying away", "label": "AEROHeli", "source": "handwritten_dev", "group": "dev:15", "meta": {}}
+{"text": "small prop plane flyover cessna", "label": "AEROProp", "source": "handwritten_dev", "group": "dev:16", "meta": {}}
+{"text": "inside the airplane cabin during flight", "label": "AEROInt", "source": "handwritten_dev", "group": "dev:17", "meta": {}}
+{"text": "metro car pulling into the platform and stopping", "label": "TRNSbwy", "source": "handwritten_dev", "group": "dev:18", "meta": {}}
+{"text": "freight train horn in the distance", "label": "TRNHorn", "source": "handwritten_dev", "group": "dev:19", "meta": {}}
+{"text": "train clickety clack on the tracks", "label": "TRNClak", "source": "handwritten_dev", "group": "dev:20", "meta": {}}
+{"text": "steam locomotive chugging and whistle", "label": "TRNSteam", "source": "handwritten_dev", "group": "dev:21", "meta": {}}
+{"text": "streetcar bell and passing tram", "label": "TRNTram", "source": "handwritten_dev", "group": "dev:22", "meta": {}}
+{"text": "outboard motor boat passing on the lake", "label": "BOATMotr", "source": "handwritten_dev", "group": "dev:23", "meta": {}}
+{"text": "rowing a canoe with paddle strokes", "label": "BOATRow", "source": "handwritten_dev", "group": "dev:24", "meta": {}}
+{"text": "ship horn blast in the harbor", "label": "BOATHorn", "source": "handwritten_dev", "group": "dev:25", "meta": {}}
+{"text": "antique timber door swinging and latching", "label": "DOORWood", "source": "handwritten_dev", "group": "dev:26", "meta": {}}
+{"text": "squeaky door hinge creak long", "label": "DOORCreak", "source": "handwritten_dev", "group": "dev:27", "meta": {}}
+{"text": "thick metal door banging shut with reverb", "label": "DOORMetl", "source": "handwritten_dev", "group": "dev:28", "meta": {}}
+{"text": "chain link fence gate rattle and latch", "label": "DOORGate", "source": "handwritten_dev", "group": "dev:29", "meta": {}}
+{"text": "metal gate swinging shut clang", "label": "DOORGate", "source": "handwritten_dev", "group": "dev:30", "meta": {}}
+{"text": "glass slider door rolling on its track", "label": "DOORSlid", "source": "handwritten_dev", "group": "dev:31", "meta": {}}
+{"text": "rapping knuckles on a timber door", "label": "DOORKnck", "source": "handwritten_dev", "group": "dev:32", "meta": {}}
+{"text": "kitchen cabinet door open close", "label": "DOORCab", "source": "handwritten_dev", "group": "dev:33", "meta": {}}
+{"text": "door handle turn and latch click", "label": "DOORHdwr", "source": "handwritten_dev", "group": "dev:34", "meta": {}}
+{"text": "automatic supermarket doors whoosh open", "label": "DOORElec", "source": "handwritten_dev", "group": "dev:35", "meta": {}}
+{"text": "jail cell door slam with keys", "label": "DOORPrisn", "source": "handwritten_dev", "group": "dev:36", "meta": {}}
+{"text": "saloon swinging doors", "label": "DOORSwng", "source": "handwritten_dev", "group": "dev:37", "meta": {}}
+{"text": "wooden dresser drawer slide open", "label": "DRWRWood", "source": "handwritten_dev", "group": "dev:38", "meta": {}}
+{"text": "metal filing cabinet drawer slam shut", "label": "DRWRMetl", "source": "handwritten_dev", "group": "dev:39", "meta": {}}
+{"text": "old wooden sash window sliding up", "label": "WNDWWood", "source": "handwritten_dev", "group": "dev:40", "meta": {}}
+{"text": "venetian blinds being pulled up", "label": "WNDWCover", "source": "handwritten_dev", "group": "dev:41", "meta": {}}
+{"text": "person walking across loose stones", "label": "FEETHmn", "source": "handwritten_dev", "group": "dev:42", "meta": {}}
+{"text": "stiletto steps on a hard tile hallway", "label": "FEETHmn", "source": "handwritten_dev", "group": "dev:43", "meta": {}}
+{"text": "running on wet pavement sneakers", "label": "FEETHmn", "source": "handwritten_dev", "group": "dev:44", "meta": {}}
+{"text": "boots walking up wooden stairs", "label": "FEETHmn", "source": "handwritten_dev", "group": "dev:45", "meta": {}}
+{"text": "dog paws on hardwood floor", "label": "FEETAnml", "source": "handwritten_dev", "group": "dev:46", "meta": {}}
+{"text": "horse hooves trotting on cobblestone", "label": "FEETHors", "source": "handwritten_dev", "group": "dev:47", "meta": {}}
+{"text": "jacket cloth movement rustle", "label": "CLOTHMvmt", "source": "handwritten_dev", "group": "dev:48", "meta": {}}
+{"text": "tearing a cotton t-shirt apart", "label": "CLOTHRip", "source": "handwritten_dev", "group": "dev:49", "meta": {}}
+{"text": "flag flapping in strong wind", "label": "CLOTHFlp", "source": "handwritten_dev", "group": "dev:50", "meta": {}}
+{"text": "folding a bed sheet and shaking it out", "label": "CLOTHHndl", "source": "handwritten_dev", "group": "dev:51", "meta": {}}
+{"text": "jingling a set of keys", "label": "OBJKey", "source": "handwritten_dev", "group": "dev:52", "meta": {}}
+{"text": "coins dropped on a table", "label": "OBJCoin", "source": "handwritten_dev", "group": "dev:53", "meta": {}}
+{"text": "rucksack zip pulled up and down", "label": "OBJZipr", "source": "handwritten_dev", "group": "dev:54", "meta": {}}
+{"text": "plastic shopping bag rustling", "label": "OBJBag", "source": "handwritten_dev", "group": "dev:55", "meta": {}}
+{"text": "closing a heavy hardcover book", "label": "OBJBook", "source": "handwritten_dev", "group": "dev:56", "meta": {}}
+{"text": "wooden chair dragged across floor", "label": "OBJFurn", "source": "handwritten_dev", "group": "dev:57", "meta": {}}
+{"text": "umbrella open and close", "label": "OBJUmbr", "source": "handwritten_dev", "group": "dev:58", "meta": {}}
+{"text": "pen writing on paper scribble", "label": "OBJWrite", "source": "handwritten_dev", "group": "dev:59", "meta": {}}
+{"text": "duct tape pulled off the roll", "label": "OBJTape", "source": "handwritten_dev", "group": "dev:60", "meta": {}}
+{"text": "rolling suitcase on sidewalk", "label": "OBJLug", "source": "handwritten_dev", "group": "dev:61", "meta": {}}
+{"text": "crumpling a sheet of paper", "label": "PAPRHndl", "source": "handwritten_dev", "group": "dev:62", "meta": {}}
+{"text": "ripping cardboard box apart", "label": "PAPRRip", "source": "handwritten_dev", "group": "dev:63", "meta": {}}
+{"text": "flipping through book pages", "label": "PAPRFltr", "source": "handwritten_dev", "group": "dev:64", "meta": {}}
+{"text": "wine glass shattering on floor", "label": "GLASBrk", "source": "handwritten_dev", "group": "dev:65", "meta": {}}
+{"text": "glass bottle set down on table", "label": "GLASImpt", "source": "handwritten_dev", "group": "dev:66", "meta": {}}
+{"text": "finger rubbing wine glass rim singing", "label": "GLASTonl", "source": "handwritten_dev", "group": "dev:67", "meta": {}}
+{"text": "glass jars clinking together handling", "label": "GLASHndl", "source": "handwritten_dev", "group": "dev:68", "meta": {}}
+{"text": "ceramic plate smash breaking", "label": "CERMBrk", "source": "handwritten_dev", "group": "dev:69", "meta": {}}
+{"text": "coffee mugs clinking set down", "label": "CERMHndl", "source": "handwritten_dev", "group": "dev:70", "meta": {}}
+{"text": "metal pipe dropped on concrete", "label": "METLImpt", "source": "handwritten_dev", "group": "dev:71", "meta": {}}
+{"text": "metal scraping on metal screech", "label": "METLFric", "source": "handwritten_dev", "group": "dev:72", "meta": {}}
+{"text": "metal bowl ringing resonance", "label": "METLTonl", "source": "handwritten_dev", "group": "dev:73", "meta": {}}
+{"text": "handling metal pots and pans", "label": "METLHndl", "source": "handwritten_dev", "group": "dev:74", "meta": {}}
+{"text": "two by four board cracking apart", "label": "WOODBrk", "source": "handwritten_dev", "group": "dev:75", "meta": {}}
+{"text": "wood log dropped on the ground", "label": "WOODImpt", "source": "handwritten_dev", "group": "dev:76", "meta": {}}
+{"text": "wooden crate smashed to pieces", "label": "WOODCrsh", "source": "handwritten_dev", "group": "dev:77", "meta": {}}
+{"text": "sanding wood by hand", "label": "WOODFric", "source": "handwritten_dev", "group": "dev:78", "meta": {}}
+{"text": "crushing a plastic water bottle", "label": "PLASCrsh", "source": "handwritten_dev", "group": "dev:79", "meta": {}}
+{"text": "plastic container lid snap on", "label": "PLASHndl", "source": "handwritten_dev", "group": "dev:80", "meta": {}}
+{"text": "rocks hitting each other clack", "label": "ROCKImpt", "source": "handwritten_dev", "group": "dev:81", "meta": {}}
+{"text": "rockslide pebbles tumbling down", "label": "ROCKMvmt", "source": "handwritten_dev", "group": "dev:82", "meta": {}}
+{"text": "shovel digging into dirt", "label": "DIRTMvmt", "source": "handwritten_dev", "group": "dev:83", "meta": {}}
+{"text": "sand pouring out of a bucket", "label": "DIRTDust", "source": "handwritten_dev", "group": "dev:84", "meta": {}}
+{"text": "walking through deep snow crunch", "label": "SNOWMvmt", "source": "handwritten_dev", "group": "dev:85", "meta": {}}
+{"text": "ice cracking on frozen lake", "label": "ICEBrk", "source": "handwritten_dev", "group": "dev:86", "meta": {}}
+{"text": "ice cubes dropped in a glass", "label": "ICEHndl", "source": "handwritten_dev", "group": "dev:87", "meta": {}}
+{"text": "small creek babbling over rocks", "label": "WATRFlow", "source": "handwritten_dev", "group": "dev:88", "meta": {}}
+{"text": "large waterfall roar", "label": "WATRFall", "source": "handwritten_dev", "group": "dev:89", "meta": {}}
+{"text": "ocean waves crashing on beach", "label": "WATRSurf", "source": "handwritten_dev", "group": "dev:90", "meta": {}}
+{"text": "water lapping against the dock", "label": "WATRLap", "source": "handwritten_dev", "group": "dev:91", "meta": {}}
+{"text": "faucet dripping into sink", "label": "WATRDrip", "source": "handwritten_dev", "group": "dev:92", "meta": {}}
+{"text": "pouring water from a pitcher", "label": "WATRPour", "source": "handwritten_dev", "group": "dev:93", "meta": {}}
+{"text": "splashing in a puddle", "label": "WATRSplsh", "source": "handwritten_dev", "group": "dev:94", "meta": {}}
+{"text": "toilet flush", "label": "WATRPlmb", "source": "handwritten_dev", "group": "dev:95", "meta": {}}
+{"text": "blowing bubbles through a straw in water", "label": "WATRBubl", "source": "handwritten_dev", "group": "dev:96", "meta": {}}
+{"text": "underwater recording with hydrophone bubbles", "label": "WATRUndwtr", "source": "handwritten_dev", "group": "dev:97", "meta": {}}
+{"text": "garden hose spraying the lawn", "label": "WATRSpray", "source": "handwritten_dev", "group": "dev:98", "meta": {}}
+{"text": "hand swishing water in a bathtub", "label": "WATRMvmt", "source": "handwritten_dev", "group": "dev:99", "meta": {}}
+{"text": "light rain falling steady", "label": "RAIN", "source": "handwritten_dev", "group": "dev:100", "meta": {}}
+{"text": "rain on a tin roof", "label": "RAINMetl", "source": "handwritten_dev", "group": "dev:101", "meta": {}}
+{"text": "rain on window glass", "label": "RAINGlas", "source": "handwritten_dev", "group": "dev:102", "meta": {}}
+{"text": "drizzle pattering on foliage in the woods", "label": "RAINVege", "source": "handwritten_dev", "group": "dev:103", "meta": {}}
+{"text": "heavy rain on concrete sidewalk", "label": "RAINConc", "source": "handwritten_dev", "group": "dev:104", "meta": {}}
+{"text": "rain hitting a tent", "label": "RAINClth", "source": "handwritten_dev", "group": "dev:105", "meta": {}}
+{"text": "distant thunder rumble", "label": "THUN", "source": "handwritten_dev", "group": "dev:106", "meta": {}}
+{"text": "close thunder crack loud", "label": "THUN", "source": "handwritten_dev", "group": "dev:107", "meta": {}}
+{"text": "thunderstorm with heavy rain and wind", "label": "STORM", "source": "handwritten_dev", "group": "dev:108", "meta": {}}
+{"text": "steady wind through the field", "label": "WIND", "source": "handwritten_dev", "group": "dev:109", "meta": {}}
+{"text": "blustery wind blasts", "label": "WINDGust", "source": "handwritten_dev", "group": "dev:110", "meta": {}}
+{"text": "wind through pine trees", "label": "WINDVege", "source": "handwritten_dev", "group": "dev:111", "meta": {}}
+{"text": "wind howling against the house windows", "label": "WINDInt", "source": "handwritten_dev", "group": "dev:112", "meta": {}}
+{"text": "campfire crackling", "label": "FIRECrkl", "source": "handwritten_dev", "group": "dev:113", "meta": {}}
+{"text": "fireplace burning logs", "label": "FIREBurn", "source": "handwritten_dev", "group": "dev:114", "meta": {}}
+{"text": "striking a match and lighting it", "label": "FIREIgn", "source": "handwritten_dev", "group": "dev:115", "meta": {}}
+{"text": "gas stove burner ignite", "label": "FIREGas", "source": "handwritten_dev", "group": "dev:116", "meta": {}}
+{"text": "blowtorch running", "label": "FIRETrch", "source": "handwritten_dev", "group": "dev:117", "meta": {}}
+{"text": "fire whoosh burst of flames", "label": "FIREWhsh", "source": "handwritten_dev", "group": "dev:118", "meta": {}}
+{"text": "large explosion with debris", "label": "EXPLReal", "source": "handwritten_dev", "group": "dev:119", "meta": {}}
+{"text": "distant explosion rumble", "label": "EXPLReal", "source": "handwritten_dev", "group": "dev:120", "meta": {}}
+{"text": "aerial shell explosions in the night sky", "label": "FRWKComr", "source": "handwritten_dev", "group": "dev:121", "meta": {}}
+{"text": "pistol gunshot single", "label": "GUNPis", "source": "handwritten_dev", "group": "dev:122", "meta": {}}
+{"text": "rifle shots outdoors with echo", "label": "GUNRif", "source": "handwritten_dev", "group": "dev:123", "meta": {}}
+{"text": "machine gun burst firing", "label": "GUNAuto", "source": "handwritten_dev", "group": "dev:124", "meta": {}}
+{"text": "shotgun pump and blast", "label": "GUNShotg", "source": "handwritten_dev", "group": "dev:125", "meta": {}}
+{"text": "gun reload magazine insert", "label": "GUNMech", "source": "handwritten_dev", "group": "dev:126", "meta": {}}
+{"text": "bullet ricochet", "label": "BLLTRico", "source": "handwritten_dev", "group": "dev:127", "meta": {}}
+{"text": "shell casings falling on concrete", "label": "BLLTShel", "source": "handwritten_dev", "group": "dev:128", "meta": {}}
+{"text": "sword unsheathe metal ring", "label": "WEAPSwrd", "source": "handwritten_dev", "group": "dev:129", "meta": {}}
+{"text": "swords clashing", "label": "WEAPSwrd", "source": "handwritten_dev", "group": "dev:130", "meta": {}}
+{"text": "knife stab into flesh", "label": "WEAPKnif", "source": "handwritten_dev", "group": "dev:131", "meta": {}}
+{"text": "arrow whoosh and thud into target", "label": "WEAPArro", "source": "handwritten_dev", "group": "dev:132", "meta": {}}
+{"text": "drawing a bow string and release", "label": "WEAPBow", "source": "handwritten_dev", "group": "dev:133", "meta": {}}
+{"text": "punch to the face", "label": "FGHTImpt", "source": "handwritten_dev", "group": "dev:134", "meta": {}}
+{"text": "body fall on the floor", "label": "FGHTBf", "source": "handwritten_dev", "group": "dev:135", "meta": {}}
+{"text": "grabbing clothing struggle", "label": "FGHTGrab", "source": "handwritten_dev", "group": "dev:136", "meta": {}}
+{"text": "whoosh pass by fast", "label": "WHSH", "source": "handwritten_dev", "group": "dev:137", "meta": {}}
+{"text": "stick swish through the air", "label": "SWSH", "source": "handwritten_dev", "group": "dev:138", "meta": {}}
+{"text": "sci-fi riser building tension", "label": "DSGNRise", "source": "handwritten_dev", "group": "dev:139", "meta": {}}
+{"text": "cinematic braam", "label": "DSGNBram", "source": "handwritten_dev", "group": "dev:140", "meta": {}}
+{"text": "big cinematic hit impact", "label": "DSGNImpt", "source": "handwritten_dev", "group": "dev:141", "meta": {}}
+{"text": "dark ambient drone", "label": "DSGNDron", "source": "handwritten_dev", "group": "dev:142", "meta": {}}
+{"text": "designed whoosh with sub bass", "label": "DSGNWhsh", "source": "handwritten_dev", "group": "dev:143", "meta": {}}
+{"text": "sci-fi door open hydraulic hiss", "label": "SCIDoor", "source": "handwritten_dev", "group": "dev:144", "meta": {}}
+{"text": "spaceship flyby", "label": "SCIShip", "source": "handwritten_dev", "group": "dev:145", "meta": {}}
+{"text": "lightsaber hum and swing", "label": "SCIWeap", "source": "handwritten_dev", "group": "dev:146", "meta": {}}
+{"text": "laser gun pew pew", "label": "LASRGun", "source": "handwritten_dev", "group": "dev:147", "meta": {}}
+{"text": "force field energy hum", "label": "SCIEnrg", "source": "handwritten_dev", "group": "dev:148", "meta": {}}
+{"text": "sci fi computer beeps and processing", "label": "SCICmpt", "source": "handwritten_dev", "group": "dev:149", "meta": {}}
+{"text": "robot arm servo movement", "label": "ROBTMvmt", "source": "handwritten_dev", "group": "dev:150", "meta": {}}
+{"text": "robot voice talking", "label": "ROBTVox", "source": "handwritten_dev", "group": "dev:151", "meta": {}}
+{"text": "magic spell cast sparkle", "label": "MAGSpel", "source": "handwritten_dev", "group": "dev:152", "meta": {}}
+{"text": "poof magic disappear", "label": "MAGPoof", "source": "handwritten_dev", "group": "dev:153", "meta": {}}
+{"text": "monster growl and roar", "label": "CREAMnstr", "source": "handwritten_dev", "group": "dev:154", "meta": {}}
+{"text": "dragon roar", "label": "CREADrgn", "source": "handwritten_dev", "group": "dev:155", "meta": {}}
+{"text": "giant insect creature chittering", "label": "CREAInsc", "source": "handwritten_dev", "group": "dev:156", "meta": {}}
+{"text": "angry hound woofing and growling", "label": "ANMLDog", "source": "handwritten_dev", "group": "dev:157", "meta": {}}
+{"text": "small dog whimpering", "label": "ANMLDog", "source": "handwritten_dev", "group": "dev:158", "meta": {}}
+{"text": "kitten mewing", "label": "ANMLCat", "source": "handwritten_dev", "group": "dev:159", "meta": {}}
+{"text": "cat purring", "label": "ANMLCat", "source": "handwritten_dev", "group": "dev:160", "meta": {}}
+{"text": "stallion neighing and blowing", "label": "ANMLHors", "source": "handwritten_dev", "group": "dev:161", "meta": {}}
+{"text": "cow mooing in the barn", "label": "ANMLFarm", "source": "handwritten_dev", "group": "dev:162", "meta": {}}
+{"text": "pigs oinking and grunting", "label": "ANMLFarm", "source": "handwritten_dev", "group": "dev:163", "meta": {}}
+{"text": "crickets chirping at night", "label": "ANMLInsc", "source": "handwritten_dev", "group": "dev:164", "meta": {}}
+{"text": "bee buzzing around", "label": "ANMLInsc", "source": "handwritten_dev", "group": "dev:165", "meta": {}}
+{"text": "frogs croaking in the pond", "label": "ANMLAmph", "source": "handwritten_dev", "group": "dev:166", "meta": {}}
+{"text": "lion roaring", "label": "ANMLWild", "source": "handwritten_dev", "group": "dev:167", "meta": {}}
+{"text": "mouse squeaking", "label": "ANMLRdnt", "source": "handwritten_dev", "group": "dev:168", "meta": {}}
+{"text": "monkeys screeching", "label": "ANMLPrim", "source": "handwritten_dev", "group": "dev:169", "meta": {}}
+{"text": "songbirds chirping in the morning", "label": "BIRDSong", "source": "handwritten_dev", "group": "dev:170", "meta": {}}
+{"text": "crow cawing", "label": "BIRDCrow", "source": "handwritten_dev", "group": "dev:171", "meta": {}}
+{"text": "seagulls calling at the beach", "label": "BIRDSea", "source": "handwritten_dev", "group": "dev:172", "meta": {}}
+{"text": "rooster crowing", "label": "BIRDFowl", "source": "handwritten_dev", "group": "dev:173", "meta": {}}
+{"text": "chickens clucking", "label": "BIRDFowl", "source": "handwritten_dev", "group": "dev:174", "meta": {}}
+{"text": "hawk screech", "label": "BIRDPrey", "source": "handwritten_dev", "group": "dev:175", "meta": {}}
+{"text": "heron call", "label": "BIRDWade", "source": "handwritten_dev", "group": "dev:176", "meta": {}}
+{"text": "pigeon wings flapping taking off", "label": "WINGBird", "source": "handwritten_dev", "group": "dev:177", "meta": {}}
+{"text": "fly buzzing around", "label": "WINGInsc", "source": "handwritten_dev", "group": "dev:178", "meta": {}}
+{"text": "forest ambience with birds and light wind", "label": "AMBForst", "source": "handwritten_dev", "group": "dev:179", "meta": {}}
+{"text": "city street ambience traffic and people", "label": "AMBUrbn", "source": "handwritten_dev", "group": "dev:180", "meta": {}}
+{"text": "highway traffic ambience distant", "label": "AMBTraf", "source": "handwritten_dev", "group": "dev:181", "meta": {}}
+{"text": "busy restaurant ambience chatter and dishes", "label": "AMBRest", "source": "handwritten_dev", "group": "dev:182", "meta": {}}
+{"text": "office ambience keyboards and phones", "label": "AMBOffc", "source": "handwritten_dev", "group": "dev:183", "meta": {}}
+{"text": "room tone quiet empty room", "label": "AMBRoom", "source": "handwritten_dev", "group": "dev:184", "meta": {}}
+{"text": "ocean ambience at the beach", "label": "AMBSea", "source": "handwritten_dev", "group": "dev:185", "meta": {}}
+{"text": "harbor ambience with boats and gulls", "label": "AMBNaut", "source": "handwritten_dev", "group": "dev:186", "meta": {}}
+{"text": "factory ambience machinery", "label": "AMBInd", "source": "handwritten_dev", "group": "dev:187", "meta": {}}
+{"text": "school hallway ambience kids", "label": "AMBSchl", "source": "handwritten_dev", "group": "dev:188", "meta": {}}
+{"text": "hospital ambience beeping monitors", "label": "AMBHosp", "source": "handwritten_dev", "group": "dev:189", "meta": {}}
+{"text": "night insects ambience", "label": "AMBInsc", "source": "handwritten_dev", "group": "dev:190", "meta": {}}
+{"text": "park ambience with kids playing", "label": "AMBPark", "source": "handwritten_dev", "group": "dev:191", "meta": {}}
+{"text": "countryside ambience farm distant dogs", "label": "AMBRurl", "source": "handwritten_dev", "group": "dev:192", "meta": {}}
+{"text": "outdoor market ambience vendors", "label": "AMBMrkt", "source": "handwritten_dev", "group": "dev:193", "meta": {}}
+{"text": "train station ambience announcements", "label": "AMBTran", "source": "handwritten_dev", "group": "dev:194", "meta": {}}
+{"text": "airport terminal ambience", "label": "AMBAir", "source": "handwritten_dev", "group": "dev:195", "meta": {}}
+{"text": "kitchen ambience at home fridge hum", "label": "AMBHome", "source": "handwritten_dev", "group": "dev:196", "meta": {}}
+{"text": "underwater ambience", "label": "AMBUndwtr", "source": "handwritten_dev", "group": "dev:197", "meta": {}}
+{"text": "audience applause", "label": "CRWDApls", "source": "handwritten_dev", "group": "dev:198", "meta": {}}
+{"text": "stadium crowd cheering goal", "label": "CRWDCheer", "source": "handwritten_dev", "group": "dev:199", "meta": {}}
+{"text": "crowd walla murmur", "label": "CRWDWalla", "source": "handwritten_dev", "group": "dev:200", "meta": {}}
+{"text": "audience laughing", "label": "CRWDLaff", "source": "handwritten_dev", "group": "dev:201", "meta": {}}
+{"text": "crowd screaming in panic", "label": "CRWDPanic", "source": "handwritten_dev", "group": "dev:202", "meta": {}}
+{"text": "hockey game crowd", "label": "CRWDSprt", "source": "handwritten_dev", "group": "dev:203", "meta": {}}
+{"text": "woman screaming", "label": "VOXScrm", "source": "handwritten_dev", "group": "dev:204", "meta": {}}
+{"text": "man laughing", "label": "VOXLaff", "source": "handwritten_dev", "group": "dev:205", "meta": {}}
+{"text": "infant wailing", "label": "VOXBaby", "source": "handwritten_dev", "group": "dev:206", "meta": {}}
+{"text": "whispering", "label": "VOXWhsp", "source": "handwritten_dev", "group": "dev:207", "meta": {}}
+{"text": "male grunts and efforts", "label": "VOXEfrt", "source": "handwritten_dev", "group": "dev:208", "meta": {}}
+{"text": "kids talking and playing", "label": "VOXChld", "source": "handwritten_dev", "group": "dev:209", "meta": {}}
+{"text": "panting and gasping, out of breath", "label": "HMNBrth", "source": "handwritten_dev", "group": "dev:210", "meta": {}}
+{"text": "male cough, single", "label": "HMNCough", "source": "handwritten_dev", "group": "dev:211", "meta": {}}
+{"text": "sneeze", "label": "HMNSneez", "source": "handwritten_dev", "group": "dev:212", "meta": {}}
+{"text": "snoring", "label": "HMNSnor", "source": "handwritten_dev", "group": "dev:213", "meta": {}}
+{"text": "heartbeat", "label": "HMNHart", "source": "handwritten_dev", "group": "dev:214", "meta": {}}
+{"text": "burp", "label": "HMNBurp", "source": "handwritten_dev", "group": "dev:215", "meta": {}}
+{"text": "kiss", "label": "HMNKiss", "source": "handwritten_dev", "group": "dev:216", "meta": {}}
+{"text": "eating an apple crunchy bites", "label": "FOODEat", "source": "handwritten_dev", "group": "dev:217", "meta": {}}
+{"text": "chewing chips", "label": "FOODEat", "source": "handwritten_dev", "group": "dev:218", "meta": {}}
+{"text": "drinking and gulping water", "label": "FOODDrnk", "source": "handwritten_dev", "group": "dev:219", "meta": {}}
+{"text": "strips of pork crackling on a skillet", "label": "FOODCook", "source": "handwritten_dev", "group": "dev:220", "meta": {}}
+{"text": "chopping vegetables on cutting board", "label": "FOODCook", "source": "handwritten_dev", "group": "dev:221", "meta": {}}
+{"text": "pouring soda into a glass fizz", "label": "FOODPour", "source": "handwritten_dev", "group": "dev:222", "meta": {}}
+{"text": "pots and pans clanking in kitchen", "label": "FOODKware", "source": "handwritten_dev", "group": "dev:223", "meta": {}}
+{"text": "cutlery on plates", "label": "FOODTware", "source": "handwritten_dev", "group": "dev:224", "meta": {}}
+{"text": "clinking wine glasses cheers", "label": "FOODGware", "source": "handwritten_dev", "group": "dev:225", "meta": {}}
+{"text": "clothes washer draining and spinning", "label": "MACHAppl", "source": "handwritten_dev", "group": "dev:226", "meta": {}}
+{"text": "microwave running and door open", "label": "MACHAppl", "source": "handwritten_dev", "group": "dev:227", "meta": {}}
+{"text": "refrigerator hum", "label": "MACHAppl", "source": "handwritten_dev", "group": "dev:228", "meta": {}}
+{"text": "ceiling fan running", "label": "MACHFan", "source": "handwritten_dev", "group": "dev:229", "meta": {}}
+{"text": "air conditioner unit running", "label": "MACHHvac", "source": "handwritten_dev", "group": "dev:230", "meta": {}}
+{"text": "elevator ding and doors", "label": "MACHElev", "source": "handwritten_dev", "group": "dev:231", "meta": {}}
+{"text": "escalator running", "label": "MACHEscl", "source": "handwritten_dev", "group": "dev:232", "meta": {}}
+{"text": "industrial machine press", "label": "MACHInd", "source": "handwritten_dev", "group": "dev:233", "meta": {}}
+{"text": "printer printing pages", "label": "MACHOffc", "source": "handwritten_dev", "group": "dev:234", "meta": {}}
+{"text": "lawn mower running", "label": "MACHGrdn", "source": "handwritten_dev", "group": "dev:235", "meta": {}}
+{"text": "water pump running", "label": "MACHPump", "source": "handwritten_dev", "group": "dev:236", "meta": {}}
+{"text": "light switch flick on off", "label": "MECHSwtch", "source": "handwritten_dev", "group": "dev:237", "meta": {}}
+{"text": "key in lock turning", "label": "MECHLock", "source": "handwritten_dev", "group": "dev:238", "meta": {}}
+{"text": "latch open and close", "label": "MECHLtch", "source": "handwritten_dev", "group": "dev:239", "meta": {}}
+{"text": "mechanical click", "label": "MECHClik", "source": "handwritten_dev", "group": "dev:240", "meta": {}}
+{"text": "gears grinding", "label": "MECHGear", "source": "handwritten_dev", "group": "dev:241", "meta": {}}
+{"text": "ratchet clicking", "label": "MECHRtch", "source": "handwritten_dev", "group": "dev:242", "meta": {}}
+{"text": "pulling a lever", "label": "MECHLvr", "source": "handwritten_dev", "group": "dev:243", "meta": {}}
+{"text": "electric motor whine", "label": "MOTRElec", "source": "handwritten_dev", "group": "dev:244", "meta": {}}
+{"text": "small gas engine running", "label": "MOTRComb", "source": "handwritten_dev", "group": "dev:245", "meta": {}}
+{"text": "power drill drilling into wood", "label": "TOOLPowr", "source": "handwritten_dev", "group": "dev:246", "meta": {}}
+{"text": "circular saw cutting plank", "label": "TOOLPowr", "source": "handwritten_dev", "group": "dev:247", "meta": {}}
+{"text": "chainsaw cutting a log", "label": "TOOLPowr", "source": "handwritten_dev", "group": "dev:248", "meta": {}}
+{"text": "hammering nails", "label": "TOOLHand", "source": "handwritten_dev", "group": "dev:249", "meta": {}}
+{"text": "hand saw sawing wood", "label": "TOOLHand", "source": "handwritten_dev", "group": "dev:250", "meta": {}}
+{"text": "screwdriver turning screw", "label": "TOOLHand", "source": "handwritten_dev", "group": "dev:251", "meta": {}}
+{"text": "nail gun firing", "label": "TOOLPneu", "source": "handwritten_dev", "group": "dev:252", "meta": {}}
+{"text": "impact wrench on lug nuts", "label": "TOOLPneu", "source": "handwritten_dev", "group": "dev:253", "meta": {}}
+{"text": "raking leaves", "label": "TOOLGrdn", "source": "handwritten_dev", "group": "dev:254", "meta": {}}
+{"text": "clacky keyboard typing, office", "label": "CMPTKey", "source": "handwritten_dev", "group": "dev:255", "meta": {}}
+{"text": "mouse clicks", "label": "CMPTKey", "source": "handwritten_dev", "group": "dev:256", "meta": {}}
+{"text": "hard drive spinning", "label": "CMPTDriv", "source": "handwritten_dev", "group": "dev:257", "meta": {}}
+{"text": "old telephone ringing", "label": "COMTelph", "source": "handwritten_dev", "group": "dev:258", "meta": {}}
+{"text": "cell phone vibrating on table", "label": "COMCell", "source": "handwritten_dev", "group": "dev:259", "meta": {}}
+{"text": "radio tuning static", "label": "COMRadio", "source": "handwritten_dev", "group": "dev:260", "meta": {}}
+{"text": "white noise static", "label": "COMStatic", "source": "handwritten_dev", "group": "dev:261", "meta": {}}
+{"text": "typewriter typing and carriage return", "label": "COMType", "source": "handwritten_dev", "group": "dev:262", "meta": {}}
+{"text": "camera shutter click", "label": "COMCam", "source": "handwritten_dev", "group": "dev:263", "meta": {}}
+{"text": "tv turning on", "label": "COMTv", "source": "handwritten_dev", "group": "dev:264", "meta": {}}
+{"text": "record player needle crackle", "label": "COMPhono", "source": "handwritten_dev", "group": "dev:265", "meta": {}}
+{"text": "wall clock tick tock", "label": "CLOCKTick", "source": "handwritten_dev", "group": "dev:266", "meta": {}}
+{"text": "grandfather clock chiming", "label": "CLOCKChim", "source": "handwritten_dev", "group": "dev:267", "meta": {}}
+{"text": "alarm clock beeping", "label": "ALRMClok", "source": "handwritten_dev", "group": "dev:268", "meta": {}}
+{"text": "emergency alarm bell clanging", "label": "ALRMBell", "source": "handwritten_dev", "group": "dev:269", "meta": {}}
+{"text": "air raid siren wailing", "label": "ALRMSirn", "source": "handwritten_dev", "group": "dev:270", "meta": {}}
+{"text": "kitchen timer beeping", "label": "BEEPTimer", "source": "handwritten_dev", "group": "dev:271", "meta": {}}
+{"text": "truck backing up beeper", "label": "BEEPVeh", "source": "handwritten_dev", "group": "dev:272", "meta": {}}
+{"text": "doorbell ding dong", "label": "BELLDoor", "source": "handwritten_dev", "group": "dev:273", "meta": {}}
+{"text": "cathedral bell peal", "label": "BELLLrg", "source": "handwritten_dev", "group": "dev:274", "meta": {}}
+{"text": "hand bell ringing", "label": "BELLHand", "source": "handwritten_dev", "group": "dev:275", "meta": {}}
+{"text": "gong hit", "label": "BELLGong", "source": "handwritten_dev", "group": "dev:276", "meta": {}}
+{"text": "ui button click", "label": "UIClick", "source": "handwritten_dev", "group": "dev:277", "meta": {}}
+{"text": "notification alert sound", "label": "UIAlert", "source": "handwritten_dev", "group": "dev:278", "meta": {}}
+{"text": "digital glitch", "label": "UIGlitch", "source": "handwritten_dev", "group": "dev:279", "meta": {}}
+{"text": "data computer blips", "label": "UIData", "source": "handwritten_dev", "group": "dev:280", "meta": {}}
+{"text": "drum hits snare", "label": "MUSCPerc", "source": "handwritten_dev", "group": "dev:281", "meta": {}}
+{"text": "strumming a steel string guitar", "label": "MUSCPluck", "source": "handwritten_dev", "group": "dev:282", "meta": {}}
+{"text": "grand piano keys, soft notes", "label": "MUSCKeyd", "source": "handwritten_dev", "group": "dev:283", "meta": {}}
+{"text": "violin note", "label": "MUSCStr", "source": "handwritten_dev", "group": "dev:284", "meta": {}}
+{"text": "trumpet fanfare", "label": "MUSCBrass", "source": "handwritten_dev", "group": "dev:285", "meta": {}}
+{"text": "music box melody", "label": "MUSCToy", "source": "handwritten_dev", "group": "dev:286", "meta": {}}
+{"text": "wind chimes tinkling", "label": "MUSCChim", "source": "handwritten_dev", "group": "dev:287", "meta": {}}
+{"text": "flute melody", "label": "MUSCWind", "source": "handwritten_dev", "group": "dev:288", "meta": {}}
+{"text": "wind up toy walking", "label": "TOYMech", "source": "handwritten_dev", "group": "dev:289", "meta": {}}
+{"text": "toy car with batteries buzzing", "label": "TOYElec", "source": "handwritten_dev", "group": "dev:290", "meta": {}}
+{"text": "slot machine spinning jackpot", "label": "GAMECas", "source": "handwritten_dev", "group": "dev:291", "meta": {}}
+{"text": "rolling dice on a board", "label": "GAMEBoard", "source": "handwritten_dev", "group": "dev:292", "meta": {}}
+{"text": "arcade machine sounds", "label": "GAMEArcd", "source": "handwritten_dev", "group": "dev:293", "meta": {}}
+{"text": "basketball bouncing on court", "label": "SPRTCourt", "source": "handwritten_dev", "group": "dev:294", "meta": {}}
+{"text": "soccer ball kick", "label": "SPRTField", "source": "handwritten_dev", "group": "dev:295", "meta": {}}
+{"text": "skateboard rolling and ollie", "label": "SPRTSkate", "source": "handwritten_dev", "group": "dev:296", "meta": {}}
+{"text": "skis carving on snow", "label": "SPRTWntr", "source": "handwritten_dev", "group": "dev:297", "meta": {}}
+{"text": "weights dropped in the gym", "label": "SPRTGym", "source": "handwritten_dev", "group": "dev:298", "meta": {}}
+{"text": "swimming in a pool", "label": "SPRTWatr", "source": "handwritten_dev", "group": "dev:299", "meta": {}}
+{"text": "metal links clinking and jangling", "label": "CHAINMvmt", "source": "handwritten_dev", "group": "dev:300", "meta": {}}
+{"text": "handling heavy chain", "label": "CHAINHndl", "source": "handwritten_dev", "group": "dev:301", "meta": {}}
+{"text": "rope creaking under tension", "label": "ROPECreak", "source": "handwritten_dev", "group": "dev:302", "meta": {}}
+{"text": "rope whipping through the air", "label": "ROPEMvmt", "source": "handwritten_dev", "group": "dev:303", "meta": {}}
+{"text": "rubber squeak on glass", "label": "RUBRFric", "source": "handwritten_dev", "group": "dev:304", "meta": {}}
+{"text": "rubber ball bouncing", "label": "RUBRImpt", "source": "handwritten_dev", "group": "dev:305", "meta": {}}
+{"text": "leather coat stretching creak", "label": "LETHRCreak", "source": "handwritten_dev", "group": "dev:306", "meta": {}}
+{"text": "leather belt handling", "label": "LETHRHndl", "source": "handwritten_dev", "group": "dev:307", "meta": {}}
+{"text": "walking through dry leaves rustling", "label": "VEGELeaf", "source": "handwritten_dev", "group": "dev:308", "meta": {}}
+{"text": "tree falling crashing down", "label": "VEGETree", "source": "handwritten_dev", "group": "dev:309", "meta": {}}
+{"text": "moving through tall grass", "label": "VEGEGras", "source": "handwritten_dev", "group": "dev:310", "meta": {}}
+{"text": "electrical hum buzz", "label": "ELECBuzz", "source": "handwritten_dev", "group": "dev:311", "meta": {}}
+{"text": "electric sparks", "label": "ELECSprk", "source": "handwritten_dev", "group": "dev:312", "meta": {}}
+{"text": "electric arc zapping", "label": "ELECArc", "source": "handwritten_dev", "group": "dev:313", "meta": {}}
+{"text": "mud suction squelch", "label": "LIQSuct", "source": "handwritten_dev", "group": "dev:314", "meta": {}}
+{"text": "thick liquid bubbling", "label": "LIQBubl", "source": "handwritten_dev", "group": "dev:315", "meta": {}}
+{"text": "bone break crunch", "label": "GOREBone", "source": "handwritten_dev", "group": "dev:316", "meta": {}}
+{"text": "blood splat", "label": "GORESplt", "source": "handwritten_dev", "group": "dev:317", "meta": {}}
+{"text": "squishing guts", "label": "GORESqsh", "source": "handwritten_dev", "group": "dev:318", "meta": {}}
+{"text": "building collapse", "label": "DESTRClpse", "source": "handwritten_dev", "group": "dev:319", "meta": {}}
+{"text": "debris crashing", "label": "DESTRCrsh", "source": "handwritten_dev", "group": "dev:320", "meta": {}}
+{"text": "earthquake rumble", "label": "NATDQuak", "source": "handwritten_dev", "group": "dev:321", "meta": {}}
+{"text": "tornado", "label": "NATDTorn", "source": "handwritten_dev", "group": "dev:322", "meta": {}}
+{"text": "geyser erupting", "label": "GEOGeyser", "source": "handwritten_dev", "group": "dev:323", "meta": {}}
+{"text": "chemical fizz reaction", "label": "CHEMReac", "source": "handwritten_dev", "group": "dev:324", "meta": {}}
+{"text": "tactical vest gear rattle", "label": "EQUIPTact", "source": "handwritten_dev", "group": "dev:325", "meta": {}}
+{"text": "air horn blast", "label": "HORNAir", "source": "handwritten_dev", "group": "dev:326", "meta": {}}
+{"text": "man whistling", "label": "WHSTHmn", "source": "handwritten_dev", "group": "dev:327", "meta": {}}
+{"text": "sports official blowing a pea whistle", "label": "WHSTMech", "source": "handwritten_dev", "group": "dev:328", "meta": {}}
+{"text": "fart", "label": "FARTReal", "source": "handwritten_dev", "group": "dev:329", "meta": {}}
+{"text": "cartoon boing", "label": "TOONBoing", "source": "handwritten_dev", "group": "dev:330", "meta": {}}
+{"text": "slide whistle", "label": "TOONWhis", "source": "handwritten_dev", "group": "dev:331", "meta": {}}
