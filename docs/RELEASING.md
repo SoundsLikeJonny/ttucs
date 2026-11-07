@@ -7,7 +7,7 @@ ttucs ships as **two** PyPI distributions:
 | `ttucs` | `ttucs` | code, UCS list, CLI | follows the code (`src/ttucs/_version.py`) |
 | `ttucs-model-bow` | `ttucs_model_bow` | data only: `config.json`, fp16 `weights.safetensors`, `manifest.json` (SHA-256) | follows the weights (`packages/ttucs-model-bow/pyproject.toml`) |
 
-`ttucs` depends on `ttucs-model-bow>=0.1.1,<0.2`, so `pip install ttucs` installs the weights too. Wheels
+`ttucs` depends on `ttucs-model-bow>=0.2.0,<0.3`, so `pip install ttucs` installs the weights too. Wheels
 cannot run code at install time, which is why the weights live in their own distribution. After that,
 inference is offline.
 
@@ -57,7 +57,7 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    After this, every release uploads both packages in one run. If step 4 fails the same way, compare
    the pending publisher's fields with the table above (the environment must match the workflow job).
 
-## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
+## Release steps (example: ttucs 0.3.0 with ttucs-model-bow 0.2.0)
 
 1. Make sure everything for the release is merged into `main`.
 2. **Build the weights** (on any machine with the dev install):
@@ -67,14 +67,14 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    ttucs train -c configs/bow-release.yaml                       # compact, redistributable data only
    python scripts/build_model_package.py --model-dir models/ttucs-bow-release --tarball --wheel
    ```
-   This writes `dist/model-bow-v0.1.1.tar.gz` and its `.sha256`. If you retrain, the sha256 changes:
+   This writes `dist/model-bow-v0.2.0.tar.gz` and its `.sha256`. If you retrain, the sha256 changes:
    put the new value in `packages/ttucs-model-bow/RELEASE_SHA256` **and** `src/ttucs/hub.py`
    (`MODELS["bow"].sha256`) and commit. `tests/test_hub.py` checks that the two match.
-3. **Upload the model asset.** Create a GitHub Release with tag `model-bow-v0.1.1`. It must not start
-   with `v`, so it does not trigger the publish workflow. Attach `model-bow-v0.1.1.tar.gz`. The same
+3. **Upload the model asset.** Create a GitHub Release with tag `model-bow-v0.2.0`. It must not start
+   with `v`, so it does not trigger the publish workflow. Attach `model-bow-v0.2.0.tar.gz`. The same
    URL serves as the download fallback for `ttucs download`.
    ```bash
-   gh release create model-bow-v0.1.1 dist/model-bow-v0.1.1.tar.gz --title "ttucs-model-bow 0.1.1 weights" --notes "Release weights (fp16 safetensors)"
+   gh release create model-bow-v0.2.0 dist/model-bow-v0.2.0.tar.gz --title "ttucs-model-bow 0.2.0 weights" --notes "Release weights (fp16 safetensors)"
    ```
 4. **TestPyPI.** Go to *Actions → Publish → Run workflow* on `main`. Then check the install in a clean
    environment:
@@ -82,7 +82,7 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    ```bash
    python -m venv /tmp/tt && . /tmp/tt/bin/activate
    pip install torch --index-url https://download.pytorch.org/whl/cpu
-   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.2.0
+   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.3.0
    TTUCS_OFFLINE=1 ttucs info && TTUCS_OFFLINE=1 ttucs predict "wooden door creak slow, take 3"
    ```
    Windows (PowerShell). Windows PowerShell 5.1 has no `&&`, the venv script lives in `Scripts\`, and
@@ -91,7 +91,7 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    python -m venv "$env:TEMP\tt"
    & "$env:TEMP\tt\Scripts\Activate.ps1"
    pip install torch --index-url https://download.pytorch.org/whl/cpu
-   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.2.0
+   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.3.0
    $env:TTUCS_OFFLINE = "1"
    ttucs info
    ttucs predict "wooden door creak slow, take 3"
@@ -104,11 +104,11 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    ```bash
    git checkout main
    git pull
-   git tag -a v0.2.0 -m "ttucs 0.2.0"
-   git push origin v0.2.0
+   git tag -a v0.3.0 -m "ttucs 0.3.0"
+   git push origin v0.3.0
    ```
    `skip-existing` lets a later ttucs release reuse an unchanged `ttucs-model-bow` without failing.
-6. Create the GitHub Release for `v0.2.0`, using the CHANGELOG section as notes.
+6. Create the GitHub Release for `v0.3.0`, using the CHANGELOG section as notes.
 
 ## Manual alternative (API token)
 

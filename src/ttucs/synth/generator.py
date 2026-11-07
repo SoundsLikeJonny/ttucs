@@ -33,9 +33,35 @@ GENERIC_SUBCATS = {"BREAK", "CRASH & DEBRIS", "FRICTION", "HANDLE", "IMPACT", "M
                    "TONAL", "CREAK", "RIP", "FLAP", "DUST", "SUCTION", "BUBBLES"}
 
 
+_STOP = {"a", "an", "the", "and", "of", "on", "in", "with", "to", "for", "small", "large", "big",
+         "old", "new"}
+
+
+def _stem(w: str) -> str:
+    """Tiny plural folding so "doors"/"door" and "mowers"/"mower" match."""
+    if len(w) > 4 and w.endswith("ies"):
+        return w[:-3] + "y"
+    if len(w) > 3 and w.endswith("s") and not w.endswith("ss"):
+        return w[:-1]
+    return w
+
+
+def _terms(e: UCSEntry) -> set[str]:
+    """Discriminative word set of a CatID: its subcategory name and single-word UCS synonyms
+    (multi-word synonyms like "Sea Lion" are not split, so "lion" does not route to ANMLAqua)."""
+    single = [s for s in e.synonyms if len(s.split()) == 1]
+    words = re.findall(r"[a-z]+", " ".join([e.subcategory, *single]).lower())
+    return {_stem(w) for w in words} - _STOP
+
+
 def load_banks() -> dict:
-    with resources.files("ttucs.resources").joinpath("synth_banks.yaml").open(encoding="utf-8") as fh:
-        return yaml.safe_load(fh)
+    """Vocabulary banks: ``synth_banks.yaml`` plus the per-CatID ``catid_phrases.yaml``."""
+    res = resources.files("ttucs.resources")
+    with res.joinpath("synth_banks.yaml").open(encoding="utf-8") as fh:
+        banks = yaml.safe_load(fh)
+    with res.joinpath("catid_phrases.yaml").open(encoding="utf-8") as fh:
+        banks["catid_phrases"] = yaml.safe_load(fh) or {}
+    return banks
 
 
 @dataclass
@@ -57,10 +83,12 @@ class DescriptionGenerator:
     """Template + vocabulary-bank generator of sound descriptions for a CatID."""
 
     def __init__(self, taxonomy: UCSTaxonomy, banks: dict | None = None, seed: int = 0,
-                 max_synonym_df: int = 25,
+                 max_synonym_df: int = 25, phrase_prob: float = 0.5,
                  llm_hook: Callable[[str, UCSEntry], str] | None = None) -> None:
         self.tax = taxonomy
         self.banks = banks or load_banks()
+        self.phrases: dict[str, list[str]] = self.banks.get("catid_phrases") or {}
+        self.phrase_prob = phrase_prob
         self.rng = random.Random(seed)
         self.llm_hook = llm_hook
         self.mods = [m for group in self.banks["modifiers"].values() for m in group]
@@ -73,6 +101,42 @@ class DescriptionGenerator:
             syns = sorted({s.lower() for s in e.synonyms if df[s.lower()] <= max_synonym_df})
             weights = [1.0 / math.sqrt(df[s]) for s in syns]
             self._syn_weights[e.cat_id] = (syns, weights)
+        self._routed, self._unrouted = self._route_objects()
+
+    # ------------------------------------------------------------------ object routing
+    def _route_objects(self) -> tuple[dict[str, list[str]], dict[str, list[str]]]:
+        """Assign each category-level bank object ("lawn mower", "gate") to the specific
+        sibling subcategories whose UCS synonyms / name mention it.
+
+        Without this, MISC/GENERAL subcategories were trained on every category object and
+        absorbed specific sounds ("lawn mower" -> MACHMisc instead of MACHGrdn). Routed objects
+        become extra head nouns for their subcategory; MISC/GENERAL only keeps the rest.
+        """
+        by_cat: dict[str, list[UCSEntry]] = {}
+        for e in self.tax.entries:
+            by_cat.setdefault(e.category, []).append(e)
+        routed: dict[str, list[str]] = {}
+        unrouted: dict[str, list[str]] = {}
+        for category, entries in by_cat.items():
+            objects = (self.banks["categories"].get(category) or {}).get("objects") or []
+            specific = [e for e in entries
+                        if e.subcategory not in GENERIC_SUBCATS | {"MISC", "GENERAL"}]
+            terms = {e.cat_id: _terms(e) for e in specific}
+            cat_words = {_stem(w) for w in re.findall(r"[a-z]+", category.lower())}
+            # a token named by more than a third of the siblings does not discriminate
+            tok_df = Counter(t for ts in terms.values() for t in ts)
+            limit = max(2, len(specific) // 3)
+            rest = []
+            for obj in objects:
+                toks = {_stem(w) for w in re.findall(r"[a-z]+", obj.lower())} - cat_words - _STOP
+                toks = {t for t in toks if tok_df[t] <= limit}
+                hits = [cid for cid, ts in terms.items() if toks & ts]
+                for cid in hits:
+                    routed.setdefault(cid, []).append(obj)
+                if not hits:
+                    rest.append(obj)
+            unrouted[category] = rest
+        return routed, unrouted
 
     # ------------------------------------------------------------------ helpers
     def _syn(self, e: UCSEntry) -> str | None:
@@ -86,7 +150,10 @@ class DescriptionGenerator:
 
     def _expl_fragment(self, e: UCSEntry) -> str | None:
         parts = [p.strip() for p in re.split(r"[.;,]|\bor\b|\bfrom\b", e.explanation) if p.strip()]
-        parts = [p for p in parts if 2 <= len(p.split()) <= 9 and "category" not in p.lower()]
+        # drop cross-references ("See also TOOLS-GARDEN", "Not VEHICLES") - they name other classes
+        parts = [p for p in parts if 2 <= len(p.split()) <= 9 and "category" not in p.lower()
+                 and not re.search(r"\b[A-Z]{3,}\b", p)              # upper-case class names
+                 and not re.search(r"\b(see|also|not)\b", p.lower())]
         if not parts:
             return None
         frag = self.rng.choice(parts).lower()
@@ -109,6 +176,9 @@ class DescriptionGenerator:
         mod = self._pick(self.mods) if r() < 0.55 else ""
         ctx = self._pick(self.contexts) if r() < 0.15 else ""
 
+        routed = self._routed.get(e.cat_id, [])
+        if e.subcategory in {"MISC", "GENERAL"}:
+            objects = self._unrouted.get(e.category) or [e.category.lower()]
         if generic or e.subcategory in {"MISC", "GENERAL"}:
             head = self._pick(objects)
             act = self._pick(sub_actions) if (sub_actions and r() < 0.8) else self._pick(actions)
@@ -118,6 +188,8 @@ class DescriptionGenerator:
             ]
         else:
             noun_choices = [x for x in (sub, syn, syn, self._syn(e)) if x]
+            if routed:
+                noun_choices += [self._pick(routed), self._pick(routed)]
             head = self._pick(noun_choices) if noun_choices else self._pick(objects)
             act = self._pick(actions) if r() < 0.7 else (self._syn(e) or "")
             other = self._syn(e) or ""
@@ -128,6 +200,15 @@ class DescriptionGenerator:
             ]
             if r() < 0.25:
                 templates.append(f"{self._pick(objects)} {head} {act}")
+        phrases = self.phrases.get(e.cat_id)
+        if phrases and r() < self.phrase_prob:
+            # everyday library-style phrasing: "<mod> weed whacker start up", "creaky door slow"
+            head = self._pick(phrases)
+            act = self._pick(sub_actions) if (generic and sub_actions) else self._pick(actions)
+            act = act if r() < 0.5 else ""
+            other = (self._syn(e) or "") if r() < 0.3 else ""
+            templates = [f"{mod} {head} {act}", f"{head} {act} {mod}", f"{head} {act} {ctx}",
+                         f"{mod} {head} {other}", f"{head} {other} {act}", f"{head}"]
         frag = self._expl_fragment(e)
         if frag and r() < 0.12:
             text = f"{mod} {frag}" if r() < 0.5 else frag

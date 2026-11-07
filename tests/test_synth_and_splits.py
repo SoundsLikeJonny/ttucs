@@ -20,6 +20,40 @@ def test_generator_covers_every_trainable_class(taxonomy):
         assert out and all(t.strip() for t in out), e.cat_id
 
 
+def test_catid_phrases_reference_real_classes(taxonomy):
+    gen = DescriptionGenerator(taxonomy, seed=0)
+    known = {e.cat_id for e in taxonomy.entries}
+    assert len(gen.phrases) > 300
+    for cid, phrases in gen.phrases.items():
+        assert cid in known, cid
+        assert phrases and all(p.strip() and len(p.split()) <= 5 for p in phrases), cid
+
+
+def test_category_objects_route_to_specific_subcategories(taxonomy):
+    gen = DescriptionGenerator(taxonomy, seed=0)
+    assert "lawn mower" in gen._routed["MACHGrdn"]
+    assert "gate" in gen._routed["DOORGate"]
+    # MISC keeps only objects no specific sibling claims
+    assert "lawn mower" not in gen._unrouted["MACHINES"]
+    misc = " ".join(gen.generate(taxonomy["MACHMisc"], 60))
+    assert "lawn mower" not in misc and "elevator" not in misc
+
+
+def test_phrase_prob_controls_phrase_usage(taxonomy):
+    e = taxonomy["MACHGrdn"]
+    off = DescriptionGenerator(taxonomy, seed=2, phrase_prob=0.0).generate(e, 80)
+    on = DescriptionGenerator(taxonomy, seed=2, phrase_prob=1.0).generate(e, 80)
+    assert not any("weed whacker" in t for t in off)
+    assert any("weed whacker" in t or "leaf blower" in t for t in on)
+
+
+def test_explanation_fragments_skip_cross_references(taxonomy):
+    gen = DescriptionGenerator(taxonomy, seed=0)
+    for _ in range(50):
+        frag = gen._expl_fragment(taxonomy["MACHGrdn"]) or ""
+        assert "tools-garden" not in frag and "see also" not in frag
+
+
 def test_slate_generator_truth_is_recoverable():
     sg = SlateGenerator(seed=3)
     hits = 0
