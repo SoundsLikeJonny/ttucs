@@ -26,11 +26,14 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
 2. **Enable the workflows.** The assistant's GitHub App cannot write `.github/workflows/`, so move the
    files yourself:
    ```bash
-   mkdir -p .github/workflows
+   mkdir -p .github/workflows          # PowerShell: New-Item -ItemType Directory -Force .github/workflows
    git mv ci/github-actions-ci.yml .github/workflows/ci.yml
    git mv ci/publish.yml .github/workflows/publish.yml
-   git commit -m "ci: enable CI and publish workflows" && git push
+   git commit -m "ci: enable CI and publish workflows"
+   git push
    ```
+   Commands in this guide are bash unless a PowerShell version is given. On Windows PowerShell 5.1,
+   run commands joined by `&&` one line at a time, and join backslash-continued lines into one line.
 3. **GitHub environments.** In the repo, go to *Settings → Environments* and create `pypi` and
    `testpypi`. For `pypi`, adding yourself as a required reviewer is recommended.
 4. **Pending trusted publishers (4 forms in total).** This repo publishes two PyPI projects, `ttucs`
@@ -73,22 +76,38 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    with `v`, so it does not trigger the publish workflow. Attach `model-bow-v0.1.1.tar.gz`. The same
    URL serves as the download fallback for `ttucs download`.
    ```bash
-   gh release create model-bow-v0.1.1 dist/model-bow-v0.1.1.tar.gz \
-       --title "ttucs-model-bow 0.1.1 weights" --notes "Release weights (fp16 safetensors)"
+   gh release create model-bow-v0.1.1 dist/model-bow-v0.1.1.tar.gz --title "ttucs-model-bow 0.1.1 weights" --notes "Release weights (fp16 safetensors)"
    ```
 4. **TestPyPI.** Go to *Actions → Publish → Run workflow* on `main`. Then check the install in a clean
    environment:
+   macOS / Linux (bash, zsh):
    ```bash
    python -m venv /tmp/tt && . /tmp/tt/bin/activate
    pip install torch --index-url https://download.pytorch.org/whl/cpu
    pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.2.0
    TTUCS_OFFLINE=1 ttucs info && TTUCS_OFFLINE=1 ttucs predict "wooden door creak slow, take 3"
    ```
+   Windows (PowerShell). Windows PowerShell 5.1 has no `&&`, the venv script lives in `Scripts\`, and
+   environment variables are set with `$env:`:
+   ```powershell
+   python -m venv "$env:TEMP\tt"
+   & "$env:TEMP\tt\Scripts\Activate.ps1"
+   pip install torch --index-url https://download.pytorch.org/whl/cpu
+   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.2.0
+   $env:TTUCS_OFFLINE = "1"
+   ttucs info
+   ttucs predict "wooden door creak slow, take 3"
+   Remove-Item Env:TTUCS_OFFLINE
+   ```
+   If activation fails with "running scripts is disabled on this system", run
+   `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first. It only applies to that window.
 5. **PyPI.** Tag the merged commit and push the tag. The workflow checks that the tag matches
    `ttucs.__version__`.
    ```bash
-   git checkout main && git pull
-   git tag -a v0.2.0 -m "ttucs 0.2.0" && git push origin v0.2.0
+   git checkout main
+   git pull
+   git tag -a v0.2.0 -m "ttucs 0.2.0"
+   git push origin v0.2.0
    ```
    `skip-existing` lets a later ttucs release reuse an unchanged `ttucs-model-bow` without failing.
 6. Create the GitHub Release for `v0.2.0`, using the CHANGELOG section as notes.
