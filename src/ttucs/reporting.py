@@ -84,3 +84,46 @@ def distribution_report(train: list[Example], tax: UCSTaxonomy, out_dir: str | P
     path = out / "distribution.md"
     path.write_text("\n".join(lines))
     return path
+
+
+def training_history_png(history: dict[str, list[float]], path: str | Path,
+                         title: str = "") -> Path | None:
+    """Per-epoch training curves: ``train_loss`` (left axis) and ``val_top1`` (right axis).
+
+    Returns ``None`` and writes nothing when the history has no per-epoch curves, e.g. for
+    rule-based models whose ``fit`` returns an empty dict.
+    """
+    curves = {k: [float(v) for v in vals] for k, vals in history.items()
+              if k in ("train_loss", "val_top1") and vals}
+    if not curves:
+        return None
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax1 = plt.subplots(figsize=(8, 4.5))
+    ax2 = ax1.twinx()
+    if "train_loss" in curves:
+        ax1.plot(range(1, len(curves["train_loss"]) + 1), curves["train_loss"],
+                 color="#d62728", label="train loss")
+    if "val_top1" in curves:
+        vals = curves["val_top1"]
+        best = max(vals)
+        ax2.plot(range(1, len(vals) + 1), vals, color="#1f77b4", label="val top-1")
+        ax2.axhline(best, color="#1f77b4", linestyle=":", linewidth=1)
+        ax2.annotate(f"best {best:.3f}", (len(vals), best), ha="right", va="bottom", fontsize=8,
+                     color="#1f77b4")
+        ax2.set_ylim(0, 1)
+    ax1.set_xlabel("epoch")
+    ax1.set_ylabel("train loss", color="#d62728")
+    ax2.set_ylabel("val top-1", color="#1f77b4")
+    ax1.set_title(title or "Training history")
+    lines = [*ax1.get_lines(), *ax2.get_lines()]
+    ax1.legend(lines, [line.get_label() for line in lines], loc="lower right", fontsize=8)
+    fig.tight_layout()
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=110)
+    plt.close(fig)
+    return path

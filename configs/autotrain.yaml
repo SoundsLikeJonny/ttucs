@@ -1,0 +1,55 @@
+# Config for scripts/autotrain.py, the MLflow-gated auto-train loop.
+# Same model shape as configs/bow-release.yaml, but the held-out realistic slates are excluded
+# on purpose: the loop only ever sees the tuning signals (dev descriptions + synthetic
+# validation). The realistic slates are scored once, manually, before promoting a beta.
+# Champion reference: configs/champion.json (created by `scripts/autotrain.py --init-champion`).
+seed: 42
+output_dir: models/ttucs-bow-autotrain
+
+data:
+  exclude_categories: [ARCHIVED]
+  synthetic:
+    enabled: true
+    target_per_class: 300
+    min_per_class: 60
+    max_synonym_df: 25
+    phrase_prob: 0.5
+    cache: data/processed-autotrain/synthetic.jsonl
+  label_documents: true
+  slate_augment_fraction: 0.25
+  split: {val: 0.1, test: 0.1}
+  realistic_slates: null            # held out: never loaded by the autotrain loop
+  processed_dir: data/processed-autotrain
+
+model:
+  name: bow
+  embedding_dim: 256
+  num_buckets: 131072
+  word_ngrams: 2
+  char_ngrams: [3, 5]
+  dropout: 0.2
+  category_loss_weight: 0.3
+
+train:
+  epochs: 15
+  batch_size: 256
+  lr: 1.0e-2
+  weight_decay: 1.0e-5
+  label_smoothing: 0.05
+  patience: 3
+  num_threads: 8
+  calibrate: true
+
+inference:
+  unknown_threshold: 0.12
+  category_threshold: 0.5
+  top_k: 5
+
+mlflow:
+  enabled: true
+  tracking_uri: sqlite:///mlflow.db
+  experiment: ttucs
+  run_name: autotrain
+  log_model: true
+  register_model: true
+  registered_model_name: ttucs

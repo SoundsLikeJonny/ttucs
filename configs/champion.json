@@ -1,0 +1,36 @@
+{
+  "weights_version": "0.2.0",
+  "note": "live evaluation of the resolved ttucs-model-bow 0.2.0 weights",
+  "evaluated_at": "2026-11-07T23:17:01Z",
+  "git_sha": "b90d56b",
+  "code_fingerprint": "8f4e0f24a1d5",
+  "config_hash": "655af0c260b5",
+  "metrics": {
+    "test_synth.top1": 0.90828270192995,
+    "test_synth.top5": 0.9832022873481058,
+    "test_synth.macro_f1": 0.9039354114416115,
+    "test_synth.ece": 0.020197693128711267,
+    "test_slates_synth.top1": 0.8995,
+    "test_slates_synth.top5": 0.9755,
+    "test_slates_synth.macro_f1": 0.8835139319765968,
+    "test_slates_synth.ece": 0.02340763369947673,
+    "dev.top1": 0.7891566265060241,
+    "dev.top5": 0.9246987951807228,
+    "dev.macro_f1": 0.7878101402373248,
+    "dev.ece": 0.06881382514958279
+  },
+  "parser": {
+    "parser_description_token_f1": 0.9778402791008443,
+    "parser_description_exact": 0.921
+  },
+  "leakage_baseline": {
+    "phrase": 2,
+    "cross": 0,
+    "soft": 10,
+    "phrase_details": [
+      "bank phrase \"sci fi computer\" (catid_phrases.SCICmpt) appears verbatim",
+      "bank phrase \"sci fi door\" (catid_phrases.SCIDoor) appears verbatim"
+    ],
+    "cross_details": []
+  }
+}

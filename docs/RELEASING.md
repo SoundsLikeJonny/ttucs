@@ -110,6 +110,37 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    `skip-existing` lets a later ttucs release reuse an unchanged `ttucs-model-bow` without failing.
 6. Create the GitHub Release for `v0.3.0`, using the CHANGELOG section as notes.
 
+## Beta weights via the autotrain loop
+
+`scripts/autotrain.py` automates the "is the new model better?" part of a weights release. It
+trains a candidate whenever the training code or resources changed (fingerprinted against
+`configs/champion.json`), gates it on the dev descriptions and the synthetic splits only - the
+held-out realistic slates never enter the loop - and with `--release` turns a passing candidate
+into a beta PR:
+
+- bumps a pre-release version (`0.2.0` -> `0.2.1b1`; tag `model-bow-v0.2.1b1`, never "Latest"),
+- builds the deterministic tarball + wheel and uploads the tarball as the Release asset,
+- pins the sha everywhere (the usual files, section above) and refreshes `configs/champion.json`,
+- opens a PR with the gate table. It never merges, never pushes `main` and never publishes to
+  PyPI.
+
+Windows PowerShell 5.1 (one command per line):
+
+```powershell
+.venv\Scripts\Activate.ps1
+python scripts/autotrain.py                          # dry run: what changed + leakage status
+python scripts/autotrain.py --train                  # train + gate; on failure: a failure report
+python scripts/autotrain.py --train --confirm-seed   # also re-run the winner with seed 7
+python scripts/autotrain.py --train --release        # passing gate -> beta PR (needs gh)
+mlflow ui                                            # http://localhost:5000: runs, curves, sweeps
+```
+
+Before promoting a beta to a final release: score the 80 held-out realistic slates once, manually
+(`ttucs eval -m models/ttucs-bow-autotrain`), update the README/MODEL_CARD tables with those
+numbers, then re-seed the champion (`python scripts/autotrain.py --init-champion`). A promoted
+beta is rebuilt as the final version with its own sha (training is deterministic, and
+`config.json` records `ttucs_version`), so beta versions stay throwaway.
+
 ## Manual alternative (API token)
 
 Use this only if you don't want Trusted Publishing:

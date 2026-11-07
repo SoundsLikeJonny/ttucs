@@ -40,6 +40,8 @@ from ttucs.evaluate import (
 )
 from ttucs.models import MODEL_REGISTRY, fit_temperature
 from ttucs.pipeline import TTUCS
+from ttucs.provenance import run_tags
+from ttucs.reporting import training_history_png
 from ttucs.synth.generator import Example
 from ttucs.taxonomy import UCSTaxonomy
 
@@ -133,7 +135,8 @@ def train(cfg: dict, rebuild_data: bool = False) -> dict[str, Any]:
             mlf.log_params({k: str(v)[:500] for k, v in flatten(cfg).items()})
             mlf.set_tags({"ttucs_version": __version__, "ucs_version": tax.version,
                           "model": mcfg["name"], "python": platform.python_version(),
-                          "torch": torch.__version__})
+                          "torch": torch.__version__, **run_tags(),
+                          "data_fingerprint": data_fingerprint(cfg)})
             mlf.log_params({"n_labels": len(labels), "n_train": len(train_pairs),
                             "n_val": len(val_pairs)})
 
@@ -170,6 +173,9 @@ def train(cfg: dict, rebuild_data: bool = False) -> dict[str, Any]:
         report_dir = out_dir / "reports"
         report_dir.mkdir(parents=True, exist_ok=True)
         (report_dir / "metrics.json").write_text(json.dumps(summary, indent=2))
+        if history:
+            training_history_png(history, report_dir / "training_history.png",
+                                 title=f"{out_dir.name}: training history")
         for split, d in details.items():
             per_class_report(pipe, d, report_dir / f"per_class_{split}.csv")
             top_confusions(pipe, d, report_dir / f"confusions_{split}.csv")
