@@ -15,6 +15,4 @@
 Adding a model: subclass `ttucs.models.base.UCSModel`, decorate it with `@register("name")`, import it in
 `ttucs/models/__init__.py`, and add `configs/<name>.yaml`.
 
-> The CI and publish workflows live in `ci/` (`github-actions-ci.yml`, `publish.yml`). Move them to
-> `.github/workflows/` to enable them, because the automation token was not allowed to push workflow
-> files. Releases: see [docs/RELEASING.md](https://github.com/SoundsLikeJonny/ttucs/blob/main/docs/RELEASING.md).
+> CI and publishing run from `.github/workflows/` (`ci.yml`, `publish.yml`). Releases: see [docs/RELEASING.md](https://github.com/SoundsLikeJonny/ttucs/blob/main/docs/RELEASING.md).

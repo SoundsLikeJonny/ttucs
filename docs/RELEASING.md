@@ -23,15 +23,9 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
 
 1. **Accounts.** Create accounts on <https://pypi.org> and <https://test.pypi.org> (they are separate
    sites with separate accounts). Enable 2FA on both: PyPI requires it for uploads.
-2. **Enable the workflows.** The assistant's GitHub App cannot write `.github/workflows/`, so move the
-   files yourself:
-   ```bash
-   mkdir -p .github/workflows          # PowerShell: New-Item -ItemType Directory -Force .github/workflows
-   git mv ci/github-actions-ci.yml .github/workflows/ci.yml
-   git mv ci/publish.yml .github/workflows/publish.yml
-   git commit -m "ci: enable CI and publish workflows"
-   git push
-   ```
+2. **Workflows.** `.github/workflows/ci.yml` (lint and tests) and `.github/workflows/publish.yml`
+   (TestPyPI and PyPI uploads) are already in the repo. Check that Actions is enabled under
+   *Settings → Actions → General*.
    Commands in this guide are bash unless a PowerShell version is given. On Windows PowerShell 5.1,
    run commands joined by `&&` one line at a time, and join backslash-continued lines into one line.
 3. **GitHub environments.** In the repo, go to *Settings → Environments* and create `pypi` and
