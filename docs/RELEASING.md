@@ -30,40 +30,36 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    run commands joined by `&&` one line at a time, and join backslash-continued lines into one line.
 3. **GitHub environments.** In the repo, go to *Settings → Environments* and create `pypi` and
    `testpypi`. For `pypi`, adding yourself as a required reviewer is recommended.
-4. **Pending trusted publishers (4 forms in total).** This repo publishes two PyPI projects, `ttucs`
-   and `ttucs-model-bow`. PyPI ties a trusted publisher to one project name, so each project needs its
-   own registration, on both PyPI and TestPyPI:
+4. **Trusted publishers: one pending publisher at a time.** This repo publishes two projects, `ttucs`
+   and `ttucs-model-bow`, from the same workflow and environment. PyPI allows only **one** pending
+   publisher per repository + workflow + environment, so you cannot register both names up front.
+   Create the projects one after the other, on each site (TestPyPI with environment `testpypi`, then
+   PyPI with environment `pypi`):
 
-   | # | Site | Where | PyPI project name | Environment |
-   |---|---|---|---|---|
-   | 1 | pypi.org | *Your account → Publishing → Add a new pending publisher* | `ttucs` | `pypi` |
-   | 2 | pypi.org | same page, submit the form again | `ttucs-model-bow` | `pypi` |
-   | 3 | test.pypi.org | same page on TestPyPI (separate account) | `ttucs` | `testpypi` |
-   | 4 | test.pypi.org | same page, submit the form again | `ttucs-model-bow` | `testpypi` |
+   1. *Your account → Publishing → Add a new pending publisher* with project name `ttucs`:
 
-   The other fields are identical in all four forms:
+      | field | value |
+      |---|---|
+      | PyPI project name | `ttucs` |
+      | Owner | `SoundsLikeJonny` |
+      | Repository name | `ttucs` |
+      | Workflow name | `publish.yml` |
+      | Environment | `testpypi` (on pypi.org: `pypi`) |
 
-   | field | value |
-   |---|---|
-   | Owner | `SoundsLikeJonny` |
-   | Repository name | `ttucs` |
-   | Workflow name | `publish.yml` |
+   2. Run the publish workflow (TestPyPI: *Actions → Publish → Run workflow*; PyPI: push the `v*` tag).
+      It creates `ttucs`, and the `ttucs-model-bow` upload fails with
+      `400 Non-user identities cannot create new projects`. That failure is expected on this first run.
+   3. The `ttucs` pending publisher is now a normal publisher, which frees the slot. Add a **new pending
+      publisher** with the same fields, except the project name `ttucs-model-bow`.
+   4. *Re-run failed jobs*. PyPI creates `ttucs-model-bow` and attaches it to the existing publisher, so
+      that publisher covers both projects. `skip-existing` skips the `ttucs` files already uploaded.
 
-   **First upload creates one project per token.** Each time the workflow trades its GitHub token for
-   a PyPI token, PyPI converts only **one** pending publisher, so only one new project is created. The
-   first run therefore creates `ttucs` (or `ttucs-model-bow`), and the other package fails with:
-   `400 Non-user identities cannot create new projects`. Re-run the failed job (*Re-run failed jobs*).
-   The second token exchange converts the remaining pending publisher and attaches it to the existing
-   publisher, so that publisher then covers both projects. `skip-existing` skips the files that already
-   uploaded. This happens once per site: once on TestPyPI and once on PyPI. After that, every release
-   uploads both packages in one go.
-
-   If the re-run fails the same way, the pending publisher for that project is missing or its name is
-   misspelled. Check *Your account → Publishing* on that site.
+   After this, every release uploads both packages in one run. If step 4 fails the same way, compare
+   the pending publisher's fields with the table above (the environment must match the workflow job).
 
 ## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
 
-1. Merge the packaging PR (#2) into `main`.
+1. Make sure everything for the release is merged into `main`.
 2. **Build the weights** (on any machine with the dev install):
    ```bash
    pip install -e packages/ttucs-model-bow -e ".[dev]"
