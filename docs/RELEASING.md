@@ -33,23 +33,32 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    ```
 3. **GitHub environments.** In the repo, go to *Settings → Environments* and create `pypi` and
    `testpypi`. For `pypi`, adding yourself as a required reviewer is recommended.
-4. **Pending trusted publishers.** On PyPI, go to *Your account → Publishing → Add a new pending
-   publisher*. Repeat on TestPyPI, and register **both** project names on each site:
+4. **Pending trusted publishers (4 forms in total).** This repo publishes two PyPI projects, `ttucs`
+   and `ttucs-model-bow`. PyPI ties a trusted publisher to one project name, so each project needs its
+   own registration, on both PyPI and TestPyPI:
+
+   | # | Site | Where | PyPI project name | Environment |
+   |---|---|---|---|---|
+   | 1 | pypi.org | *Your account → Publishing → Add a new pending publisher* | `ttucs` | `pypi` |
+   | 2 | pypi.org | same page, submit the form again | `ttucs-model-bow` | `pypi` |
+   | 3 | test.pypi.org | same page on TestPyPI (separate account) | `ttucs` | `testpypi` |
+   | 4 | test.pypi.org | same page, submit the form again | `ttucs-model-bow` | `testpypi` |
+
+   The other fields are identical in all four forms:
 
    | field | value |
    |---|---|
-   | PyPI project name | `ttucs` (then again for `ttucs-model-bow`) |
    | Owner | `SoundsLikeJonny` |
-   | Repository | `ttucs` |
+   | Repository name | `ttucs` |
    | Workflow name | `publish.yml` |
-   | Environment | `pypi` (on TestPyPI: `testpypi`) |
 
-   A pending publisher creates the project on its first upload. Both projects share one publisher, so a
-   single upload step can publish both.
+   A pending publisher turns into a normal one, and the project is created, on the first upload. All four
+   point to the same workflow, so one run of `publish.yml` can upload both packages. Without the
+   `ttucs-model-bow` registration, that upload fails with a "not a trusted publisher" error.
 
 ## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
 
-1. Merge the PRs. `feat/initial-release` (#1) goes first, then the packaging PR.
+1. Merge the packaging PR (#2) into `main`.
 2. **Build the weights** (on any machine with the dev install):
    ```bash
    pip install -e packages/ttucs-model-bow -e ".[dev]"
