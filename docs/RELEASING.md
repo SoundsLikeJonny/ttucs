@@ -54,7 +54,7 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
 
    A pending publisher turns into a normal one, and the project is created, on the first upload. All four
    point to the same workflow, so one run of `publish.yml` can upload both packages. Without the
-   `ttucs-model-bow` registration, that upload fails with a "not a trusted publisher" error.
+   `ttucs-model-bow` registration, that upload is rejected with an `invalid-publisher` error.
 
 ## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
 
