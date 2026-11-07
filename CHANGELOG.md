@@ -6,7 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Moving CI git workflows to `/.github`
 
 ## [0.2.0] - 2026-11-06
 
@@ -21,9 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Model loading from `weights.safetensors` (fp16 or fp32) as well as `weights.pt`; training records
   its data sources in `config.json`.
 - `scripts/build_model_package.py` (reproducible weights tarball and wheel), trusted-publishing
-  workflow `ci/publish.yml`, and `docs/RELEASING.md`.
+  workflow `.github/workflows/publish.yml`, and `docs/RELEASING.md`.
 
 ### Changed
+- CI workflows moved from `ci/` to `.github/workflows/` (`ci.yml`, `publish.yml`), so GitHub runs them.
 - Lean core install: scikit-learn, pandas, matplotlib and MLflow moved to the `[train]` extra.
   `train`, `eval` and `report` print an install hint without it.
 - `TTUCS.from_pretrained()` with no arguments now loads the installed `ttucs-model-bow` weights.
