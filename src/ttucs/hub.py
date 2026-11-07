@@ -322,7 +322,7 @@ def export_model(src: str | Path, dst: str | Path, dtype: str = "float16",
         (dst / stale).unlink(missing_ok=True)
     save_file(state, str(dst / "weights.safetensors"), metadata={"format": "pt", "dtype": dtype})
     meta.update({"format_version": MODEL_FORMAT_VERSION, "weights_dtype": dtype,
-                 "min_ttucs_version": meta.get("min_ttucs_version", "0.1.1")})
+                 "min_ttucs_version": meta.get("min_ttucs_version", "0.2.0")})
     meta.update(extra_meta or {})
     (dst / "config.json").write_text(json.dumps(meta, indent=2) + "\n")
     write_manifest(dst)

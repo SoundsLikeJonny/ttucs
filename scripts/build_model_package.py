@@ -80,7 +80,7 @@ def from_trained(model_dir: Path, version: str, dtype: str, allow_other: bool) -
     meta = json.loads((model_dir / "config.json").read_text())
     td = meta.get("training_data")
     if td is None and not allow_other:
-        sys.exit(f"{model_dir}/config.json has no 'training_data' record - retrain with ttucs>=0.1.1 "
+        sys.exit(f"{model_dir}/config.json has no 'training_data' record - retrain with ttucs>=0.2.0 "
                  "so the data provenance can be checked")
     extra = set((td or {}).get("sources", [])) - PUBLISHABLE_SOURCES
     if extra and not allow_other:

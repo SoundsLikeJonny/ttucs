@@ -47,7 +47,7 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    A pending publisher creates the project on its first upload. Both projects share one publisher, so a
    single upload step can publish both.
 
-## Release steps (example: 0.1.1)
+## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
 
 1. Merge the PRs. `feat/initial-release` (#1) goes first, then the packaging PR.
 2. **Build the weights** (on any machine with the dev install):
@@ -72,17 +72,17 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    ```bash
    python -m venv /tmp/tt && . /tmp/tt/bin/activate
    pip install torch --index-url https://download.pytorch.org/whl/cpu
-   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.1.1
+   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ttucs==0.2.0
    TTUCS_OFFLINE=1 ttucs info && TTUCS_OFFLINE=1 ttucs predict "wooden door creak slow, take 3"
    ```
 5. **PyPI.** Tag the merged commit and push the tag. The workflow checks that the tag matches
    `ttucs.__version__`.
    ```bash
    git checkout main && git pull
-   git tag -a v0.1.1 -m "ttucs 0.1.1" && git push origin v0.1.1
+   git tag -a v0.2.0 -m "ttucs 0.2.0" && git push origin v0.2.0
    ```
    `skip-existing` lets a later ttucs release reuse an unchanged `ttucs-model-bow` without failing.
-6. Create the GitHub Release for `v0.1.1`, using the CHANGELOG section as notes.
+6. Create the GitHub Release for `v0.2.0`, using the CHANGELOG section as notes.
 
 ## Manual alternative (API token)
 

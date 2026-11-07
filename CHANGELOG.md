@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-11-06
+## [0.2.0] - 2026-11-06
 
 ### Added
-- Pretrained weights ship as the data-only `ttucs-model-bow` distribution (fp16 safetensors, SHA-256
+- Pretrained weights ship as the data-only `ttucs-model-bow` 0.1.1 distribution (fp16 safetensors, SHA-256
   manifest, 131,072 x 128 compact model from `configs/bow-release.yaml`). It is a default dependency,
-  so `pip install ttucs` works offline right after install.
+  so `pip install ttucs` works offline right after install. It is versioned separately from `ttucs`.
 - `ttucs.hub`: offline-first model resolution (explicit path, installed package, local cache in
   `TTUCS_HOME` or the platform cache dir, then a SHA-256-verified GitHub Release download).
   `TTUCS_OFFLINE=1` or `HF_HUB_OFFLINE=1` disables all network access.
@@ -26,11 +26,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lean core install: scikit-learn, pandas, matplotlib and MLflow moved to the `[train]` extra.
   `train`, `eval` and `report` print an install hint without it.
 - `TTUCS.from_pretrained()` with no arguments now loads the installed `ttucs-model-bow` weights.
+- The default model is now the compact model trained on redistributable data only. Accuracy on the 80
+  hand-written evaluation slates drops from 0.713 to 0.488 top-1 (0.913 to 0.813 top-5); synthetic
+  test sets stay at about 0.86-0.87 top-1.
 - README rewritten for PyPI with absolute links; model and data cards updated for the published model.
 
 ### Removed
-- Third-party sound library metadata ingestion and its fetch command. The published weights are trained
-  only on synthetic data and the UCS list.
+- **Breaking:** third-party sound library metadata ingestion and its CLI fetch command. The published
+  weights are trained only on synthetic data and the UCS list.
 
 ### Fixed
 - License metadata uses an SPDX expression (`license = "MIT"`, `license-files`) instead of the
@@ -57,6 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Legacy prototype (`main_web.py`, notebook, `.idea/`, `requirements.txt`).
 
-[Unreleased]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.1.0...v0.1.1
+[Unreleased]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/SoundsLikeJonny/ttucs/releases/tag/v0.1.0
