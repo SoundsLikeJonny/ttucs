@@ -20,7 +20,7 @@ from importlib import resources
 UCS_VERSION = "8.2.1"
 
 # Known CatID spellings found in the wild that are not in the official list.
-# BOOM ONE metadata uses "MACHOffi" for MACHINES-OFFICE (official CatID: MACHOffc).
+# Some library metadata uses "MACHOffi" for MACHINES-OFFICE (official CatID: MACHOffc).
 CATID_ALIASES: dict[str, str] = {"MACHOffi": "MACHOffc", "WOODHandl": "WOODHndl"}
 
 # Categories that describe library *workflow* state rather than sound content

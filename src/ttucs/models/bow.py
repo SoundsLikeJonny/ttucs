@@ -15,7 +15,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from ttucs.models.base import UCSModel, register, train_loop
+from ttucs.models.base import UCSModel, load_state_dict, register, train_loop
 from ttucs.text import preprocess
 
 
@@ -124,5 +124,5 @@ class BowClassifier(UCSModel):
         torch.save(self.net.state_dict(), path / "weights.pt")
 
     def _load_weights(self, path: Path) -> None:
-        self.net.load_state_dict(torch.load(path / "weights.pt", map_location="cpu", weights_only=True))
+        self.net.load_state_dict(load_state_dict(path))
         self.net.eval()

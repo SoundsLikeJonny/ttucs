@@ -86,6 +86,21 @@ class UCSModel(abc.ABC):
         return np.array([self.label_index[lab] for lab in labels], dtype=np.int64)
 
 
+def load_state_dict(directory: str | Path) -> dict[str, torch.Tensor]:
+    """Load ``weights.safetensors`` (preferred, may be fp16) or ``weights.pt`` as fp32 tensors."""
+    d = Path(directory)
+    st = d / "weights.safetensors"
+    if st.is_file():
+        from safetensors.torch import load_file
+
+        state = load_file(str(st))
+    elif (d / "weights.pt").is_file():
+        state = torch.load(d / "weights.pt", map_location="cpu", weights_only=True)
+    else:
+        raise FileNotFoundError(f"no weights.safetensors or weights.pt in {d}")
+    return {k: v.float() if v.is_floating_point() else v for k, v in state.items()}
+
+
 # ---------------------------------------------------------------------------- training
 def train_loop(module: nn.Module, batches: Callable[[bool], Iterable[tuple]],
                forward: Callable[[tuple], tuple[torch.Tensor, torch.Tensor | None]],

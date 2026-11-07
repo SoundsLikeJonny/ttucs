@@ -1,0 +1,14 @@
+# sdist contents (the wheel only ships src/ttucs incl. resources/*.csv, *.yaml)
+include README.md CHANGELOG.md CONTRIBUTING.md MODEL_CARD.md DATA_CARD.md LICENSE Makefile
+graft configs
+graft tests
+graft examples
+graft scripts
+graft docs
+graft ci
+recursive-include src/ttucs/resources *.csv *.yaml
+prune packages
+prune data
+prune models
+prune mlruns
+global-exclude *.py[cod] __pycache__ *.pt *.safetensors

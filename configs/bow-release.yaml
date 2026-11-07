@@ -1,0 +1,54 @@
+# Release model published as the `ttucs-model-bow` wheel on PyPI.
+# Trained on synthetic descriptions/slates + UCS label documents (all redistributable).
+# Compact vs configs/bow.yaml: 131072 buckets x 128 dims (vs 524288 x 192), exported as fp16
+# safetensors (~34 MB) so the wheel stays well under PyPI's 100 MB file limit.
+# Train:  ttucs train -c configs/bow-release.yaml
+# Build:  python scripts/build_model_package.py --model-dir models/ttucs-bow-release --tarball --wheel
+seed: 42
+output_dir: models/ttucs-bow-release
+
+data:
+  exclude_categories: [ARCHIVED]     # workflow CatIDs (ADR, MIX, WIP...) - not sound content
+  synthetic:
+    enabled: true
+    target_per_class: 150            # synthetic examples per CatID
+    min_per_class: 60                # lower bound if target_per_class is set lower
+    max_synonym_df: 25
+    cache: data/processed-release/synthetic.jsonl
+  label_documents: true
+  slate_augment_fraction: 0.25
+  split: {val: 0.1, test: 0.1}
+  realistic_slates: examples/realistic_slates.jsonl
+  processed_dir: data/processed-release
+
+model:
+  name: bow
+  embedding_dim: 128
+  num_buckets: 131072
+  word_ngrams: 2
+  char_ngrams: [3, 5]
+  dropout: 0.2
+  category_loss_weight: 0.3
+
+train:
+  epochs: 15
+  batch_size: 256
+  lr: 1.0e-2
+  weight_decay: 1.0e-5
+  label_smoothing: 0.05
+  patience: 3
+  num_threads: 8
+  calibrate: true
+
+inference:
+  unknown_threshold: 0.12
+  category_threshold: 0.5
+  top_k: 5
+
+mlflow:
+  enabled: false                     # set true to track release runs too
+  tracking_uri: sqlite:///mlflow.db
+  experiment: ttucs
+  log_model: true
+  register_model: true
+  registered_model_name: ttucs

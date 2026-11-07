@@ -1,4 +1,4 @@
-"""Assemble balanced train/val/test splits from synthetic + (optional) BOOM ONE data."""
+"""Assemble balanced train/val/test splits from synthetic data and UCS label documents."""
 
 from __future__ import annotations
 
@@ -6,10 +6,9 @@ import hashlib
 import json
 import logging
 import random
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 
-from ttucs.datasets.boom import load_boom_one
 from ttucs.slate.parser import parse_slate
 from ttucs.synth.generator import DescriptionGenerator, Example, SlateGenerator
 from ttucs.taxonomy import UCSTaxonomy
@@ -120,36 +119,10 @@ def build_datasets(cfg: dict, taxonomy: UCSTaxonomy) -> dict[str, list[Example]]
     vf, tf = dcfg["split"]["val"], dcfg["split"]["test"]
     splits: dict[str, list[Example]] = defaultdict(list)
 
-    # ---- real data (BOOM ONE demo)
-    real_train_counts: Counter[str] = Counter()
-    bcfg = dcfg.get("boom", {})
-    if bcfg.get("enabled") and Path(bcfg["path"]).is_file():
-        boom = [ex for ex in load_boom_one(bcfg["path"], taxonomy, tuple(bcfg["text_fields"]), exclude)
-                if ex.label in set(labels)]
-        btr, bva, bte = group_split(boom, vf, tf, seed)
-        splits["test_boom"] = bte
-        splits["val_boom"] = bva
-        if bcfg.get("use_for_training", True):
-            rng = random.Random(seed)
-            by_label: dict[str, list[Example]] = defaultdict(list)
-            for ex in btr:
-                by_label[ex.label].append(ex)
-            for lab, exs in by_label.items():
-                rng.shuffle(exs)
-                keep = exs[: bcfg.get("max_per_class", 10**9)]
-                splits["train"] += keep
-                real_train_counts[lab] = len(keep)
-            splits["val"] += bva
-        log.info("BOOM ONE: %d examples (%d labels)", len(boom), len({e.label for e in boom}))
-    elif bcfg.get("enabled"):
-        log.warning("BOOM ONE data not found at %s - run `ttucs fetch-boom` (continuing without)",
-                    bcfg.get("path"))
-
-    # ---- synthetic top-up (balances the class distribution)
+    # ---- synthetic descriptions (balanced: the same budget for every CatID)
     scfg = dcfg["synthetic"]
     if scfg.get("enabled", True):
-        counts = {cid: max(scfg["min_per_class"], scfg["target_per_class"] - real_train_counts[cid])
-                  for cid in labels}
+        counts = {cid: max(scfg["min_per_class"], scfg["target_per_class"]) for cid in labels}
         synth = generate_synthetic(taxonomy, counts, seed, scfg.get("max_synonym_df", 25))
         if scfg.get("cache"):
             write_jsonl(synth, scfg["cache"])
