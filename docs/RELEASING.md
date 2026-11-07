@@ -49,9 +49,17 @@ GitHub Release asset (`model-bow-v<version>.tar.gz`) that CI downloads and verif
    | Repository name | `ttucs` |
    | Workflow name | `publish.yml` |
 
-   A pending publisher turns into a normal one, and the project is created, on the first upload. All four
-   point to the same workflow, so one run of `publish.yml` can upload both packages. Without the
-   `ttucs-model-bow` registration, that upload is rejected with an `invalid-publisher` error.
+   **First upload creates one project per token.** Each time the workflow trades its GitHub token for
+   a PyPI token, PyPI converts only **one** pending publisher, so only one new project is created. The
+   first run therefore creates `ttucs` (or `ttucs-model-bow`), and the other package fails with:
+   `400 Non-user identities cannot create new projects`. Re-run the failed job (*Re-run failed jobs*).
+   The second token exchange converts the remaining pending publisher and attaches it to the existing
+   publisher, so that publisher then covers both projects. `skip-existing` skips the files that already
+   uploaded. This happens once per site: once on TestPyPI and once on PyPI. After that, every release
+   uploads both packages in one go.
+
+   If the re-run fails the same way, the pending publisher for that project is missing or its name is
+   misspelled. Check *Your account → Publishing* on that site.
 
 ## Release steps (example: ttucs 0.2.0 with ttucs-model-bow 0.1.1)
 
