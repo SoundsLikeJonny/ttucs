@@ -237,7 +237,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
     s.add_argument("--data", nargs="*", help="JSONL files with text/label (default: test splits)")
     s.add_argument("--parse", action="store_true", help="run the slate parser on --data texts")
-    s.add_argument("--predictions", default=None, help="write a predictions CSV (realistic slates, else the first --data file)")
+    s.add_argument("--predictions", default=None,
+                   help="write a predictions CSV (realistic slates, else the first --data file)")
     s.add_argument("--json", default=None, help="write metrics JSON")
     s.add_argument("--mlflow", action="store_true", help="log an evaluation run to MLflow")
     s.set_defaults(func=cmd_eval)

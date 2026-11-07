@@ -80,29 +80,32 @@ The API also offers `predict_batch`, `top_k`, aggregated category scores, temper
 
 | config | model | notes |
 |---|---|---|
-| `configs/bow-release.yaml` | hashed word+char n-gram bag of embeddings (131,072 × 128), CatID + Category heads | **published weights** (fp16 safetensors, ~34 MB); CPU; ~1 min training |
+| `configs/bow-release.yaml` | hashed word+char n-gram bag of embeddings (131,072 × 256), CatID + Category heads | **published weights** (fp16 safetensors, ~68 MB); CPU; ~3 min training |
 | `configs/bow.yaml` | the same, larger (524,288 × 192) | ~400 MB fp32; no accuracy gain on synthetic data (see model card) |
 | `configs/minilm.yaml` | frozen all-MiniLM-L6-v2 + MLP head | optional, needs `[transformers]` (**not trained/verified yet**) |
 | `configs/zeroshot.yaml` | TF-IDF similarity to UCS Explanation+Synonyms | cold-start floor, no training |
 
-## Results: published model (`ttucs-model-bow` 0.1.1, fp16)
+## Results: published model (`ttucs-model-bow` 0.2.0, fp16)
 
 | test split | n | top-1 | top-5 | macro-F1 | ECE |
 |---|---:|---:|---:|---:|---:|
-| synthetic descriptions | 11,244 | 0.874 | 0.972 | 0.861 | 0.020 |
-| synthetic spoken slates (parser → model) | 2,000 | 0.859 | 0.970 | 0.841 | 0.031 |
-| **hand-written realistic slates** | 80 | **0.488** | **0.813** | 0.509 | 0.182 |
+| synthetic descriptions | 22,384 | 0.908 | 0.983 | 0.904 | 0.020 |
+| synthetic spoken slates (parser → model) | 2,000 | 0.900 | 0.976 | 0.884 | 0.023 |
+| hand-written dev descriptions (tuning set) | 332 | 0.789 | 0.925 | 0.788 | 0.069 |
+| **hand-written realistic slates (held out)** | 80 | **0.713** | **0.925** | 0.723 | 0.138 |
 
-The fp16 export scored the same as the fp32 checkpoint on all three splits, to 4 decimals.
+The fp16 export matches the fp32 checkpoint to within 0.0001 on every split. The previous weights
+(0.1.1) scored 0.488 top-1 / 0.813 top-5 on the realistic slates.
 
 **Read these numbers with caution.** The synthetic test sets come from the same generator as the
 training data and overstate real-world accuracy. The 80 hand-written slates are the most honest signal:
-about half are right at top-1 and about four in five are in the top 5. The set is tiny, and confidence
-is over-optimistic on real phrasing (ECE 0.18). The model is trained only on redistributable data
-(synthetic text plus UCS label documents). A 0.1.0 development model that also used non-redistributable
-real library metadata reached 0.713 top-1 on the same 80 slates. Training on your own labelled
-library metadata is the most promising way to close that gap; it is on the roadmap and not yet a
-built-in option. See
+about seven in ten are right at top-1 and over nine in ten are in the top 5. The set is tiny (one slate
+is 1.25 points), and confidence is still over-optimistic on real phrasing (ECE 0.14). Part of the gain
+comes from a hand-written phrase bank, and some everyday wording in it also appears in these slates;
+on the 29 slates that share no bank phrase with their own class, top-1 went from 0.552 to 0.724. The
+model is trained only on redistributable data (synthetic text plus UCS label documents). Training on
+your own labelled library metadata is the most promising way to improve further; it is on the roadmap
+and not yet a built-in option. See
 [MODEL_CARD.md](https://github.com/SoundsLikeJonny/ttucs/blob/main/MODEL_CARD.md) and
 [DATA_CARD.md](https://github.com/SoundsLikeJonny/ttucs/blob/main/DATA_CARD.md).
 

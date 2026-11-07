@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-07
+
+### Added
+- `src/ttucs/resources/catid_phrases.yaml`: hand-written everyday phrases for 494 CatIDs, used by the
+  synthetic generator with probability `synthetic.phrase_prob` (default 0.5).
+- Object routing in `DescriptionGenerator`: objects named in a specific subcategory's Explanation or
+  Synonyms go to that subcategory, and MISC/GENERAL classes only get the leftover objects.
+- `examples/dev_descriptions.jsonl`: 332 hand-written descriptions for choosing settings, so the
+  realistic slates stay a held-out test set.
+- `ttucs eval --predictions` writes predictions for the first `--data` file when no realistic slates
+  are evaluated.
+
+### Changed
+- Default weights are now `ttucs-model-bow` 0.2.0 (131,072 x 256, ~68 MB, 300 examples per CatID).
+  On the 80 hand-written realistic slates, top-1 goes from 0.488 to 0.713 and top-5 from 0.813 to
+  0.925; on the dev set, top-1 goes from 0.491 to 0.789. The dependency range is now
+  `ttucs-model-bow>=0.2.0,<0.3`.
+
+### Fixed
+- Synthetic explanation fragments no longer include cross-references to other classes ("see ...",
+  "not ...").
+
 ## [0.2.0] - 2026-11-06
 
 ### Added
@@ -61,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Legacy prototype (`main_web.py`, notebook, `.idea/`, `requirements.txt`).
 
-[Unreleased]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SoundsLikeJonny/ttucs/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/SoundsLikeJonny/ttucs/releases/tag/v0.1.0

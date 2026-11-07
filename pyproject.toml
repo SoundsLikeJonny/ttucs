@@ -28,7 +28,7 @@ dependencies = [
     "pyyaml>=6.0",
     "safetensors>=0.4",
     "platformdirs>=3",
-    "ttucs-model-bow>=0.1.1,<0.2",
+    "ttucs-model-bow>=0.2.0,<0.3",
 ]
 
 [project.optional-dependencies]
