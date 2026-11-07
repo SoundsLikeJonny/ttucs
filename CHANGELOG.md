@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `requirements.txt`: a pinned lock of the `[dev]` dependencies (Python 3.10+, Windows/macOS/Linux,
+  CPU-only PyTorch) for reproducible development environments, generated with `uv pip compile`.
+
 ## [0.3.0] - 2026-11-07
 
 ### Added

@@ -5,6 +5,15 @@
    ttucs depends on the `ttucs-model-bow` weights distribution. Installing the local copy first keeps
    pip off PyPI for it. The local copy has no weights until you run `scripts/build_model_package.py`,
    and tests that need real weights skip.
+
+   For an exactly pinned environment, use `requirements.txt` instead. It is a generated lock of the
+   `[dev]` dependencies for Python 3.10+ on Windows, macOS and Linux, with CPU-only PyTorch:
+   ```bash
+   pip install -r requirements.txt
+   pip install --no-deps -e packages/ttucs-model-bow -e .
+   ```
+   It is not used by the package itself (`pyproject.toml` keeps the loose ranges). After changing
+   dependencies in `pyproject.toml`, regenerate it with the `uv pip compile` command in its header.
 2. Branch from `main` and use [Conventional Commits](https://www.conventionalcommits.org/)
    (`feat:`, `fix:`, `docs:`, `test:`, `ci:`, `chore:`).
 3. `make lint test smoke` must pass. Add tests for new behaviour.
