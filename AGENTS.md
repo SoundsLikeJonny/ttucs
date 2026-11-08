@@ -175,6 +175,7 @@ dev, either point at a trained model dir (`-m models/...`) or install the releas
 | evaluate on the dev set | `... eval ... --data examples/dev_descriptions.jsonl --predictions dev.csv` |
 | build weights tarball and wheel | `python scripts/build_model_package.py --model-dir models/ttucs-bow-release --tarball --wheel` |
 | check the resolved model | `ttucs info --verify` |
+| auto-train, gate and beta-release loop | `make autotrain` (`python scripts/autotrain.py --train`; dry run without `--train`; `--release` opens a beta PR) |
 
 Style: ruff with line length 110, target py310 (rules in `pyproject.toml`). Use type hints and keep
 dependencies minimal: anything heavy goes in an extra (`[train]`, `[transformers]`), never in the core
@@ -321,3 +322,10 @@ As of 2026-11-07:
   - The header comment in `.github/workflows/publish.yml` still says to "MOVE this file"; it is
     already in place.
   - CONTRIBUTING setup is bash-only, and its claim that weight-dependent tests skip should be checked.
+- **Autotrain loop (added 2026-11-07):** `scripts/autotrain.py` + `configs/champion.json` retrain on
+  code/resource changes, gate against the champion on dev + synthetic data only, and can open beta
+  PRs (`--release`); the realistic slates stay out of the loop. Known pre-existing leakage
+  (recorded as the baseline in `configs/champion.json`; the gate blocks only NEW violations): the
+  dev set contains "sci fi door" (dev:144) and "sci fi computer" (dev:149) verbatim from
+  `catid_phrases.yaml`, and 10 generic 3-word `synth_banks.yaml` entries (contexts/objects) match
+  dev or realistic texts.

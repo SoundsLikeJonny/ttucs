@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `requirements.txt`: a pinned lock of the `[dev]` dependencies (Python 3.10+, Windows/macOS/Linux,
   CPU-only PyTorch) for reproducible development environments, generated with `uv pip compile`.
+- `scripts/autotrain.py`, `configs/autotrain.yaml` and `configs/champion.json`: an MLflow-gated
+  auto-train loop. It fingerprints the training code and resources, blocks rounds with new
+  leakage, trains a candidate on the dev descriptions and synthetic splits only (the held-out
+  realistic slates are never loaded), and gates it against the champion: dev top-1 must gain at
+  least 0.015 and guardrails (dev top-5/macro-F1/ECE, synthetic top-1/top-5/macro-F1, parser
+  exact/token-F1) must hold. With `--release` a passing candidate becomes a beta PR (pre-release
+  version bump, verified Release asset, pinned sha, refreshed champion) - it never merges, never
+  pushes `main` and never publishes to PyPI. `make autotrain` runs one round.
+- MLflow training runs are now tagged with the git SHA/branch/dirty flag, a code fingerprint and
+  the data fingerprint, and write a `training_history.png` (train loss + val top-1 per epoch).
+- `scripts/check_leakage.py`: automates the leakage checks (bank phrases of 3+ words appearing
+  verbatim in the hand-written sets; dev/realistic 4-gram or substring overlap); exits 1 on
+  violations. Run it after editing `catid_phrases.yaml`, `synth_banks.yaml` or the dev set.
 
 ## [0.3.0] - 2026-11-07
 
