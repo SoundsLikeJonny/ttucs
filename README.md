@@ -6,7 +6,7 @@ CatID, Category/SubCategory, a confidence, the parsed slate fields, a suggested 
 keywords. It is built with PyTorch and MLflow, and inference runs locally and offline.
 
 ```bash
-pip install ttucs          # also installs the pretrained weights (ttucs-model-bow, ~32 MB)
+pip install ttucs          # also installs the pretrained weights (ttucs-model-bow, ~63 MB)
 ```
 
 ```python

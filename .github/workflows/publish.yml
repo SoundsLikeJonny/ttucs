@@ -1,6 +1,5 @@
 # Build + publish ttucs and ttucs-model-bow with PyPI Trusted Publishing (no API tokens).
-# The GitHub App used by the assistant cannot write .github/workflows/: MOVE this file to
-# .github/workflows/publish.yml to enable it. See docs/RELEASING.md.
+# See docs/RELEASING.md.
 #
 #   * manual "Run workflow"  -> builds and uploads to TestPyPI (environment: testpypi)
 #   * push of a tag v*        -> builds and uploads to PyPI     (environment: pypi)

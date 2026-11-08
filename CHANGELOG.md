@@ -32,6 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   weights into the artifact store, so exploratory rounds now log metrics and reports only. Turn it
   back on for a gated winner that should enter the registry.
 
+### Fixed
+- README install line now states the real weights size: the `ttucs-model-bow` 0.2.0 wheel is ~63 MB
+  (fp16 safetensors ~68 MB), not the 0.1.1-era "~32 MB".
+- CONTRIBUTING dev setup now covers Windows PowerShell 5.1 as well as bash, and no longer claims that
+  weight-dependent tests skip: no test needs the real weights (they train tiny models in-test and
+  bypass the installed package).
+- Removed the stale "MOVE this file" header comment from `.github/workflows/publish.yml`.
+
 ## [0.3.0] - 2026-11-07
 
 ### Added
