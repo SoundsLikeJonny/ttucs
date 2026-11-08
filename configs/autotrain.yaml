@@ -47,9 +47,12 @@ inference:
 
 mlflow:
   enabled: true
+  # MLFLOW_TRACKING_URI overrides this (offline mode forces the SQLite default).
   tracking_uri: sqlite:///mlflow.db
   experiment: ttucs
   run_name: autotrain
-  log_model: true
+  # Every logged model copies the ~63 MB weights into the artifact store, so exploratory rounds
+  # log metrics and reports only. Set true for a gated winner that should enter the registry.
+  log_model: false
   register_model: true
   registered_model_name: ttucs
