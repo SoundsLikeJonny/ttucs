@@ -38,8 +38,25 @@ def test_autotrain_config_excludes_realistic_slates():
     cfg = load_config(ROOT / "configs" / "autotrain.yaml")
     assert cfg["data"]["realistic_slates"] is None
     assert cfg["mlflow"]["enabled"] is True and cfg["mlflow"]["run_name"] == "autotrain"
+    assert cfg["mlflow"]["log_model"] is False
     assert cfg["data"]["synthetic"]["target_per_class"] == 300
     assert cfg["output_dir"] == "models/ttucs-bow-autotrain"
+
+
+def test_tracking_uri_env_override(monkeypatch):
+    from ttucs.train import DEFAULT_TRACKING_URI, resolve_tracking_uri
+
+    for var in ("MLFLOW_TRACKING_URI", "TTUCS_OFFLINE", "HF_HUB_OFFLINE"):
+        monkeypatch.delenv(var, raising=False)
+    mcfg = {"tracking_uri": "sqlite:///mlflow.db"}
+    assert resolve_tracking_uri(mcfg) == "sqlite:///mlflow.db"
+    assert resolve_tracking_uri({}) == DEFAULT_TRACKING_URI
+
+    monkeypatch.setenv("MLFLOW_TRACKING_URI", "https://mlflow.example.com")
+    assert resolve_tracking_uri(mcfg) == "https://mlflow.example.com"
+
+    monkeypatch.setenv("TTUCS_OFFLINE", "1")
+    assert resolve_tracking_uri(mcfg) == DEFAULT_TRACKING_URI
 
 
 def test_training_history_png(tmp_path):

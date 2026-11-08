@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
+  a remote tracking server without editing a config file. Offline mode (`TTUCS_OFFLINE=1` or
+  `HF_HUB_OFFLINE=1`) ignores it and keeps the local SQLite store. The resolved URI is logged.
 - `requirements.txt`: a pinned lock of the `[dev]` dependencies (Python 3.10+, Windows/macOS/Linux,
   CPU-only PyTorch) for reproducible development environments, generated with `uv pip compile`.
 - `scripts/autotrain.py`, `configs/autotrain.yaml` and `configs/champion.json`: an MLflow-gated
@@ -23,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/check_leakage.py`: automates the leakage checks (bank phrases of 3+ words appearing
   verbatim in the hand-written sets; dev/realistic 4-gram or substring overlap); exits 1 on
   violations. Run it after editing `catid_phrases.yaml`, `synth_banks.yaml` or the dev set.
+
+### Changed
+- `configs/autotrain.yaml` sets `mlflow.log_model: false`: every logged model copies the ~63 MB
+  weights into the artifact store, so exploratory rounds now log metrics and reports only. Turn it
+  back on for a gated winner that should enter the registry.
 
 ## [0.3.0] - 2026-11-07
 

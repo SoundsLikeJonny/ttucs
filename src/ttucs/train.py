@@ -17,6 +17,7 @@ import contextlib
 import hashlib
 import json
 import logging
+import os
 import platform
 import random
 import time
@@ -38,6 +39,7 @@ from ttucs.evaluate import (
     predictions_csv,
     top_confusions,
 )
+from ttucs.hub import is_offline
 from ttucs.models import MODEL_REGISTRY, fit_temperature
 from ttucs.pipeline import TTUCS
 from ttucs.provenance import run_tags
@@ -97,6 +99,21 @@ def load_or_build(cfg: dict, rebuild: bool = False) -> dict[str, list[Example]]:
     return generate_data(cfg, out)
 
 
+DEFAULT_TRACKING_URI = "sqlite:///mlflow.db"
+
+
+def resolve_tracking_uri(mcfg: dict) -> str:
+    """Tracking URI: ``MLFLOW_TRACKING_URI`` wins over the config, offline mode forces SQLite."""
+    configured = str(mcfg.get("tracking_uri") or DEFAULT_TRACKING_URI)
+    env = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
+    if not env:
+        return configured
+    if is_offline():
+        log.info("offline mode is on - ignoring MLFLOW_TRACKING_URI, using %s", DEFAULT_TRACKING_URI)
+        return DEFAULT_TRACKING_URI
+    return env
+
+
 @contextlib.contextmanager
 def _mlflow_run(cfg: dict):
     mcfg = cfg.get("mlflow", {})
@@ -105,7 +122,9 @@ def _mlflow_run(cfg: dict):
         return
     import mlflow
 
-    mlflow.set_tracking_uri(mcfg.get("tracking_uri", "sqlite:///mlflow.db"))
+    uri = resolve_tracking_uri(mcfg)
+    log.info("mlflow tracking uri: %s", uri)
+    mlflow.set_tracking_uri(uri)
     mlflow.set_experiment(mcfg.get("experiment", "ttucs"))
     with mlflow.start_run(run_name=mcfg.get("run_name")) as run:
         yield run
