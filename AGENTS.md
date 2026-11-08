@@ -298,12 +298,12 @@ install. Add tests for new behaviour.
 
 ## 11. Current state (update this section when it changes)
 
-As of 2026-11-07:
+As of 2026-11-08:
 
 - **PyPI:** `ttucs` 0.2.0 and 0.3.0; `ttucs-model-bow` 0.1.1 and 0.2.0.
 - **Tags:** `v0.1.0`, `v0.2.0`, `v0.3.0`, `model-bow-v0.1.1`, `model-bow-v0.2.0`.
-- **GitHub Releases:** only the two `model-bow-*` ones. The Releases for **`v0.2.0` and `v0.3.0`
-  are still missing**.
+- **GitHub Releases:** `v0.2.0`, `v0.3.0` (Latest) and the two `model-bow-*` weights releases all
+  exist. `v0.1.0` has a tag but no Release.
 - **Published weights** `ttucs-model-bow` 0.2.0 (fp16, 131,072 × 256, 300 synthetic examples per
   CatID, phrase bank plus routing):
 
@@ -317,11 +317,6 @@ As of 2026-11-07:
   - The previous 0.1.1 weights scored 0.488 / 0.813 on the realistic slates.
   - On the 29 realistic slates with no bank-phrase overlap, top-1 went from 0.552 to 0.724.
   - Parser metrics: description exact match 0.921, token-F1 0.978.
-- **Known doc issues to fix in a small PR:**
-  - The README install line still says the weights are "~32 MB"; the 0.2.0 wheel is about 63 MB.
-  - The header comment in `.github/workflows/publish.yml` still says to "MOVE this file"; it is
-    already in place.
-  - CONTRIBUTING setup is bash-only, and its claim that weight-dependent tests skip should be checked.
 - **Autotrain loop (added 2026-11-07):** `scripts/autotrain.py` + `configs/champion.json` retrain on
   code/resource changes, gate against the champion on dev + synthetic data only, and can open beta
   PRs (`--release`); the realistic slates stay out of the loop. Known pre-existing leakage
