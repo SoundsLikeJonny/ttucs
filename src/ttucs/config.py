@@ -39,6 +39,7 @@ DEFAULTS: dict[str, Any] = {
         "name": "bow",
         "embedding_dim": 128,
         "num_buckets": 262144,
+        "head_repeat": 1,  # headline-clause feature repeat in the bag mean (1 = off)
         "word_ngrams": 2,
         "char_ngrams": [3, 5],
         "dropout": 0.2,

@@ -73,6 +73,30 @@ def test_verbose_keeps_class_nouns(taxonomy):
     assert "elephant" not in dog
 
 
+def test_head_repeat_preserves_default_and_emphasises_headline():
+    """With the knob off, featurisation is bit-identical to the published behaviour; with
+    it on, first-clause features are repeated (2x pull in the bag mean), clauses isolated."""
+    from ttucs.models.bow import HashedNgramFeaturizer
+
+    default = HashedNgramFeaturizer(1024, 2, (3, 5))
+    text = "metal gate slam, creaky hinges"
+
+    legacy = default._legacy_features(text)
+    assert default.features_and_weights(text) == (legacy, [1.0] * len(legacy))
+
+    emphasised = HashedNgramFeaturizer(1024, 2, (3, 5), head_repeat=2)
+    feats = emphasised.features(text)
+    head = set(default.features("metal gate slam"))
+    ctx = set(default.features("creaky hinges"))
+    n_head = sum(1 for f in feats if f in head - ctx)
+    n_ctx = sum(1 for f in feats if f in ctx - head)
+    head_feats = default.features("metal gate slam")
+    assert n_head == 2 * len(head_feats)
+    assert n_ctx >= len(ctx) - 2  # exact counts modulo rare bucket collisions
+    # clauses isolated: every feature belongs to exactly one clause
+    assert head | ctx >= set(feats)
+
+
 def test_multi_clause_joins_same_class_pairs(taxonomy):
     e = taxonomy["MACHGrdn"]
     off = DescriptionGenerator(taxonomy, seed=5, multi_clause_prob=0.0).generate(e, 60)
