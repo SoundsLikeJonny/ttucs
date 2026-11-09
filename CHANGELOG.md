@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `docs/about/`: a 20-document guided tour of the repository for new contributors, from what UCS is
+  and how a slate is parsed through bag-of-words features, every layer of `BowNet`, calibration,
+  synthetic data, splits, training, evaluation, the two-package distribution and the release
+  process. `docs/about/about_index.md` is the entry point.
 - `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
   a remote tracking server without editing a config file. Offline mode (`TTUCS_OFFLINE=1` or
   `HF_HUB_OFFLINE=1`) ignores it and keeps the local SQLite store. The resolved URI is logged.
@@ -47,6 +51,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   context clauses count once. Off keeps featurisation bit-identical to the published model.
 
 ### Changed
+- `docs/assets/distribution.md` and its plots are regenerated from `configs/bow-release.yaml`, so the
+  report describes the release training split (159,591 synthetic + 3,305 UCS label documents =
+  162,896 examples, 179-260 per CatID) instead of the older `configs/bow.yaml` build. `make report`
+  now uses the release config for the same reason.
 - **Multi-clause descriptions** (parser behaviour ships with `ttucs`; retrained weights with the
   new data would be a separate `ttucs-model-bow` release): the parser joins the content clauses
   that follow a description cue

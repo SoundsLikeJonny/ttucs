@@ -21,7 +21,8 @@ generated from it, so the weights can be redistributed.
   so every CatID has training examples.
 - Splits are deterministic (seed 42) and grouped so variants of one description never straddle splits.
 - Generated data is fingerprinted from the config and cached in `processed_dir`.
-- Run `ttucs report` for `docs/assets/distribution.md` with plots.
+- Run `ttucs report -c configs/bow-release.yaml --out docs/assets` (or `make report`) for
+  `docs/assets/distribution.md` with plots; it describes the release training split.
 - Generator knobs available for experimentation (all default off; the release config ships
   `multi_clause_prob: 0.2` since the 0.2.0-era card above was written): `multi_clause_prob` joins
   same-class description pairs into multi-clause text, `verbose_prob` emits longer action-narration /
