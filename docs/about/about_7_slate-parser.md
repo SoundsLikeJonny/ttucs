@@ -32,7 +32,7 @@ that belongs to a field.
 ### Pass 1 — hard spans
 
 Unambiguous technical tokens, matched by regex and by the gear lexicon
-([about_gear-lexicon.md](about_gear-lexicon.md)):
+([about_8_gear-lexicon.md](about_8_gear-lexicon.md)):
 
 | field | pattern (abridged) | priority |
 |---|---|---:|
@@ -130,6 +130,6 @@ perspectives and dates. When you change the parser:
 3. run `python scripts/check_leakage.py` if you touched any bank;
 4. remember that parser changes ship with `ttucs` and need no retrain — but if the parser now feeds
    the classifier *more* text (as multi-clause did), the training data should match, which is why
-   `data.synthetic.multi_clause_prob` exists ([about_synthetic-data.md](about_synthetic-data.md)).
+   `data.synthetic.multi_clause_prob` exists ([about_15_synthetic-data.md](about_15_synthetic-data.md)).
 
-Next: [about_gear-lexicon.md](about_gear-lexicon.md) explains the largest table the parser uses.
+Next: [about_8_gear-lexicon.md](about_8_gear-lexicon.md) explains the largest table the parser uses.

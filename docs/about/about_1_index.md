@@ -31,46 +31,46 @@ Read them in order the first time; afterwards they work as reference.
 
 | # | document | what it answers |
 |---|---|---|
-| 1 | [about_index.md](about_index.md) | this page: the map |
-| 2 | [about_what-is-ttucs.md](about_what-is-ttucs.md) | the problem, the user, the goals, what "done" means |
-| 3 | [about_repo-map.md](about_repo-map.md) | every directory and file, and which doc explains it |
+| 1 | [about_1_index.md](about_1_index.md) | this page: the map |
+| 2 | [about_2_what-is-ttucs.md](about_2_what-is-ttucs.md) | the problem, the user, the goals, what "done" means |
+| 3 | [about_3_repo-map.md](about_3_repo-map.md) | every directory and file, and which doc explains it |
 
 ### Part 2 — The domain
 
 | # | document | what it answers |
 |---|---|---|
-| 4 | [about_ucs-taxonomy.md](about_ucs-taxonomy.md) | what UCS is, the 753 CatIDs, why 738 are used, how the CSV is loaded |
-| 5 | [about_slate-anatomy.md](about_slate-anatomy.md) | what a slate contains, what STT does to it, what ttucs extracts |
+| 4 | [about_4_ucs-taxonomy.md](about_4_ucs-taxonomy.md) | what UCS is, the 753 CatIDs, why 738 are used, how the CSV is loaded |
+| 5 | [about_5_slate-anatomy.md](about_5_slate-anatomy.md) | what a slate contains, what STT does to it, what ttucs extracts |
 
 ### Part 3 — Inference, step by step
 
 | # | document | what it answers |
 |---|---|---|
-| 6 | [about_normalisation.md](about_normalisation.md) | fillers, spoken numbers, homophones, spelled letters |
-| 7 | [about_slate-parser.md](about_slate-parser.md) | the three-pass parser, spans, cues, leftovers, description assembly |
-| 8 | [about_gear-lexicon.md](about_gear-lexicon.md) | how microphones, recorders and stereo setups are recognised |
-| 9 | [about_text-features.md](about_text-features.md) | the model's input: tokenisation, word n-grams, char n-grams, hashing |
-| 10 | [about_bag-of-words.md](about_bag-of-words.md) | what a bag of words is, why it works here, what it loses |
-| 11 | [about_model-architecture.md](about_model-architecture.md) | every layer of `BowNet`, tensor shapes, parameter counts |
-| 12 | [about_training-loop.md](about_training-loop.md) | batches, losses, optimisers, schedule, early stopping |
-| 13 | [about_calibration-and-decisions.md](about_calibration-and-decisions.md) | temperature scaling, ECE, confident / fallback / unknown |
-| 14 | [about_pipeline-and-outputs.md](about_pipeline-and-outputs.md) | `TTUCS`, `Prediction`, filenames, keywords, the CLI |
+| 6 | [about_6_normalisation.md](about_6_normalisation.md) | fillers, spoken numbers, homophones, spelled letters |
+| 7 | [about_7_slate-parser.md](about_7_slate-parser.md) | the three-pass parser, spans, cues, leftovers, description assembly |
+| 8 | [about_8_gear-lexicon.md](about_8_gear-lexicon.md) | how microphones, recorders and stereo setups are recognised |
+| 9 | [about_9_text-features.md](about_9_text-features.md) | the model's input: tokenisation, word n-grams, char n-grams, hashing |
+| 10 | [about_10_bag-of-words.md](about_10_bag-of-words.md) | what a bag of words is, why it works here, what it loses |
+| 11 | [about_11_model-architecture.md](about_11_model-architecture.md) | every layer of `BowNet`, tensor shapes, parameter counts |
+| 12 | [about_12_training-loop.md](about_12_training-loop.md) | batches, losses, optimisers, schedule, early stopping |
+| 13 | [about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md) | temperature scaling, ECE, confident / fallback / unknown |
+| 14 | [about_14_pipeline-and-outputs.md](about_14_pipeline-and-outputs.md) | `TTUCS`, `Prediction`, filenames, keywords, the CLI |
 
 ### Part 4 — Data and training
 
 | # | document | what it answers |
 |---|---|---|
-| 15 | [about_synthetic-data.md](about_synthetic-data.md) | the description generator, banks, object routing, slates |
-| 16 | [about_datasets-and-splits.md](about_datasets-and-splits.md) | label documents, augmentation, grouped splits, caching |
-| 17 | [about_training-and-config.md](about_training-and-config.md) | `ttucs train`, configs, MLflow, reports, provenance |
-| 18 | [about_evaluation.md](about_evaluation.md) | metrics, the three test sets, leakage, the autotrain gate |
+| 15 | [about_15_synthetic-data.md](about_15_synthetic-data.md) | the description generator, banks, object routing, slates |
+| 16 | [about_16_datasets-and-splits.md](about_16_datasets-and-splits.md) | label documents, augmentation, grouped splits, caching |
+| 17 | [about_17_training-and-config.md](about_17_training-and-config.md) | `ttucs train`, configs, MLflow, reports, provenance |
+| 18 | [about_18_evaluation.md](about_18_evaluation.md) | metrics, the three test sets, leakage, the autotrain gate |
 
 ### Part 5 — Shipping and maintaining
 
 | # | document | what it answers |
 |---|---|---|
-| 19 | [about_distribution-and-hub.md](about_distribution-and-hub.md) | two PyPI packages, model resolution, download, integrity |
-| 20 | [about_development-and-release.md](about_development-and-release.md) | tests, CI, versioning, the release runbook, where to change things |
+| 19 | [about_19_distribution-and-hub.md](about_19_distribution-and-hub.md) | two PyPI packages, model resolution, download, integrity |
+| 20 | [about_20_development-and-release.md](about_20_development-and-release.md) | tests, CI, versioning, the release runbook, where to change things |
 
 ## The pipeline in one diagram
 
@@ -102,7 +102,7 @@ That is why you can add a new microphone to the lexicon without retraining anyth
 
 ## How to run it while you read
 
-From a checkout with the dev environment installed (see [about_development-and-release.md](about_development-and-release.md)):
+From a checkout with the dev environment installed (see [about_20_development-and-release.md](about_20_development-and-release.md)):
 
 ```bash
 ttucs predict "um okay so project nightfall uh location tofino beach waves crashing on the rocks mkh eighty forty ortf into a mix pre six ninety six k twenty four bit take one"

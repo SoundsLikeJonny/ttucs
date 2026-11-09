@@ -111,7 +111,7 @@ Real ambience slates often list several things:
 
 The parser joins the content clauses that follow a description cue into one description, so the
 classifier sees all of them. This is the multi-clause behaviour added in PR #12
-([about_slate-parser.md](about_slate-parser.md)).
+([about_7_slate-parser.md](about_7_slate-parser.md)).
 
 ## Why the split matters
 
@@ -124,5 +124,5 @@ Keeping the description separate from the fields is the central design decision 
 - a wrong gear parse cannot corrupt the classification, and a wrong classification cannot corrupt
   the gear fields.
 
-Next: [about_normalisation.md](about_normalisation.md) shows the first transformation applied to
+Next: [about_6_normalisation.md](about_6_normalisation.md) shows the first transformation applied to
 the raw string.

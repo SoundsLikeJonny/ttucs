@@ -139,5 +139,5 @@ on the project's real constraint: `pip install`, offline, CPU, small.
 | pooling + head | `BowNet.forward` |
 | training | `BowClassifier.fit` -> `train_loop` |
 
-Next: [about_model-architecture.md](about_model-architecture.md) walks through every layer with
+Next: [about_11_model-architecture.md](about_11_model-architecture.md) walks through every layer with
 shapes and parameter counts.

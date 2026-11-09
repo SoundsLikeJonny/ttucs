@@ -16,7 +16,7 @@ pipe = TTUCS.from_mlflow("models:/ttucs/1")
 `from_pretrained` does four things:
 
 1. `hub.resolve_model(name)` finds a directory (explicit path, installed `ttucs-model-bow` package,
-   cache, or a verified download — [about_distribution-and-hub.md](about_distribution-and-hub.md));
+   cache, or a verified download — [about_19_distribution-and-hub.md](about_19_distribution-and-hub.md));
 2. `hub.check_compatibility` refuses a model whose format or `ttucs` version range does not match;
 3. `UCSModel.load(path)` rebuilds the model class from `config.json` and loads the weights;
 4. it reads `temperature`, `inference.unknown_threshold` and `inference.category_threshold` from the
@@ -143,4 +143,4 @@ pair for the training commands:
   line.
 - `parse_ucs_filename` raises `ValueError` for malformed names.
 
-Next: [about_synthetic-data.md](about_synthetic-data.md) starts the data half of the tour.
+Next: [about_15_synthetic-data.md](about_15_synthetic-data.md) starts the data half of the tour.

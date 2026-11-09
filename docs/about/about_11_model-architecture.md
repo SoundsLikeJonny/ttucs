@@ -76,7 +76,7 @@ Two outputs from the same 256-dim vector:
   smoothing: a description that is clearly "a door" but ambiguous between `DOORGate` and
   `DOORCreak` still gets a useful gradient from the category head, and the category probabilities
   are what drive the `category_fallback` decision
-  ([about_calibration-and-decisions.md](about_calibration-and-decisions.md)).
+  ([about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md)).
 
 ## Parameter count
 
@@ -111,7 +111,7 @@ for chunk in chunks(texts, 1024):
 
 It is wrapped in `@torch.no_grad()`, batches at 1024, and returns a `float32` array of shape
 `(n, 738)`. The pipeline then divides by the temperature and softmaxes
-([about_calibration-and-decisions.md](about_calibration-and-decisions.md)).
+([about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md)).
 
 ## The other two models
 
@@ -144,4 +144,4 @@ verified** — it is a research path, not part of the published tool.
 | hierarchical decisions | auxiliary Category head |
 | trains in minutes | 33.8M params, sparse optimiser, 15 epochs |
 
-Next: [about_training-loop.md](about_training-loop.md) shows how these weights are learned.
+Next: [about_12_training-loop.md](about_12_training-loop.md) shows how these weights are learned.

@@ -90,7 +90,7 @@ module.load_state_dict(best_state)
 ```
 
 - Validation is `val_top1` on the validation split (10% of the data, grouped so variants of one
-  description never straddle splits — [about_datasets-and-splits.md](about_datasets-and-splits.md)).
+  description never straddle splits — [about_16_datasets-and-splits.md](about_16_datasets-and-splits.md)).
 - The best state is kept in memory as a clone of the state dict and restored at the end, so the
   returned model is the best epoch, not the last.
 - `patience: 3` stops after three epochs without a gain of more than 0.0001.
@@ -120,5 +120,5 @@ examples, 15 epochs, batch 256): roughly 3–5 minutes, which is the figure in A
 README. The smoke config (`configs/smoke.yaml`: 12 per class, 2 epochs, 65,536 buckets x 32 dims)
 runs in well under a minute in CI.
 
-Next: [about_calibration-and-decisions.md](about_calibration-and-decisions.md) turns logits into
+Next: [about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md) turns logits into
 confidences and a decision.

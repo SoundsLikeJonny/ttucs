@@ -158,5 +158,5 @@ verifies.
   in `pyproject.toml`, `MODEL_CARD.md`, the README results table and the weights package README
   changelog.
 
-Next: [about_development-and-release.md](about_development-and-release.md) covers the process
+Next: [about_20_development-and-release.md](about_20_development-and-release.md) covers the process
 around all of this.

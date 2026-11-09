@@ -148,5 +148,5 @@ description is thin.
   choose a threshold: pick the coverage/accuracy trade-off you want.
 - Changing the defaults is a user-visible change and needs a CHANGELOG entry.
 
-Next: [about_pipeline-and-outputs.md](about_pipeline-and-outputs.md) shows how a `Prediction` is
+Next: [about_14_pipeline-and-outputs.md](about_14_pipeline-and-outputs.md) shows how a `Prediction` is
 assembled and printed.

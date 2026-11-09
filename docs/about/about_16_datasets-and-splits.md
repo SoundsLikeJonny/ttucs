@@ -129,4 +129,4 @@ The synthetic cache is also written separately to `data.processed.synthetic.cach
 - No third-party library metadata, ever (AGENTS.md rule 2).
 - `data/` is git-ignored; splits are rebuilt, not committed.
 
-Next: [about_training-and-config.md](about_training-and-config.md) consumes these splits.
+Next: [about_17_training-and-config.md](about_17_training-and-config.md) consumes these splits.

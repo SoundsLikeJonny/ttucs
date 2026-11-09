@@ -38,7 +38,7 @@ These come from AGENTS.md section 1 and they decide most trade-offs in the code.
 2. **`pip install ttucs` works out of the box, and inference is fully offline.** No API keys, no
    model download at first use, no network at import time or during prediction. `TTUCS_OFFLINE=1`
    must guarantee zero network access. This is why the weights ship as their own PyPI package
-   ([about_distribution-and-hub.md](about_distribution-and-hub.md)).
+   ([about_19_distribution-and-hub.md](about_19_distribution-and-hub.md)).
 3. **Everything published is redistributable.** MIT code, MIT weights, the public UCS list. No
    third-party sound-library metadata anywhere: training data is synthetic text plus the UCS list.
 4. **Accuracy on real slate wording**, not on synthetic test sets. The headline number is the
@@ -68,7 +68,7 @@ definition of finished work (AGENTS.md section 2, rule 7):
   step.
 - **Not a general-purpose UCS oracle.** The model knows 738 CatIDs and was trained on synthetic
   text; it is good on the wording recordists actually use and it is over-confident on phrasing it
-  has never seen ([about_calibration-and-decisions.md](about_calibration-and-decisions.md)).
+  has never seen ([about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md)).
 
 ## The shape of the solution
 
@@ -87,6 +87,6 @@ honest (the generator produces descriptions, not slates, for the classifier).
 
 ## Where to go next
 
-- The file-by-file map: [about_repo-map.md](about_repo-map.md)
-- The label space: [about_ucs-taxonomy.md](about_ucs-taxonomy.md)
-- The full inference path: [about_normalisation.md](about_normalisation.md) onwards
+- The file-by-file map: [about_3_repo-map.md](about_3_repo-map.md)
+- The label space: [about_4_ucs-taxonomy.md](about_4_ucs-taxonomy.md)
+- The full inference path: [about_6_normalisation.md](about_6_normalisation.md) onwards

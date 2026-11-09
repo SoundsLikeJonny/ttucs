@@ -57,7 +57,7 @@ mirrors the release config but sets `realistic_slates: null`.
 
 1. **Seed everything** (`random`, `numpy`, `torch`) and load the taxonomy.
 2. **Load or build the splits** (`load_or_build`, fingerprint-checked —
-   [about_datasets-and-splits.md](about_datasets-and-splits.md)).
+   [about_16_datasets-and-splits.md](about_16_datasets-and-splits.md)).
 3. **Build the label lists**: `labels` = trainable CatIDs in taxonomy order, `cats` = their
    categories. These lists are saved into `config.json`, so the model is self-describing.
 4. **Instantiate the model** from `MODEL_REGISTRY[cfg["model"]["name"]]`.
@@ -92,7 +92,7 @@ consumes.
 
 `weights.pt` is the training artefact. The release format is produced later by
 `hub.export_model`, which writes `weights.safetensors` in fp16 plus a `manifest.json`
-([about_distribution-and-hub.md](about_distribution-and-hub.md)).
+([about_19_distribution-and-hub.md](about_19_distribution-and-hub.md)).
 
 ## MLflow
 
@@ -150,4 +150,4 @@ MLflow lives in the `[train]` extra. `_extras.require_mlflow` raises a clear err
 | data rebuilt every run | a `data` key or the version changed | expected; check the fingerprint in the log |
 | `KeyError` on a config key | typo, or a knob missing from `DEFAULTS` | add it to `DEFAULTS` |
 
-Next: [about_evaluation.md](about_evaluation.md) covers the metrics and the gate.
+Next: [about_18_evaluation.md](about_18_evaluation.md) covers the metrics and the gate.

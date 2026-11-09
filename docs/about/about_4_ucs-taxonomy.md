@@ -25,7 +25,7 @@ WATRSurf_Waves Crashing Rocks_NONE_Nightfall_MKH8040-ORTF
 
 UCS also defines a `MISC` subcategory per category ("this category, unspecified") and a
 `GENERAL` subcategory in some categories. ttucs uses `MISC` for its `category_fallback` decision
-([about_calibration-and-decisions.md](about_calibration-and-decisions.md)).
+([about_13_calibration-and-decisions.md](about_13_calibration-and-decisions.md)).
 
 ## The numbers
 

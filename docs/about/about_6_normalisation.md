@@ -78,4 +78,4 @@ you add a replacement, add a test with the exact STT spelling you saw in the wil
 `python scripts/check_leakage.py` afterwards if you touched a bank (normalisation itself cannot
 leak, but it is cheap to check).
 
-Next: [about_slate-parser.md](about_slate-parser.md) consumes this output.
+Next: [about_7_slate-parser.md](about_7_slate-parser.md) consumes this output.

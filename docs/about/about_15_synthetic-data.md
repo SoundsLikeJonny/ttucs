@@ -14,7 +14,7 @@ into spoken slates. Everything is deterministic, offline and LLM-free by default
 - **Controllable.** Phrase coverage, multi-clause joins and noise levels are config knobs.
 - **Honest about its limits.** Synthetic text comes from the same generator as the training data,
   so synthetic test scores overstate real accuracy. That is why the headline number is the 80
-  hand-written slates ([about_evaluation.md](about_evaluation.md)).
+  hand-written slates ([about_18_evaluation.md](about_18_evaluation.md)).
 
 ## The vocabulary banks
 
@@ -157,4 +157,4 @@ contains "sci fi door" and "sci fi computer" verbatim from `catid_phrases.yaml`,
 - Never copy wording from `examples/realistic_slates.jsonl` into a bank (AGENTS.md rule 6).
 - Keep phrases short, lowercase and library-style; the model learns exactly what you write.
 
-Next: [about_datasets-and-splits.md](about_datasets-and-splits.md) turns these texts into splits.
+Next: [about_16_datasets-and-splits.md](about_16_datasets-and-splits.md) turns these texts into splits.

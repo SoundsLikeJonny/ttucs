@@ -149,4 +149,4 @@ When you report a number:
 - label estimates as estimates, and never claim a gain smaller than the noise floor without a
   second seed.
 
-Next: [about_distribution-and-hub.md](about_distribution-and-hub.md) ships the result.
+Next: [about_19_distribution-and-hub.md](about_19_distribution-and-hub.md) ships the result.

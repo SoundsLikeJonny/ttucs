@@ -109,4 +109,4 @@ repetition. Round 4 of the retrain experiments found this netted flat, so the re
 Those limits are acceptable for short, telegraphic descriptions ("metal gate slam heavy"), which is
 exactly what the tool is fed.
 
-Next: [about_bag-of-words.md](about_bag-of-words.md) explains the idea these features implement.
+Next: [about_10_bag-of-words.md](about_10_bag-of-words.md) explains the idea these features implement.
