@@ -28,6 +28,12 @@ model = TTUCS.from_pretrained("models/my-model")
 Only the parsed **description** goes to the classifier. The other slate fields are returned but are
 never used for classification.
 
+## How it works
+
+![ttucs architecture: spoken slate -> slate parser -> classifier -> prediction, with slate fields bypassing the classifier](docs/assets/architecture.png)
+
+Regenerate with `python scripts/render_architecture.py` (needs `pip install matplotlib`).
+
 ## Install
 
 | what | command |
