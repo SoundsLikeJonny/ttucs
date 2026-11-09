@@ -26,6 +26,7 @@ DEFAULTS: dict[str, Any] = {
             "max_synonym_df": 25,
             "phrase_prob": 0.5,
             "multi_clause_prob": 0.0,  # share of examples joined into "a, b" pairs
+            "verbose_prob": 0.0,       # share of longer action-narrative / scene-observation text
             "cache": "data/processed/synthetic.jsonl",
         },
         "label_documents": True,       # add UCS explanation/synonym docs as training text
@@ -38,6 +39,7 @@ DEFAULTS: dict[str, Any] = {
         "name": "bow",
         "embedding_dim": 128,
         "num_buckets": 262144,
+        "head_repeat": 1,  # headline-clause feature repeat in the bag mean (1 = off)
         "word_ngrams": 2,
         "char_ngrams": [3, 5],
         "dropout": 0.2,

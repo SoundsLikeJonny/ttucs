@@ -84,13 +84,14 @@ class DescriptionGenerator:
 
     def __init__(self, taxonomy: UCSTaxonomy, banks: dict | None = None, seed: int = 0,
                  max_synonym_df: int = 25, phrase_prob: float = 0.5,
-                 multi_clause_prob: float = 0.0,
+                 multi_clause_prob: float = 0.0, verbose_prob: float = 0.0,
                  llm_hook: Callable[[str, UCSEntry], str] | None = None) -> None:
         self.tax = taxonomy
         self.banks = banks or load_banks()
         self.phrases: dict[str, list[str]] = self.banks.get("catid_phrases") or {}
         self.phrase_prob = phrase_prob
         self.multi_clause_prob = multi_clause_prob
+        self.verbose_prob = verbose_prob
         self.rng = random.Random(seed)
         self.llm_hook = llm_hook
         self.mods = [m for group in self.banks["modifiers"].values() for m in group]
@@ -104,6 +105,7 @@ class DescriptionGenerator:
             weights = [1.0 / math.sqrt(df[s]) for s in syns]
             self._syn_weights[e.cat_id] = (syns, weights)
         self._routed, self._unrouted = self._route_objects()
+        self._amb_sibling_cache: dict[str, list[str]] = {}
 
     # ------------------------------------------------------------------ object routing
     def _route_objects(self) -> tuple[dict[str, list[str]], dict[str, list[str]]]:
@@ -166,6 +168,80 @@ class DescriptionGenerator:
     def _pick(self, seq: list[str]) -> str:
         return self.rng.choice(seq)
 
+    def _amb_siblings(self, e: UCSEntry) -> list[str]:
+        cached = self._amb_sibling_cache.get(e.cat_id)
+        if cached is None:
+            cached = sorted({s for other in self.tax.entries if other.category == e.category
+                             and other.cat_id != e.cat_id
+                             for s in (self._sub_words(other),) if s})
+            self._amb_sibling_cache[e.cat_id] = cached
+        return cached
+
+    def _art(self, word: str) -> str:
+        """Article for a noun phrase; plural-looking nouns take none."""
+        if len(word) > 3 and word.endswith("s") and not word.endswith("ss"):
+            return ""
+        return "an" if word[:1].lower() in "aeiou" else "a"
+
+    def _verbose_one(self, e: UCSEntry) -> str | None:
+        """Longer, sentence-style description: an action narration for sources, a scene
+        observation for ambiences ("standing in a parking lot, traffic close by, ...")."""
+        r, pick = self.rng.random, self.rng.choice
+        cat = self.banks["categories"].get(e.category, {"objects": [e.category.lower()], "actions": []})
+        sub_actions = self.banks["subcategory_actions"].get(e.subcategory) or []
+        # only the subcategory's own verbs: category-level action pools pair species
+        # verbs across classes ("dog moo"); placeholders ("various") are not actions
+        act_pool = [a for a in sub_actions
+                    if a not in {"sound", "misc", "various", "assorted", "ambience", "atmosphere"}]
+        routed = self._routed.get(e.cat_id, [])
+        # conservative noun pool: the class's own subcategory word and routed objects
+        # only - synonyms are noisy out of context ("ucs marke"), and category-level
+        # object lists would bypass routing ("elephant" inside the dog class)
+        nouns = [x for x in (self._sub_words(e),
+                             pick(routed) if routed else "") if x]
+
+        if e.category != "AMBIENCE":
+            when = ""
+            mod = pick(self.mods) if r() < 0.7 else ""
+            ctx = pick(self.contexts) if r() < 0.5 else ""
+            obj = pick(nouns) if nouns else e.category.lower()
+            act = pick(act_pool) if act_pool else ""
+            if act == obj:
+                act = ""
+            act2 = pick(act_pool) if act_pool and r() < 0.45 else ""
+            tail = pick(["repeated", "intermittent", "steady", "constant", "sporadic"]) if r() < 0.3 else ""
+            core = f"{mod} {obj}".strip()
+            art_core = core if self._art(obj) == "" else f"{self._art(mod) if mod else self._art(obj)} {core}"
+            options = [
+                f"the sound of {art_core} {act} {ctx}",
+                f"you can hear {art_core} {act}" + (f", then {act2}" if act2 and act2 != obj else ""),
+                f"close up recording of {art_core} {act}",
+                f"{art_core.capitalize()} {act} {ctx}" + (f", {tail}" if tail else ""),
+            ]
+        else:
+            locs = [c for c in self.contexts
+                    if c.split()[0] in ("in", "on", "at", "outside", "inside", "by")]
+            ctx = pick(locs)
+            with_ctx = pick([c for c in self.contexts if c.startswith("with")]) if r() < 0.35 else ""
+            primary = self._sub_words(e) or (pick(routed) if routed else "")
+            primary = primary or pick(cat.get("objects") or ["ambience"])
+            sibs = self._amb_siblings(e)
+            secondary = pick(sibs) if sibs and r() < 0.7 else ""
+            near = pick(["close by", "nearby", "passing close"])
+            far = pick(["farther away", "far away", "further off"])
+            when = pick([a for a in (cat.get("actions") or []) if a]) if r() < 0.6 else ""
+            opener = pick(["standing", "you are", "recorded"])
+            second = f", {secondary} {far}" if secondary else ""
+            extra = f", {with_ctx}" if with_ctx else ""
+            options = [
+                f"{opener} {ctx}, {primary} {near}{second}{extra}",
+                f"ambience {ctx}, dominated by {primary}{second}{extra}",
+            ]
+        text = pick(options).strip()
+        if when:
+            text = f"{text}, {when}"
+        return re.sub(r"\s+", " ", text).strip(" ,")
+
     # ------------------------------------------------------------------ public
     def generate_one(self, e: UCSEntry) -> str:
         cat = self.banks["categories"].get(e.category, {"objects": [e.category.lower()], "actions": []})
@@ -211,15 +287,19 @@ class DescriptionGenerator:
             other = (self._syn(e) or "") if r() < 0.3 else ""
             templates = [f"{mod} {head} {act}", f"{head} {act} {mod}", f"{head} {act} {ctx}",
                          f"{mod} {head} {other}", f"{head} {other} {act}", f"{head}"]
-        frag = self._expl_fragment(e)
-        if frag and r() < 0.12:
-            text = f"{mod} {frag}" if r() < 0.5 else frag
-        else:
-            text = self._pick(templates)
+        text = self._verbose_one(e) if r() < self.verbose_prob else None
+        verbose = text is not None
+        if text is None:
+            frag = self._expl_fragment(e)
+            if frag and r() < 0.12:
+                text = f"{mod} {frag}" if r() < 0.5 else frag
+            else:
+                text = self._pick(templates)
         text = re.sub(r"\s+", " ", text).strip()
         # light lexical noise: occasional word dropout to avoid template memorisation
+        # (skipped for verbose sentences, where it breaks the connectives)
         words = text.split()
-        if len(words) > 3 and r() < 0.15:
+        if not verbose and len(words) > 3 and r() < 0.15:
             words.pop(self.rng.randrange(len(words)))
         text = " ".join(words)
         if self.llm_hook is not None:

@@ -6,10 +6,10 @@ UCS v8.2.1: 753 CatIDs, 738 trainable (excluded categories: ARCHIVED).
 
 | source | examples | CatIDs |
 |---|---:|---:|
-| synthetic | 88492 | 738 |
+| synthetic | 159591 | 738 |
 | ucs_doc | 3305 | 738 |
 
-- examples per CatID: min 95, median 125, max 148; imbalance ratio max/min 1.6
+- examples per CatID: min 179, median 221, max 260; imbalance ratio max/min 1.5
 
 ![class distribution](class_distribution.png)
 

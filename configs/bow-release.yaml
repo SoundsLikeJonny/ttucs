@@ -17,6 +17,7 @@ data:
     max_synonym_df: 25
     phrase_prob: 0.5                 # share of examples built from resources/catid_phrases.yaml
     multi_clause_prob: 0.2           # share of examples joined into "a, b" multi-clause text
+    verbose_prob: 0.0                # longer narration styles: hurt multi-clause dev in round 3 (0.582 vs 0.673)
     cache: data/processed-release/synthetic.jsonl
   label_documents: true
   slate_augment_fraction: 0.25
@@ -32,6 +33,7 @@ model:
   char_ngrams: [3, 5]
   dropout: 0.2
   category_loss_weight: 0.3
+  head_repeat: 1                    # clause weighting (round 4) netted flat - keep the default
 
 train:
   epochs: 15

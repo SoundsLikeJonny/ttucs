@@ -47,6 +47,56 @@ def test_phrase_prob_controls_phrase_usage(taxonomy):
     assert any("weed whacker" in t or "leaf blower" in t for t in on)
 
 
+def test_verbose_prob_controls_length(taxonomy):
+    e = taxonomy["DOORCreak"]
+    off = DescriptionGenerator(taxonomy, seed=7, verbose_prob=0.0).generate(e, 60)
+    on = DescriptionGenerator(taxonomy, seed=7, verbose_prob=1.0).generate(e, 60)
+
+    def avg(ts):
+        return sum(len(t.split()) for t in ts) / len(ts)
+
+    assert avg(on) > avg(off) + 1
+
+
+def test_verbose_ambience_is_scene_observation(taxonomy):
+    e = taxonomy["AMBTraf"]
+    texts = DescriptionGenerator(taxonomy, seed=7, verbose_prob=1.0).generate(e, 40)
+    openers = ("standing", "you", "recorded", "ambience")
+    assert all(t.split(",")[0].split()[0] in openers for t in texts)
+    assert all("traffic" in t for t in texts)
+
+
+def test_verbose_keeps_class_nouns(taxonomy):
+    gen = DescriptionGenerator(taxonomy, seed=7, verbose_prob=1.0)
+    dog = " ".join(gen.generate(taxonomy["ANMLDog"], 60))
+    assert "moo" not in dog and "oink" not in dog and "whinny" not in dog
+    assert "elephant" not in dog
+
+
+def test_head_repeat_preserves_default_and_emphasises_headline():
+    """With the knob off, featurisation is bit-identical to the published behaviour; with
+    it on, first-clause features are repeated (2x pull in the bag mean), clauses isolated."""
+    from ttucs.models.bow import HashedNgramFeaturizer
+
+    default = HashedNgramFeaturizer(1024, 2, (3, 5))
+    text = "metal gate slam, creaky hinges"
+
+    legacy = default._legacy_features(text)
+    assert default.features_and_weights(text) == (legacy, [1.0] * len(legacy))
+
+    emphasised = HashedNgramFeaturizer(1024, 2, (3, 5), head_repeat=2)
+    feats = emphasised.features(text)
+    head = set(default.features("metal gate slam"))
+    ctx = set(default.features("creaky hinges"))
+    n_head = sum(1 for f in feats if f in head - ctx)
+    n_ctx = sum(1 for f in feats if f in ctx - head)
+    head_feats = default.features("metal gate slam")
+    assert n_head == 2 * len(head_feats)
+    assert n_ctx >= len(ctx) - 2  # exact counts modulo rare bucket collisions
+    # clauses isolated: every feature belongs to exactly one clause
+    assert head | ctx >= set(feats)
+
+
 def test_multi_clause_joins_same_class_pairs(taxonomy):
     e = taxonomy["MACHGrdn"]
     off = DescriptionGenerator(taxonomy, seed=5, multi_clause_prob=0.0).generate(e, 60)

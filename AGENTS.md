@@ -324,3 +324,21 @@ As of 2026-11-08:
   dev set contains "sci fi door" (dev:144) and "sci fi computer" (dev:149) verbatim from
   `catid_phrases.yaml`, and 10 generic 3-word `synth_banks.yaml` entries (contexts/objects) match
   dev or realistic texts.
+- **PR #12 (opened 2026-11-08, awaiting owner review):** parser fixes (MKH without the "h",
+  spoken "dual a b" -> `Spaced Pair (AB)`, multi-clause descriptions: cue'd slates absorb the
+  clauses that follow them, cue-less slates join all content clauses; perspective-only words and
+  mic-brand fragments kept out), module-level `import ttucs as t; t.predict(...)` lazy API,
+  multi-clause training data (`data.synthetic.multi_clause_prob: 0.2` in the release config),
+  MLflow tracking on in `bow-release.yaml`. CI green, 113 tests, no new leakage (12 known baseline
+  violations only). No weights bump: `ttucs-model-bow` stays 0.2.0 until the owner promotes a
+  retrain (recommended candidate = round-2 config).
+- **Four controlled retrain rounds (2026-11-08/09):** only multi-clause data durably helped
+  (dev multi-clause slice 0.600 -> 0.673, n=55; synthetic test 0.909 -> 0.915; realistic
+  category-acc 0.875 -> 0.900). Held-out realistic top-1 stuck at 0.675 across all rounds
+  (published 0.713, n=80) - sibling-class confusion is the binding constraint. Parked opt-in
+  knobs (commits local to the branch, default off, off in the release config):
+  `data.synthetic.verbose_prob` (longer narration styles; round 3 cost multi-clause dev 0.673 ->
+  0.582) and `model.head_repeat` (clause weighting via feature repetition; round 4 netted flat,
+  and the parser's first clause is not always the label driver). Next levers: sibling
+  hard-negative phrases, category-gated fallback rules, second seed before trusting small
+  deltas.
