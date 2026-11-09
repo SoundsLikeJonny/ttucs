@@ -22,6 +22,11 @@ generated from it, so the weights can be redistributed.
 - Splits are deterministic (seed 42) and grouped so variants of one description never straddle splits.
 - Generated data is fingerprinted from the config and cached in `processed_dir`.
 - Run `ttucs report` for `docs/assets/distribution.md` with plots.
+- Generator knobs available for experimentation (all default off; the release config ships
+  `multi_clause_prob: 0.2` since the 0.2.0-era card above was written): `multi_clause_prob` joins
+  same-class description pairs into multi-clause text, `verbose_prob` emits longer action-narration /
+  scene-observation sentences. Both change the synthetic test sets, so results are not comparable
+  across generator versions.
 
 **Your own data:** real library metadata is the biggest lever for accuracy on real slates, but there
 is no built-in option for it yet. To experiment, retrain from source with `pip install "ttucs[train]"`

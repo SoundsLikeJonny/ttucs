@@ -76,9 +76,12 @@ ttucs eval -m models/ttucs-bow-release                                # [train]
 ttucs report -c configs/bow-release.yaml                              # [train]
 ```
 
-The API also offers `predict_batch`, `top_k`, aggregated category scores, temperature calibration, a
-`decision` field (`confident` / `category_fallback` to the category's MISC CatID / `unknown`), and
-`save_pretrained`.
+The API also offers `t.predict_batch` / `predict_batch`, `top_k`, aggregated category scores,
+temperature calibration, a `decision` field (`confident` / `category_fallback` to the category's
+MISC CatID / `unknown`), and `save_pretrained`. The parser feeds the classifier the full
+description: on slates without a "recording ..." cue it joins all content clauses, so multi-part
+ambience slates ("nearby traffic, crossing sign, children playing in a nearby park, wind") are
+classified in whole.
 
 ## Models
 
@@ -88,6 +91,11 @@ The API also offers `predict_batch`, `top_k`, aggregated category scores, temper
 | `configs/bow.yaml` | the same, larger (524,288 × 192) | ~400 MB fp32; no accuracy gain on synthetic data (see model card) |
 | `configs/minilm.yaml` | frozen all-MiniLM-L6-v2 + MLP head | optional, needs `[transformers]` (**not trained/verified yet**) |
 | `configs/zeroshot.yaml` | TF-IDF similarity to UCS Explanation+Synonyms | cold-start floor, no training |
+
+Training-data and featurisation knobs for experimentation (all defaults off): `data.synthetic.multi_clause_prob`
+(join same-class description pairs, 0.2 in the release config), `data.synthetic.verbose_prob` (longer
+action-narration / scene-observation styles), `model.head_repeat` (repeat the first clause's features in the
+bag mean). See `CHANGELOG.md` for what helped and what did not in controlled rounds.
 
 ## Results: published model (`ttucs-model-bow` 0.2.0, fp16)
 

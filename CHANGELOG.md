@@ -8,27 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Module-level shortcuts for a one-line start: `import ttucs as t; t.predict(...)` (and
-  `t.predict_batch(...)`) load the default pretrained model lazily on first use - offline, and
-  nothing loads at import time - so scripts no longer need an explicit `TTUCS.from_pretrained()`.
-  The class API is unchanged for custom models or inference overrides.
-- The slate parser now recognises Sennheiser MKH models when speech-to-text drops the "h"
-  ("m k eighty forty" -> `Sennheiser MKH 8040`; 1-2 digit capsule numbers stay Schoeps), and the
-  A-B technique spoken as "dual a b" / "a b stereo" (`Spaced Pair (AB)`).
-- Cue-less slates now join all content-bearing leftover clauses into the description instead of
-  keeping only the longest one, so multi-part ambience slates ("nearby traffic, crossing sign,
-  children playing in a nearby park, wind") are classified in full. Perspective-only words
-  (exterior/interior/...) are captured as perspective and kept out of the description.
-
-### Changed
-- Descriptions are now multi-clause: the parser joins the content clauses that follow a
-  description cue ("recording traffic passing, children playing, wind" keeps all three; the same
-  for cue-less slates), and `data.synthetic.multi_clause_prob` (0.2 in the release config) joins
-  same-class description pairs so training matches what the parser feeds the model. Multi-clause
-  dev texts scored 0.600 vs 0.816 single-clause before this change. Synthetic test sets change
-  and are not comparable across versions.
-
-### Added
 - `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
   a remote tracking server without editing a config file. Offline mode (`TTUCS_OFFLINE=1` or
   `HF_HUB_OFFLINE=1`) ignores it and keeps the local SQLite store. The resolved URI is logged.
@@ -47,11 +26,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/check_leakage.py`: automates the leakage checks (bank phrases of 3+ words appearing
   verbatim in the hand-written sets; dev/realistic 4-gram or substring overlap); exits 1 on
   violations. Run it after editing `catid_phrases.yaml`, `synth_banks.yaml` or the dev set.
+- Module-level shortcuts for a one-line start: `import ttucs as t; t.predict(...)` (and
+  `t.predict_batch(...)`) load the default pretrained model lazily on first use - offline, and
+  nothing loads at import time - so scripts no longer need an explicit `TTUCS.from_pretrained()`.
+  The class API is unchanged for custom models or inference overrides.
+- Slate parser: Sennheiser MKH models are now recognised when speech-to-text drops the "h"
+  ("m k eighty forty" -> `Sennheiser MKH 8040`; 1-2 digit capsule numbers stay Schoeps), and the
+  A-B technique spoken as "dual a b" / "a b stereo" parses as `Spaced Pair (AB)`.
+- Cue-less slates now join all content-bearing leftover clauses into the description instead of
+  keeping only the longest one, so multi-part ambience slates ("nearby traffic, crossing sign,
+  children playing in a nearby park, wind") are classified in full. Perspective-only words
+  (exterior/interior/...) are captured as perspective and kept out of the description.
+- Opt-in description-generator styles for experimentation (default off, off in the release config):
+  `data.synthetic.verbose_prob` emits longer action-narration sentences for sources and
+  first-person scene observations for ambiences; `data.synthetic.multi_clause_prob` joins
+  same-class description pairs into multi-clause training text.
+- Opt-in clause weighting, `model.head_repeat` (default 1 = off): with a value above 1,
+  comma-clauses are featurised independently and the first clause - the label driver, which the
+  parser guarantees comes first - has its features repeated into the embedding-bag mean while
+  context clauses count once. Off keeps featurisation bit-identical to the published model.
 
 ### Changed
+- **Multi-clause descriptions** (parser behaviour ships with `ttucs`; retrained weights with the
+  new data would be a separate `ttucs-model-bow` release): the parser joins the content clauses
+  that follow a description cue
+  ("recording traffic passing, children playing, wind" keeps all three; the same for cue-less
+  slates), and the release config trains on `data.synthetic.multi_clause_prob: 0.2` so training
+  matches what the parser feeds the model. Retrained on it, the multi-clause dev slice improves
+  0.600 -> 0.673 (n=55), synthetic test 0.909 -> 0.915 (22,384 -> 20,259 examples after the
+  generator change), realistic category accuracy 0.875 -> 0.900; held-out realistic top-1 is
+  0.675 vs the published 0.713 (n=80, within noise - sibling-class confusions dominate).
+  Synthetic test sets change with the generator and are not comparable across versions.
 - `configs/autotrain.yaml` sets `mlflow.log_model: false`: every logged model copies the ~63 MB
   weights into the artifact store, so exploratory rounds now log metrics and reports only. Turn it
   back on for a gated winner that should enter the registry.
+- `configs/bow-release.yaml` enables MLflow tracking for release training runs
+  (`mlflow ui --backend-store-uri sqlite:///mlflow.db` to browse them).
+- Experiment retrain rounds (2026-11-08/09) with the new knobs did not beat the multi-clause
+  configuration: `verbose_prob: 0.3` cost multi-clause dev accuracy (0.673 -> 0.582, n=55) and
+  `head_repeat: 2` netted flat, so the release config keeps `verbose_prob: 0.0` and
+  `head_repeat: 1`. Two controlled rounds changed held-out top-1 by at most one slate (n=80).
 
 ### Fixed
 - README install line now states the real weights size: the `ttucs-model-bow` 0.2.0 wheel is ~63 MB
