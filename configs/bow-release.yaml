@@ -33,7 +33,7 @@ model:
   char_ngrams: [3, 5]
   dropout: 0.2
   category_loss_weight: 0.3
-  head_repeat: 2                    # headline clause counts double in the bag mean
+  head_repeat: 1                    # clause weighting (round 4) netted flat - keep the default
 
 train:
   epochs: 15
