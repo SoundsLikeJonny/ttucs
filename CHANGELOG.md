@@ -21,9 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (exterior/interior/...) are captured as perspective and kept out of the description.
 
 ### Changed
-- The synthetic slate generator emits mic phrases like "i'm using <mic>" / "on <mic>" and the
-  "dual a b" setup, so training augmentation matches real slate phrasing (synthetic test sets
-  change and are not comparable across versions).
+- Descriptions are now multi-clause: the parser joins the content clauses that follow a
+  description cue ("recording traffic passing, children playing, wind" keeps all three; the same
+  for cue-less slates), and `data.synthetic.multi_clause_prob` (0.2 in the release config) joins
+  same-class description pairs so training matches what the parser feeds the model. Multi-clause
+  dev texts scored 0.600 vs 0.816 single-clause before this change. Synthetic test sets change
+  and are not comparable across versions.
 
 ### Added
 - `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
