@@ -25,10 +25,12 @@ BOX = dict(boxstyle="round,pad=0.02", linewidth=1.4)
 
 def box(ax, x, y, w, h, title, lines, family, title_size=10.5):
     ax.add_patch(FancyBboxPatch((x, y), w, h, facecolor=STAGE[family], edgecolor=EDGE[family], **BOX))
+    n_title = title.count("\n") + 1
     ax.text(x + w / 2, y + h - 0.035, title, ha="center", va="top", fontsize=title_size,
-            fontweight="bold", color=TEXT)
+            fontweight="bold", color=TEXT, linespacing=1.15)
+    y0 = y + h - 0.035 - 0.038 * n_title
     for i, line in enumerate(lines):
-        ax.text(x + w / 2, y + h - 0.088 - i * 0.043, line, ha="center", va="top",
+        ax.text(x + w / 2, y0 - i * 0.043, line, ha="center", va="top",
                 fontsize=7.9, color=TEXT)
 
 
@@ -50,7 +52,7 @@ def main() -> None:
     top, height = 0.34, 0.50  # main flow band: y 0.34 .. 0.84
 
     # ---- stage 1: speech to text
-    box(ax, 0.015, top, 0.135, height, "Spoken slate",
+    box(ax, 0.015, top, 0.135, height, "Recorded voice\nslate text",
         ['"exterior, parking lot,', 'ambience nearby traffic,', "i'm using an sennheiser",
          'm k eighty forty..."', "", "speech-to-text output", "(words, no audio)"], 0)
 
