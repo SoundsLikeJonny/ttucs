@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Module-level shortcuts for a one-line start: `import ttucs as t; t.predict(...)` (and
+  `t.predict_batch(...)`) load the default pretrained model lazily on first use - offline, and
+  nothing loads at import time - so scripts no longer need an explicit `TTUCS.from_pretrained()`.
+  The class API is unchanged for custom models or inference overrides.
+- The slate parser now recognises Sennheiser MKH models when speech-to-text drops the "h"
+  ("m k eighty forty" -> `Sennheiser MKH 8040`; 1-2 digit capsule numbers stay Schoeps), and the
+  A-B technique spoken as "dual a b" / "a b stereo" (`Spaced Pair (AB)`).
+- Cue-less slates now join all content-bearing leftover clauses into the description instead of
+  keeping only the longest one, so multi-part ambience slates ("nearby traffic, crossing sign,
+  children playing in a nearby park, wind") are classified in full. Perspective-only words
+  (exterior/interior/...) are captured as perspective and kept out of the description.
+
+### Changed
+- The synthetic slate generator emits mic phrases like "i'm using <mic>" / "on <mic>" and the
+  "dual a b" setup, so training augmentation matches real slate phrasing (synthetic test sets
+  change and are not comparable across versions).
+
+### Added
 - `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
   a remote tracking server without editing a config file. Offline mode (`TTUCS_OFFLINE=1` or
   `HF_HUB_OFFLINE=1`) ignores it and keeps the local SQLite store. The resolved URI is logged.

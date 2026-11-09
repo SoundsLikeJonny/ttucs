@@ -59,6 +59,30 @@ def test_batch_matches_single_and_save_roundtrip(tiny_model, tmp_path):
 
 
 @pytest.mark.slow
+def test_module_level_shortcuts(tiny_model, monkeypatch):
+    """`import ttucs as t; t.predict(...)` loads the default model lazily, exactly once."""
+    import ttucs
+
+    loaded = TTUCS.from_pretrained(tiny_model)
+    calls: list = []
+    monkeypatch.setattr(TTUCS, "from_pretrained",
+                        classmethod(lambda cls, model=None, **kw: calls.append(model) or loaded))
+    monkeypatch.setattr(ttucs, "_DEFAULT", None)
+
+    pred = ttucs.predict("recording a dog barking loudly", top_k=2)
+    assert isinstance(pred, Prediction)
+    assert pred.alternatives[0].cat_id == "ANMLDog"
+    assert ttucs.predict_batch(["glass bottle smash"])
+    assert len(calls) == 1  # loaded on first use only, then reused
+
+
+def test_nothing_loads_at_import():
+    import ttucs
+
+    assert ttucs._DEFAULT is None
+
+
+@pytest.mark.slow
 def test_unknown_and_category_fallback(tiny_model):
     strict = TTUCS.from_pretrained(tiny_model, unknown_threshold=1.01, category_threshold=1.01)
     p = strict.predict("door")
