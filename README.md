@@ -10,15 +10,19 @@ pip install ttucs          # also installs the pretrained weights (ttucs-model-b
 ```
 
 ```python
-from ttucs import TTUCS
+import ttucs as t
 
-model = TTUCS.from_pretrained()   # offline: loads the installed weights, no network
-p = model.predict("Project Thick As Thieves, location Squamish forest, recording a wooden door creak slow, "
-                  "Sennheiser MKH 416 and Sound Devices MixPre, 96k 24 bit, take 3")
+p = t.predict("Project Thick As Thieves, location Squamish forest, recording a wooden door creak slow, "
+              "Sennheiser MKH 416 and Sound Devices MixPre, 96k 24 bit, take 3")
 p.cat_id, p.category_full, p.confidence
 p.filename                        # e.g. 'DOORCreak_Wooden Door Creak Slow_NONE_ThickAsThieves_MKH416'
 p.slate["sample_rate"], p.slate["take"]
 p.to_json()
+
+# The first t.predict() call loads the installed weights offline and reuses them.
+# For a specific model directory or inference overrides, use the class API:
+from ttucs import TTUCS
+model = TTUCS.from_pretrained("models/my-model")
 ```
 
 Only the parsed **description** goes to the classifier. The other slate fields are returned but are

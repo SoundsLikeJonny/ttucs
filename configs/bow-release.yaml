@@ -16,6 +16,7 @@ data:
     min_per_class: 60                # lower bound if target_per_class is set lower
     max_synonym_df: 25
     phrase_prob: 0.5                 # share of examples built from resources/catid_phrases.yaml
+    multi_clause_prob: 0.2           # share of examples joined into "a, b" multi-clause text
     cache: data/processed-release/synthetic.jsonl
   label_documents: true
   slate_augment_fraction: 0.25
@@ -48,7 +49,7 @@ inference:
   top_k: 5
 
 mlflow:
-  enabled: false                     # set true to track release runs too
+  enabled: true                      # track release runs: mlflow ui --backend-store-uri sqlite:///mlflow.db
   tracking_uri: sqlite:///mlflow.db
   experiment: ttucs
   log_model: true

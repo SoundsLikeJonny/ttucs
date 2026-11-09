@@ -56,9 +56,10 @@ def group_split(examples: list[Example], val: float, test: float, seed: int
 
 # ------------------------------------------------------------------------ synthetic
 def generate_synthetic(taxonomy: UCSTaxonomy, counts: dict[str, int], seed: int,
-                       max_synonym_df: int = 25, phrase_prob: float = 0.5) -> list[Example]:
+                       max_synonym_df: int = 25, phrase_prob: float = 0.5,
+                       multi_clause_prob: float = 0.0) -> list[Example]:
     gen = DescriptionGenerator(taxonomy, seed=seed, max_synonym_df=max_synonym_df,
-                               phrase_prob=phrase_prob)
+                               phrase_prob=phrase_prob, multi_clause_prob=multi_clause_prob)
     out: list[Example] = []
     for cat_id, n in counts.items():
         entry = taxonomy[cat_id]
@@ -125,7 +126,8 @@ def build_datasets(cfg: dict, taxonomy: UCSTaxonomy) -> dict[str, list[Example]]
     if scfg.get("enabled", True):
         counts = {cid: max(scfg["min_per_class"], scfg["target_per_class"]) for cid in labels}
         synth = generate_synthetic(taxonomy, counts, seed, scfg.get("max_synonym_df", 25),
-                                   scfg.get("phrase_prob", 0.5))
+                                   scfg.get("phrase_prob", 0.5),
+                                   scfg.get("multi_clause_prob", 0.0))
         if scfg.get("cache"):
             write_jsonl(synth, scfg["cache"])
         str_, sva, ste = group_split(synth, vf, tf, seed)

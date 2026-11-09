@@ -25,6 +25,7 @@ DEFAULTS: dict[str, Any] = {
             "min_per_class": 60,       # lower bound if target_per_class is set lower
             "max_synonym_df": 25,
             "phrase_prob": 0.5,
+            "multi_clause_prob": 0.0,  # share of examples joined into "a, b" pairs
             "cache": "data/processed/synthetic.jsonl",
         },
         "label_documents": True,       # add UCS explanation/synonym docs as training text

@@ -9,6 +9,9 @@ from ttucs.slate.normalize import normalize_transcript, words_to_numbers
     ("forty eight k", "48 k"),
     ("mkh four sixteen", "mkh 416"),
     ("mkh eighty forty", "mkh 8040"),
+    ("sennheiser m k eighty forty", "sennheiser mk 8040"),
+    ("setup in a dual a b", "setup in a dual ab"),
+    ("a b stereo pair", "ab stereo pair"),
 ])
 def test_number_words(spoken, expected):
     assert normalize_transcript(spoken) == expected
