@@ -47,6 +47,19 @@ def test_phrase_prob_controls_phrase_usage(taxonomy):
     assert any("weed whacker" in t or "leaf blower" in t for t in on)
 
 
+def test_multi_clause_joins_same_class_pairs(taxonomy):
+    e = taxonomy["MACHGrdn"]
+    off = DescriptionGenerator(taxonomy, seed=5, multi_clause_prob=0.0).generate(e, 60)
+    on = DescriptionGenerator(taxonomy, seed=5, multi_clause_prob=1.0).generate(e, 60)
+    assert not any(", " in t for t in off)
+    joined = [t for t in on if ", " in t]
+    assert len(joined) > 10
+    # a join is two full same-class descriptions
+    for t in joined[:5]:
+        a, b = t.split(", ", 1)
+        assert a and b
+
+
 def test_explanation_fragments_skip_cross_references(taxonomy):
     gen = DescriptionGenerator(taxonomy, seed=0)
     for _ in range(50):

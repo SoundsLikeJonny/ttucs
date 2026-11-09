@@ -209,23 +209,33 @@ class SlateParser:
         out.perspective = self._perspectives(norm)
 
         desc_spans = [s for s in spans if s.field == "description" and s.value]
+        leftovers = self._leftovers(norm, spans)
         if desc_spans:
-            out.description = " ".join(s.value for s in desc_spans)
-        leftovers = [c for c in self._leftovers(norm, spans) if not _perspective_only(c)]
-        if not out.description:
+            # "recording traffic passing by, children playing, wind" - clauses after a
+            # description cue are more of what was recorded, so absorb them too instead
+            # of dropping them as unparsed.
+            after = [c for c in leftovers
+                     if c[0] >= desc_spans[-1].end and _content_words(c[1]) > 0
+                     and not _perspective_only(c[1]) and not _gear_fragment(c[1])]
+            out.description = ", ".join([s.value for s in desc_spans] + [c[1] for c in after])
+            absorbed = {c[0] for c in after}
+        else:
             # No explicit cue: every content-bearing leftover is part of what was recorded
             # ("ambience nearby traffic, crossing sign, children playing, wind"), so join them
             # for the classifier instead of keeping only the longest clause.
-            parts = [c for c in leftovers
-                     if _content_words(c) > 0 and not _gear_fragment(c)]
-            if parts and _content_words(" ".join(parts)) >= self.min_description_words:
-                out.description = " ".join(parts)
-                leftovers = [c for c in leftovers if c not in parts]
+            parts = [c for c in leftovers if _content_words(c[1]) > 0
+                     and not _gear_fragment(c[1]) and not _perspective_only(c[1])]
+            if parts and _content_words(" ".join(c[1] for c in parts)) >= self.min_description_words:
+                out.description = ", ".join(c[1] for c in parts)
+                absorbed = {c[0] for c in parts}
+            else:
+                absorbed = set()
+        leftovers = [c for c in leftovers if c[0] not in absorbed]
         out.description = _PERSPECTIVE_META.sub(" ", out.description)
         out.description = re.sub(r"\s+", " ", _strip_glue(out.description)).strip()
         if not out.description:  # nothing recognisable: classify the whole utterance
             out.description = _strip_glue(norm)
-        out.unparsed = [x for x in leftovers if _content_words(x) > 0]
+        out.unparsed = [c[1] for c in leftovers if _content_words(c[1]) > 0]
         return out
 
     # -------------------------------------------------------------------- internals
@@ -326,14 +336,23 @@ class SlateParser:
         return [tag for rx, tag in _PERSPECTIVES if rx.search(norm)]
 
     @staticmethod
-    def _leftovers(norm: str, spans: list[_Span]) -> list[str]:
+    def _leftovers(norm: str, spans: list[_Span]) -> list[tuple[int, str]]:
+        """Clauses not covered by spans, as (char position, text) pairs."""
         chars = list(norm)
         for s in spans:
             for i in range(s.start, min(s.end, len(chars))):
                 chars[i] = "|"
         text = "".join(chars)
-        pieces = re.split(r"\|+|[,;!?]|\.(?!\d)| - ", text)
-        return [p for p in (_strip_glue(x) for x in pieces) if p]
+        out: list[tuple[int, str]] = []
+        pos = 0
+        for part in re.split(r"(\|+|[,;!?]|\.(?!\d)| - )", text):
+            pos += len(part)
+            if re.fullmatch(r"\|+|[,;!?]|\.(?!\d)| - ", part or ""):
+                continue
+            piece = _strip_glue(part)
+            if piece:
+                out.append((pos - len(part), piece))
+        return out
 
 
 def _resolve_overlaps(spans: list[_Span]) -> list[_Span]:

@@ -84,11 +84,13 @@ class DescriptionGenerator:
 
     def __init__(self, taxonomy: UCSTaxonomy, banks: dict | None = None, seed: int = 0,
                  max_synonym_df: int = 25, phrase_prob: float = 0.5,
+                 multi_clause_prob: float = 0.0,
                  llm_hook: Callable[[str, UCSEntry], str] | None = None) -> None:
         self.tax = taxonomy
         self.banks = banks or load_banks()
         self.phrases: dict[str, list[str]] = self.banks.get("catid_phrases") or {}
         self.phrase_prob = phrase_prob
+        self.multi_clause_prob = multi_clause_prob
         self.rng = random.Random(seed)
         self.llm_hook = llm_hook
         self.mods = [m for group in self.banks["modifiers"].values() for m in group]
@@ -231,7 +233,21 @@ class DescriptionGenerator:
         while len(out) < n and tries < n * max_tries_factor:
             out.setdefault(self.generate_one(entry), None)
             tries += 1
-        return list(out)
+        texts = list(out)
+        if self.multi_clause_prob and len(texts) > 2:
+            # Join pairs of same-class descriptions ("metal gate slam, creaky hinges"):
+            # real slates often list several related clauses, and the parser now feeds the
+            # classifier the full join, so the model must see multi-clause text too.
+            joined: list[str] = []
+            for i in range(0, len(texts) - 1, 2):
+                if self.rng.random() < self.multi_clause_prob:
+                    joined.append(f"{texts[i]}, {texts[i + 1]}")
+                else:
+                    joined.extend(texts[i:i + 2])
+            if len(texts) % 2:
+                joined.append(texts[-1])
+            texts = joined
+        return texts
 
 
 # ============================================================================ slates

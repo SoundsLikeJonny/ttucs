@@ -94,6 +94,23 @@ def test_ambience_multiclause_slate():
     assert "MKH8040" in (s.user_data or "")
 
 
+def test_description_absorbs_clauses_after_cue():
+    s = parse_slate("recording traffic passing by, children playing in a nearby park, take 2")
+    assert s.description == "traffic passing, children playing in a nearby park"
+    assert "children playing" not in s.unparsed
+
+
+def test_multiclause_descriptions_match_trailing_join():
+    for slate, desc in (
+        ("recording a metal gate slam, creaky hinges", "metal gate slam, creaky hinges"),
+        ("distant waves on rocks, gulls overhead",
+         "distant waves on rocks, gulls overhead"),
+        ("ambience busy street, sirens far away", "ambience busy street, sirens far away"),
+    ):
+        s = parse_slate(slate)
+        assert s.description == desc, f"{slate!r} -> {s.description!r}"
+
+
 def test_description_skips_perspective_and_gear_fragments():
     s = parse_slate("exterior, distant traffic hum, i'm using an sennheiser")
     assert s.description == "distant traffic hum"
