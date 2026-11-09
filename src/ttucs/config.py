@@ -26,6 +26,7 @@ DEFAULTS: dict[str, Any] = {
             "max_synonym_df": 25,
             "phrase_prob": 0.5,
             "multi_clause_prob": 0.0,  # share of examples joined into "a, b" pairs
+            "verbose_prob": 0.0,       # share of longer action-narrative / scene-observation text
             "cache": "data/processed/synthetic.jsonl",
         },
         "label_documents": True,       # add UCS explanation/synonym docs as training text
