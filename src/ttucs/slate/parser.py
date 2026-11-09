@@ -15,8 +15,8 @@ The parser works in three passes over the normalised transcript:
    ``24 bit``, ``take 3``, dates, perspectives);
 2. **cue spans** - phrases such as ``project``/``location``/``recording`` whose value runs
    until the next span, cue or clause boundary;
-3. **description** - the explicit description cue if present, otherwise the most
-   content-bearing leftover clause.
+3. **description** - the explicit description cue if present, otherwise the content-bearing
+   leftover clauses joined in spoken order (so multi-part ambience slates classify in full).
 """
 
 from __future__ import annotations
@@ -87,7 +87,19 @@ _GLUE = {"a", "an", "the", "and", "with", "on", "into", "in", "at", "using", "th
          "our", "some", "then", "also", "plus", "so", "that", "this", "running", "recorded",
          "recording", "going", "go", "set", "up", "here", "there", "now", "okay", "ok", "uh",
          "pair", "rig", "mic", "mics", "recorder", "as", "well", "just", "be", "will",
-         "gonna", "rolling", "speed", "slate", "marker", "sound", "sounds", "speeding"}
+         "gonna", "rolling", "speed", "slate", "marker", "sound", "sounds", "speeding",
+         "i", "i'm", "i've", "we", "we've", "got", "setup"}
+
+# Perspective words that are metadata on their own (already captured in ``perspective``);
+# they must not be joined into the description or reported as unparsed.
+_PERSPECTIVE_ONLY = re.compile(
+    r"(?:exterior|interior|outside|inside|outdoors?|indoors?|ext|int|close[- ]?up|cu|med|dist)\b")
+
+# Brand/capsule remnants of mic mentions the lexicon could not fully parse
+# ("i'm using an sennheiser") - kept out of the description, left in ``unparsed``.
+_BRAND_WORDS = {"sennheiser", "schoeps", "rode", "zoom", "tascam", "nagra", "sony", "sanken",
+                "neumann", "shure", "dpa", "lom", "technica", "devices", "mixpre",
+                "mkh", "mk", "cmc", "cmit", "ccm", "ntg", "kmr", "mke"}
 
 _PERSPECTIVES = [
     (re.compile(r"\bclose up\b|\bclose[- ]miked\b|\bclose perspective\b|\bperspective close\b|"
@@ -161,6 +173,15 @@ def _content_words(text: str) -> int:
     return sum(1 for w in text.split() if w not in _GLUE and not w.isdigit())
 
 
+def _perspective_only(text: str) -> bool:
+    return bool(_PERSPECTIVE_ONLY.fullmatch(text))
+
+
+def _gear_fragment(text: str) -> bool:
+    words = [w for w in re.split(r"\s+", text) if w not in _GLUE and not w.isdigit()]
+    return bool(words) and all(w in _BRAND_WORDS for w in words)
+
+
 # ------------------------------------------------------------------------------ parser
 class SlateParser:
     """Parse STT slate transcripts into :class:`SlateFields`.
@@ -190,12 +211,16 @@ class SlateParser:
         desc_spans = [s for s in spans if s.field == "description" and s.value]
         if desc_spans:
             out.description = " ".join(s.value for s in desc_spans)
-        leftovers = self._leftovers(norm, spans)
+        leftovers = [c for c in self._leftovers(norm, spans) if not _perspective_only(c)]
         if not out.description:
-            ranked = sorted(leftovers, key=_content_words, reverse=True)
-            if ranked and _content_words(ranked[0]) >= self.min_description_words:
-                out.description = ranked[0]
-                leftovers.remove(ranked[0])
+            # No explicit cue: every content-bearing leftover is part of what was recorded
+            # ("ambience nearby traffic, crossing sign, children playing, wind"), so join them
+            # for the classifier instead of keeping only the longest clause.
+            parts = [c for c in leftovers
+                     if _content_words(c) > 0 and not _gear_fragment(c)]
+            if parts and _content_words(" ".join(parts)) >= self.min_description_words:
+                out.description = " ".join(parts)
+                leftovers = [c for c in leftovers if c not in parts]
         out.description = _PERSPECTIVE_META.sub(" ", out.description)
         out.description = re.sub(r"\s+", " ", _strip_glue(out.description)).strip()
         if not out.description:  # nothing recognisable: classify the whole utterance

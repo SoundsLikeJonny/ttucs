@@ -51,6 +51,8 @@ REPLACEMENTS: list[tuple[str, str]] = [
     (r"\bc\s?m\s?i\s?t\b", "cmit"), (r"\bc\s?m\s?c\b", "cmc"), (r"\bk\s?m\s?r\b", "kmr"),
     (r"\bo\s?r\s?t\s?f\b", "ortf"), (r"\bmid[- ]side\b", "ms"), (r"\bm\s?/\s?s\b", "ms"),
     (r"\bx\s?/\s?y\b|\bx y\b", "xy"), (r"\ba\s?/\s?b\b", "ab"),
+    (r"\ba b\b(?= (?:pair|stereo|setup|rig|technique))", "ab"),
+    (r"\b(?:dual|double)\s+a\s?/?\s?b\b", "dual ab"),
     (r"\bmix\s?pre\b|\bmixed pre\b|\bmix pray\b", "mixpre"),
     (r"\btask\s?cam\b", "tascam"), (r"\bsound device\b", "sound devices"),
     (r"\bkilo ?hertz\b|\bk ?hz\b|\bkay\b", "k"), (r"\bbits\b", "bit"),

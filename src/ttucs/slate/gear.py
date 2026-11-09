@@ -31,6 +31,10 @@ def _up(s: str | None) -> str:
 
 MICS: list[GearPattern] = [
     _p("mic", r"\b(?:sennheiser\s+)?mkh\s?(\d{2,4})\b", lambda m: f"Sennheiser MKH {m.group(1)}"),
+    # STT often drops the "h" of MKH ("m k eighty forty" -> "mk 8040"). 3-4 digit capsule
+    # numbers are unambiguous: Schoeps capsules are 1-2 digits (MK 4/8/21/22/41).
+    _p("mic", r"\b(?:sennheiser\s+)?mk\s?(\d{3,4})\b", lambda m: f"Sennheiser MKH {m.group(1)}"),
+    _p("mic", r"\bsennheiser\s+mk\s?(30|50)\b", lambda m: f"Sennheiser MKH {m.group(1)}"),
     _p("mic", r"\bsennheiser\s+(me|mke)\s?(\d{1,3})\b",
        lambda m: f"Sennheiser {m.group(1).upper()}{m.group(2)}"),
     _p("mic", r"\b(?:sennheiser\s+)?ambeo(?:\s+vr)?\b", "Sennheiser Ambeo VR"),
@@ -105,7 +109,8 @@ SETUPS: list[GearPattern] = [
     _p("setup", r"\bnos\b", "NOS"),
     _p("setup", r"\bblumlein\b", "Blumlein"),
     _p("setup", r"\bdecca tree\b", "Decca Tree"),
-    _p("setup", r"\bspaced (?:pair|omnis?)\b|\bab pair\b|\bab\b(?= (?:pair|stereo|omnis?))",
+    _p("setup", r"\bspaced (?:pair|omnis?)\b|\b(?:dual|double)\s?ab\b|\bab pair\b|"
+                r"\bab\b(?= (?:pair|stereo|omnis?))",
        "Spaced Pair (AB)"),
     _p("setup", r"\bquad\b|\bquadraphonic\b", "Quad"),
     _p("setup", r"\bambisonics?\b|\bfirst order ambi\w*\b|\bfoa\b", "Ambisonic"),

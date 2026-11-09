@@ -240,6 +240,7 @@ _MICS = [
     ("mkh eighty forty", "Sennheiser MKH 8040"), ("mkh eighty fifty", "Sennheiser MKH 8050"),
     ("mkh eighty sixty", "Sennheiser MKH 8060"), ("mkh thirty", "Sennheiser MKH 30"),
     ("schoeps cmc six", "Schoeps CMC6"), ("schoeps mk four", "Schoeps MK4"),
+    ("sennheiser mk eighty forty", "Sennheiser MKH 8040"),  # STT drops the h of MKH
     ("cmit five u", "Schoeps CMIT5U"), ("rode ntg three", "Rode NTG3"), ("rode nt four", "Rode NT4"),
     ("dpa forty sixty", "DPA 4060"), ("dpa four zero six zero", "DPA 4060"),
     ("sanken cs three e", "Sanken CS3E"), ("neumann kmr eighty one", "Neumann KMR81"),
@@ -256,8 +257,8 @@ _RECORDERS = [
     ("tascam dr forty x", "Tascam DR40X"), ("sound devices mix pre ten", "Sound Devices MixPre-10"),
 ]
 _SETUPS = [("ms", "MS"), ("mid side", "MS"), ("x y", "XY"), ("ortf", "ORTF"),
-           ("spaced pair", "Spaced Pair (AB)"), ("in mono", "Mono"), ("in stereo", "Stereo"),
-           ("ambisonic", "Ambisonic")]
+           ("spaced pair", "Spaced Pair (AB)"), ("dual a b", "Spaced Pair (AB)"),
+           ("in mono", "Mono"), ("in stereo", "Stereo"), ("ambisonic", "Ambisonic")]
 _RATES = [("ninety six k", 96000), ("96k", 96000), ("forty eight k", 48000), ("48 khz", 48000),
           ("one ninety two k", 192000), ("192k", 192000), ("forty four one", 44100),
           ("ninety six kilohertz", 96000)]
@@ -316,7 +317,8 @@ class SlateGenerator:
                 gear.append(f"{s2} {pick(['with', 'on'])} {spoken}" if r() < 0.5 else f"{spoken} {s2}")
                 truth["mic_setup"] = [c2]
             else:
-                gear.append(spoken)
+                gear.append(pick([spoken, f"i'm using {spoken}", f"using {spoken}",
+                                  f"on {spoken}", f"i've got {spoken}"]))
         elif r() < 0.15:
             spoken, canon = pick(_MIC_TYPES)
             gear.append(spoken)

@@ -61,3 +61,40 @@ def test_user_data_from_gear():
     s = parse_slate("mkh eighty forty ortf, birds chirping")
     assert s.user_data == "MKH8040-ORTF"
     assert s.to_dict()["mic_setup"] == ["ORTF"]
+
+
+def test_mkh_without_the_h():
+    # STT often drops the "h" of MKH ("m k eighty forty" -> "mk 8040").
+    assert parse_slate("sennheiser mk 8040").microphones == ["Sennheiser MKH 8040"]
+    assert parse_slate("mk 416").microphones == ["Sennheiser MKH 416"]
+    assert parse_slate("sennheiser mk 50").microphones == ["Sennheiser MKH 50"]
+    # 1-2 digit capsule numbers stay Schoeps
+    assert parse_slate("schoeps mk 4").microphones == ["Schoeps MK4"]
+
+
+def test_dual_ab_setup():
+    for text in ("cmc 41 setup in a dual a b", "mkh 8040 dual a b", "mkh 8040 a b stereo"):
+        s = parse_slate(text)
+        assert "Spaced Pair (AB)" in s.mic_setup, text
+
+
+def test_ambience_multiclause_slate():
+    """Regression: a real session slate where the second mic, the setup and the ambience
+    content clauses all slipped through (owner report, 2026-11-08)."""
+    s = parse_slate("exterior, parking lot, daytime, ambience nearby traffic in Metrotown area, "
+                    "crossing sign, children playing in a nearby park, wind."
+                    "I'm using an sennheiser m k eighty forty with a schoeps c m c 41 "
+                    "setup in a dual a b")
+    assert s.microphones == ["Sennheiser MKH 8040", "Schoeps CMC41"]
+    assert s.mic_setup == ["Spaced Pair (AB)"]
+    assert s.perspective == ["EXT"]
+    for fragment in ("traffic", "crossing sign", "children playing", "wind"):
+        assert fragment in s.description, fragment
+    assert not any("sennheiser" in u for u in s.unparsed)
+    assert "MKH8040" in (s.user_data or "")
+
+
+def test_description_skips_perspective_and_gear_fragments():
+    s = parse_slate("exterior, distant traffic hum, i'm using an sennheiser")
+    assert s.description == "distant traffic hum"
+    assert s.perspective == ["EXT"]
