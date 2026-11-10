@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and how a slate is parsed through bag-of-words features, every layer of `BowNet`, calibration,
   synthetic data, splits, training, evaluation, the two-package distribution and the release
   process. `docs/about/about_1_index.md` is the entry point.
+- `ttucs serve`: the engine over loopback HTTP, so other tools can share one loaded model instead
+  of paying a process start per call. Routes are `GET /health`, `POST /predict`, `POST /parse`,
+  `GET /taxonomy/search`, `GET /taxonomy/{cat_id}` and `POST /shutdown`; every response carries
+  `schema_version`. It binds `127.0.0.1` only, requires an `X-Ttucs-Token` header on everything
+  except `/health`, sends no CORS headers, caps bodies at 1 MiB and 512 texts, and serialises
+  inference behind one lock. The endpoint file (`$TTUCS_HOME/serve.json`, mode `0600`) carries the
+  host, port, token and pid and is removed on clean shutdown. `--no-token` exists for tests and
+  logs a warning. See `docs/serve-api.md` for the contract, including the launcher steps a client
+  follows. No new dependencies and no network access of its own.
 - `MLFLOW_TRACKING_URI` now overrides `mlflow.tracking_uri` from the config, so runs can be sent to
   a remote tracking server without editing a config file. Offline mode (`TTUCS_OFFLINE=1` or
   `HF_HUB_OFFLINE=1`) ignores it and keeps the local SQLite store. The resolved URI is logged.
@@ -51,6 +60,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   context clauses count once. Off keeps featurisation bit-identical to the published model.
 
 ### Changed
+- **Breaking:** `ttucs predict --json` now always prints a JSON list, one element per input. It
+  previously printed a bare object for a single text and a list for several, which made every
+  script branch on the input count. Consumers that indexed the single-object form need `[0]`.
+  `ttucs serve` follows the same rule.
 - `docs/assets/distribution.md` and its plots are regenerated from `configs/bow-release.yaml`, so the
   report describes the release training split (159,591 synthetic + 3,305 UCS label documents =
   162,896 examples, 179-260 per CatID) instead of the older `configs/bow.yaml` build. `make report`

@@ -108,7 +108,12 @@ ttucs generate-data -c configs/bow-release.yaml                       # [train]
 ttucs train -c configs/bow-release.yaml                               # [train]; MLflow optional
 ttucs eval -m models/ttucs-bow-release                                # [train]
 ttucs report -c configs/bow-release.yaml                              # [train]
+ttucs serve -m bow --port 0 --token-file "$TTUCS_HOME/serve.json"     # loopback HTTP for other tools
 ```
+
+`ttucs serve` exposes the engine over loopback HTTP so a desktop UI or a DAW extension can share one
+loaded model instead of starting Python per call. The contract - routes, token, endpoint file and
+the launcher steps a client follows - is in [docs/serve-api.md](docs/serve-api.md).
 
 The API also offers `t.predict_batch` / `predict_batch`, `top_k`, aggregated category scores,
 temperature calibration, a `decision` field (`confident` / `category_fallback` to the category's

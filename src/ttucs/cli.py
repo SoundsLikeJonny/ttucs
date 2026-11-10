@@ -133,8 +133,7 @@ def cmd_predict(args: argparse.Namespace) -> int:
     preds = pipe.predict_batch(_texts(args), top_k=args.top_k, creator_id=args.creator_id,
                                source_id=args.source_id)
     if args.json:
-        out = [p.to_dict() for p in preds]
-        print(json.dumps(out if len(out) > 1 else out[0], indent=2, ensure_ascii=False))
+        print(json.dumps([p.to_dict() for p in preds], indent=2, ensure_ascii=False))
         return 0
     for p in preds:
         print(f"\n> {p.text}")
@@ -214,6 +213,16 @@ def cmd_download(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_serve(args: argparse.Namespace) -> int:
+    from ttucs.serve import run_serve
+
+    try:
+        return run_serve(args.model, host=args.host, port=args.port, token_file=args.token_file,
+                         top_k=args.top_k, warm=not args.no_warm, no_token=args.no_token)
+    except ValueError as exc:
+        raise SystemExit(f"ttucs serve: error: {exc}") from None
+
+
 # ------------------------------------------------------------------------------ parser
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="ttucs", description="Text to UCS: classify spoken slates "
@@ -272,6 +281,17 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--sha256", default=None, help="expected sha256 of the archive (with --url)")
     s.add_argument("--force", action="store_true", help="re-download even if present")
     s.set_defaults(func=cmd_download)
+
+    s = sub.add_parser("serve", help="serve the engine over loopback HTTP for other tools")
+    s.add_argument("-m", "--model", default=None, help=MODEL_HELP)
+    s.add_argument("--host", default="127.0.0.1", help="loopback address to bind (default: 127.0.0.1)")
+    s.add_argument("--port", type=int, default=0, help="port (default: 0 = pick a free one)")
+    s.add_argument("--token-file", default=None,
+                   help="endpoint file with host/port/token (default: $TTUCS_HOME/serve.json)")
+    s.add_argument("--no-token", action="store_true", help="disable the token (tests only)")
+    s.add_argument("-k", "--top-k", type=int, default=5, help="default top-k for /predict")
+    s.add_argument("--no-warm", action="store_true", help="skip the startup warm-up prediction")
+    s.set_defaults(func=cmd_serve)
 
     s = sub.add_parser("report", help="class distribution report + plots")
     _add_config(s)
