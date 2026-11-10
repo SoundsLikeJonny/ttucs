@@ -45,6 +45,9 @@ DEFAULT_HOST = "127.0.0.1"
 AUTH_HEADER = "X-Ttucs-Token"
 ENDPOINT_FILENAME = "serve.json"
 MAX_BODY_BYTES = 1 << 20
+#: How much of an unread body is drained before an error response, so the client can read it
+#: instead of seeing a connection reset. Larger bodies are refused without draining.
+DRAIN_LIMIT = 8 << 20
 MAX_TEXTS = 512
 MAX_TOP_K = 50
 MAX_SEARCH_LIMIT = 200
@@ -201,6 +204,9 @@ class _Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
     server_version = f"ttucs/{__version__}"
     sys_version = ""
+    #: Bounds any blocking read, including a client that lies about Content-Length.
+    timeout = 30
+    _body_consumed: bool = True
 
     @property
     def app(self) -> _App:
@@ -209,6 +215,30 @@ class _Handler(BaseHTTPRequestHandler):
     # ------------------------------------------------------------------ plumbing
     def log_message(self, fmt: str, *args: Any) -> None:
         log.debug("%s - %s", self.address_string(), fmt % args)
+
+    def _drain(self) -> None:
+        """Consume an unread request body so the client can read our error response.
+
+        Closing a socket with unread bytes pending sends an RST on Windows, which reaches the
+        client as a connection abort instead of the status code we just wrote.
+        """
+        raw = self.headers.get("Content-Length")
+        if raw is None:
+            return
+        try:
+            remaining = int(raw)
+        except ValueError:
+            return
+        if remaining <= 0 or remaining > DRAIN_LIMIT:
+            return
+        while remaining > 0:
+            try:
+                chunk = self.rfile.read(min(remaining, 65536))
+            except OSError:
+                return
+            if not chunk:
+                return
+            remaining -= len(chunk)
 
     def _send(self, status: HTTPStatus, payload: dict[str, Any]) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -222,6 +252,8 @@ class _Handler(BaseHTTPRequestHandler):
         self.close_connection = True
 
     def _error(self, status: HTTPStatus, detail: str) -> None:
+        if not self._body_consumed:
+            self._drain()
         self._send(status, {"schema_version": SCHEMA_VERSION, "error": status.phrase.lower(),
                             "detail": detail})
 
@@ -247,6 +279,7 @@ class _Handler(BaseHTTPRequestHandler):
             raise _HttpError(HTTPStatus.REQUEST_ENTITY_TOO_LARGE,
                              f"body must be at most {MAX_BODY_BYTES} bytes")
         raw = self.rfile.read(length)
+        self._body_consumed = True
         try:
             data = json.loads(raw or b"{}")
         except json.JSONDecodeError:
@@ -286,6 +319,7 @@ class _Handler(BaseHTTPRequestHandler):
     # ------------------------------------------------------------------ routes
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
+        self._body_consumed = True  # GET carries no body to drain
         try:
             if parsed.path == "/health":
                 self._send(HTTPStatus.OK, _health(self.app))
@@ -304,6 +338,7 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        self._body_consumed = False
         try:
             if not self._authorised():
                 return

@@ -109,6 +109,13 @@ def test_predict_requires_token(server):
     assert status == 401
 
 
+def test_unauthorised_request_with_a_large_body_still_answers(server):
+    # The body is drained before the 401, otherwise Windows resets the connection instead.
+    status, body = call(server, "POST", "/predict", {"texts": ["x" * (256 << 10)]}, token=None)
+    assert status == 401
+    assert body["schema_version"] == SCHEMA_VERSION
+
+
 def test_no_token_mode_allows_anonymous(taxonomy):
     srv = create_server(_StubPipe(taxonomy), port=0, token=None)
     thread = threading.Thread(target=srv.serve_forever, daemon=True)
